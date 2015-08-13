@@ -2,7 +2,7 @@ PODS:
   - konashi-ios-sdk (4.0.1)
 
 DEPENDENCIES:
-  - konashi-ios-sdk
+  - konashi-ios-sdk (~> 4.0.0)
 
 SPEC CHECKSUMS:
   konashi-ios-sdk: 2a11146c5fd2fecb39dd0531201e4b836dea8f11
