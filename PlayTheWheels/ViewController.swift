@@ -10,16 +10,27 @@ import UIKit
 
 class ViewController: UIViewController {
 
+  @IBOutlet weak var find: UIButton!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    Konashi.shared().readyHandler = {
+      // LED2を点灯させる
+      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
+    }
+    
+    find.addTarget(self, action: "tapFind:", forControlEvents: .TouchUpInside)
   }
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
-
+  
+  func tapFind(sender:UIButton!) {
+    Konashi.find()
+  }
 
 }
 
