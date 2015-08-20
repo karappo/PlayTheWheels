@@ -116,6 +116,7 @@ class ViewController: UIViewController {
   func tapSendB(sender:UIButton!) {
     uart("000.000.255\n")
   }
+  // シリアル通信で送信
   func uart(str: String){
     let res = Konashi.uartWriteString(str)
     if res == KonashiResult.Success {
