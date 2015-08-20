@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -23,39 +22,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="83y-3O-qFb">
                                         <rect key="frame" x="38" y="184" width="300" height="300"/>
                                         <subviews>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ws1-UO-trg" userLabel="8">
-                                                <rect key="frame" x="220" y="220" width="30" height="30"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="Vqc-dB-id6"/>
-                                                    <constraint firstAttribute="height" constant="30" id="qNr-wZ-Ypx"/>
-                                                </constraints>
-                                            </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FC8-T0-kFY" userLabel="7">
-                                                <rect key="frame" x="270" y="135" width="30" height="30"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="oMq-sD-ooF"/>
-                                                    <constraint firstAttribute="height" constant="30" id="xxs-So-Hrl"/>
-                                                </constraints>
-                                            </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23o-1f-HOp" userLabel="6">
-                                                <rect key="frame" x="220" y="50" width="30" height="30"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="BKL-89-gfg"/>
-                                                    <constraint firstAttribute="height" constant="30" id="Q4p-uK-jdC"/>
-                                                </constraints>
-                                            </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SRh-NC-u7e" userLabel="5">
-                                                <rect key="frame" x="135" y="0.0" width="30" height="30"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="frb-SX-fKO"/>
-                                                    <constraint firstAttribute="height" constant="30" id="qBt-NK-Gyk"/>
-                                                </constraints>
-                                            </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rm6-JS-XuA" userLabel="4">
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rm6-JS-XuA" userLabel="8">
                                                 <rect key="frame" x="50" y="50" width="30" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -63,7 +30,7 @@
                                                     <constraint firstAttribute="width" constant="30" id="cW6-pc-ikL"/>
                                                 </constraints>
                                             </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNU-Tk-8se" userLabel="3">
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fNU-Tk-8se" userLabel="7">
                                                 <rect key="frame" x="0.0" y="135" width="30" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -71,7 +38,7 @@
                                                     <constraint firstAttribute="width" constant="30" id="Wo6-4t-0dl"/>
                                                 </constraints>
                                             </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdz-sF-JBU" userLabel="2">
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdz-sF-JBU" userLabel="6">
                                                 <rect key="frame" x="50" y="220" width="30" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -79,20 +46,44 @@
                                                     <constraint firstAttribute="height" constant="30" id="vHP-f5-2if"/>
                                                 </constraints>
                                             </view>
-                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9wH-hu-G4O" userLabel="1">
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9wH-hu-G4O" userLabel="5">
                                                 <rect key="frame" x="135" y="270" width="30" height="30"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJo-MI-nOG">
-                                                        <rect key="frame" x="-156" y="-434" width="343" height="647"/>
-                                                        <state key="normal">
-                                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </state>
-                                                    </button>
-                                                </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="30" id="NYD-KW-ewN"/>
                                                     <constraint firstAttribute="height" constant="30" id="Ye3-Fb-CJ4"/>
+                                                </constraints>
+                                            </view>
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ws1-UO-trg" userLabel="4">
+                                                <rect key="frame" x="220" y="220" width="30" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="Vqc-dB-id6"/>
+                                                    <constraint firstAttribute="height" constant="30" id="qNr-wZ-Ypx"/>
+                                                </constraints>
+                                            </view>
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FC8-T0-kFY" userLabel="3">
+                                                <rect key="frame" x="270" y="135" width="30" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="oMq-sD-ooF"/>
+                                                    <constraint firstAttribute="height" constant="30" id="xxs-So-Hrl"/>
+                                                </constraints>
+                                            </view>
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23o-1f-HOp" userLabel="2">
+                                                <rect key="frame" x="220" y="50" width="30" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="BKL-89-gfg"/>
+                                                    <constraint firstAttribute="height" constant="30" id="Q4p-uK-jdC"/>
+                                                </constraints>
+                                            </view>
+                                            <view alpha="0.30000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SRh-NC-u7e" userLabel="1">
+                                                <rect key="frame" x="135" y="0.0" width="30" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="frb-SX-fKO"/>
+                                                    <constraint firstAttribute="height" constant="30" id="qBt-NK-Gyk"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -191,14 +182,23 @@
                             <constraint firstAttribute="bottom" secondItem="fxz-Zq-W1y" secondAttribute="bottom" id="JQb-iN-waD"/>
                             <constraint firstItem="fxz-Zq-W1y" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="L0K-bo-OCb"/>
                             <constraint firstItem="fxz-Zq-W1y" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="Qnp-DY-zlT"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="fxz-Zq-W1y" secondAttribute="trailing" id="pDQ-1I-MqN"/>
                             <constraint firstAttribute="trailing" secondItem="fxz-Zq-W1y" secondAttribute="trailing" id="tBA-jf-3XU"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="fxz-Zq-W1y" secondAttribute="bottom" id="wjB-kh-gtx"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="arrow" destination="amX-hl-uBo" id="4BL-GE-vNf"/>
                         <outlet property="find" destination="K9d-9Z-BlT" id="efF-CB-HkZ"/>
+                        <outlet property="label" destination="X0t-D6-R98" id="JyH-oK-TvU"/>
+                        <outlet property="led1" destination="SRh-NC-u7e" id="XT6-Vv-wSI"/>
+                        <outlet property="led2" destination="23o-1f-HOp" id="U45-VL-UHk"/>
+                        <outlet property="led3" destination="FC8-T0-kFY" id="qrf-40-Fnc"/>
+                        <outlet property="led4" destination="Ws1-UO-trg" id="Nba-SV-Phi"/>
+                        <outlet property="led5" destination="9wH-hu-G4O" id="UMt-WD-hCq"/>
+                        <outlet property="led6" destination="wdz-sF-JBU" id="F1C-FP-Kuf"/>
+                        <outlet property="led7" destination="fNU-Tk-8se" id="hqi-RR-Rab"/>
+                        <outlet property="led8" destination="Rm6-JS-XuA" id="Qfi-NI-riQ"/>
                         <outlet property="sendB" destination="Mjk-Uk-IXj" id="j9m-0u-yDy"/>
                         <outlet property="sendG" destination="xlS-Z1-xgF" id="Me0-Du-Pr6"/>
                         <outlet property="sendR" destination="EFh-gW-DOs" id="UMv-2T-awE"/>
