@@ -13,6 +13,8 @@
 		E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7509F621B7C4DDB001C54E8 /* Main.storyboard */; };
 		E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7509F651B7C4DDB001C54E8 /* Images.xcassets */; };
 		E7509F751B7C4DDB001C54E8 /* PlayTheWheelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */; };
+		E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */; };
+		E79CAC4F1B85EF9F00BA3D41 /* sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +39,8 @@
 		E7509F6E1B7C4DDB001C54E8 /* PlayTheWheelsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlayTheWheelsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7509F731B7C4DDB001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTheWheelsTests.swift; sourceTree = "<group>"; };
+		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
+		E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sample.mp3; path = PlayTheWheels/assets/sample.mp3; sourceTree = "<group>"; };
 		E7A6EEA41B7C561900A8BD2A /* PlayTheWheels-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PlayTheWheels-Bridging-Header.h"; sourceTree = "<group>"; };
 		F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +96,7 @@
 		E7509F5B1B7C4DDA001C54E8 /* PlayTheWheels */ = {
 			isa = PBXGroup;
 			children = (
+				E79CAC4B1B85EF9500BA3D41 /* assets */,
 				E7509F5E1B7C4DDA001C54E8 /* AppDelegate.swift */,
 				E7509F601B7C4DDA001C54E8 /* ViewController.swift */,
 				E7509F621B7C4DDB001C54E8 /* Main.storyboard */,
@@ -124,6 +129,16 @@
 				E7509F731B7C4DDB001C54E8 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E79CAC4B1B85EF9500BA3D41 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */,
+				E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */,
+			);
+			name = assets;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		EE27FB85BE4204BEA68EF57C /* Pods */ = {
@@ -219,6 +234,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */,
+				E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */,
+				E79CAC4F1B85EF9F00BA3D41 /* sample.mp3 in Resources */,
 				E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
