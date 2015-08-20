@@ -32,25 +32,8 @@ class ViewController: UIViewController {
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
   var players: Array<AVAudioPlayer> = []
-  var player1: AVAudioPlayer!
-  var player2: AVAudioPlayer!
-  var player3: AVAudioPlayer!
-  var player4: AVAudioPlayer!
-  var player5: AVAudioPlayer!
-  var player6: AVAudioPlayer!
-  var player7: AVAudioPlayer!
-  var player8: AVAudioPlayer!
   
-  let slits = [
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3",
-    "sample.mp3"
-  ]
+  let slits_count = 8
   var leds: Array<UIView> = []
   var prev_deg: Double = 0.0
   var slit_degs: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
@@ -58,8 +41,8 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let count = Double(slits.count)
-    for i in 0..<slits.count {
+    let count = Double(slits_count)
+    for i in 0..<slits_count {
       slit_degs += [360.0/count*Double(i)]
     }
     leds = [
@@ -74,32 +57,11 @@ class ViewController: UIViewController {
     ]
     
     let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("sample", ofType: "mp3")!)
-    player1 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player1.prepareToPlay()
-    player2 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player2.prepareToPlay()
-    player3 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player3.prepareToPlay()
-    player4 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player4.prepareToPlay()
-    player5 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player5.prepareToPlay()
-    player6 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player6.prepareToPlay()
-    player7 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player7.prepareToPlay()
-    player8 = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-    player8.prepareToPlay()
-    players = [
-      player1,
-      player2,
-      player3,
-      player4,
-      player5,
-      player6,
-      player7,
-      player8
-    ]
+    for i in 0..<slits_count {
+      let player = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
+      player.prepareToPlay()
+      players += [player]
+    }
     
     MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
     
@@ -170,7 +132,6 @@ class ViewController: UIViewController {
     let passed_index = self.getSlitIndexInRange(self.prev_deg, current: current_deg)
     if 0 < passed_index.count {
       for slit_index in passed_index {
-        let slit = self.slits[slit_index]
         let led = leds[slit_index]
         activate(led)
         
@@ -223,7 +184,7 @@ class ViewController: UIViewController {
     var result: Array<Int> = [] // range内にあるslit
     var rest: Array<Int> = [] // range外にあるslit
     
-    for i in 0..<slits.count {
+    for i in 0..<slits_count {
       let slit = slit_degs[i]
       if _min <= slit && slit <= _max {
         result += [i]
