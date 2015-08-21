@@ -77,14 +77,14 @@ class ViewController: UIViewController {
     }
     
     // Konashi関係
-    NSLog("Konashi.isConnected:\(Konashi.isConnected())")
+    NSLog("[Konashi] isConnected:\(Konashi.isConnected())")
     
     Konashi.shared().connectedHandler = {
-      NSLog("CONNECTED")
+      NSLog("[Konashi] Connected")
     }
     
     Konashi.shared().readyHandler = {
-      NSLog("READY")
+      NSLog("[Konashi] Ready...")
       
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
 
@@ -93,7 +93,7 @@ class ViewController: UIViewController {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
-      NSLog("UartRx \(data.description)")
+      NSLog("[Konashi] UartRx \(data.description)")
     }
     find.addTarget(self, action: "tapFind:", forControlEvents: .TouchUpInside)
     sendR.addTarget(self, action: "tapSendR:", forControlEvents: .TouchUpInside)
