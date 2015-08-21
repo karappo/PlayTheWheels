@@ -47,7 +47,7 @@
 		E7509F731B7C4DDB001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTheWheelsTests.swift; sourceTree = "<group>"; };
 		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
-		E7A6EEA41B7C561900A8BD2A /* PlayTheWheels-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PlayTheWheels-Bridging-Header.h"; sourceTree = "<group>"; };
+		E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
 		E7D462561B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 0.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 0.wav"; sourceTree = "<group>"; };
 		E7D462571B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 1.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 1.wav"; sourceTree = "<group>"; };
 		E7D462581B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 2.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 2.wav"; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 				E7509F5A1B7C4DDA001C54E8 /* Products */,
 				EE27FB85BE4204BEA68EF57C /* Pods */,
 				7FB59610D0D0C8318B4CED32 /* Frameworks */,
-				E7A6EEA41B7C561900A8BD2A /* PlayTheWheels-Bridging-Header.h */,
+				E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -442,7 +442,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "PlayTheWheels-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "ObjCBridge.h";
 			};
 			name = Debug;
 		};
@@ -457,7 +457,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "PlayTheWheels-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "ObjCBridge.h";
 			};
 			name = Release;
 		};
