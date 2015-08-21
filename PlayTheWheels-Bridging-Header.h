@@ -3,4 +3,4 @@
 //
 #import "Konashi.h"
 #import "Colorkit.h"
-#import <EstimoteSDK/EstimoteSDK.h>
+#import "EstimoteSDK.h"
