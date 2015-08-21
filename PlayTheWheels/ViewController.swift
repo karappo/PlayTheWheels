@@ -56,8 +56,8 @@ class ViewController: UIViewController {
       led8
     ]
     
-    let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("sample", ofType: "mp3")!)
     for i in 0..<slits_count {
+      let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!)
       let player = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
       player.prepareToPlay()
       players += [player]
@@ -150,6 +150,7 @@ class ViewController: UIViewController {
         let r = NSString(format: "%03d", Int(slitColor.getRed()))
         let g = NSString(format: "%03d", Int(slitColor.getGreen()))
         let b = NSString(format: "%03d", Int(slitColor.getBlue()))
+        
         NSLog("\(h) - \(r).\(g).\(b)")
         uart("\(r).\(g).\(b)\n")
         

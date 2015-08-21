@@ -14,7 +14,14 @@
 		E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7509F651B7C4DDB001C54E8 /* Images.xcassets */; };
 		E7509F751B7C4DDB001C54E8 /* PlayTheWheelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */; };
 		E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */; };
-		E79CAC4F1B85EF9F00BA3D41 /* sample.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */; };
+		E7D4625E1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D462561B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav */; };
+		E7D4625F1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D462571B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav */; };
+		E7D462601B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D462581B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav */; };
+		E7D462611B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 3.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D462591B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 3.wav */; };
+		E7D462621B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 4.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D4625A1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 4.wav */; };
+		E7D462631B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 5.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D4625B1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 5.wav */; };
+		E7D462641B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 6.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D4625C1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 6.wav */; };
+		E7D462651B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 7.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7D4625D1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 7.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +47,15 @@
 		E7509F731B7C4DDB001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTheWheelsTests.swift; sourceTree = "<group>"; };
 		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
-		E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sample.mp3; path = PlayTheWheels/assets/sample.mp3; sourceTree = "<group>"; };
 		E7A6EEA41B7C561900A8BD2A /* PlayTheWheels-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PlayTheWheels-Bridging-Header.h"; sourceTree = "<group>"; };
+		E7D462561B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 0.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 0.wav"; sourceTree = "<group>"; };
+		E7D462571B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 1.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 1.wav"; sourceTree = "<group>"; };
+		E7D462581B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 2.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 2.wav"; sourceTree = "<group>"; };
+		E7D462591B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 3.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 3.wav"; sourceTree = "<group>"; };
+		E7D4625A1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 4.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 4.wav"; sourceTree = "<group>"; };
+		E7D4625B1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 5.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 5.wav"; sourceTree = "<group>"; };
+		E7D4625C1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 6.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 6.wav"; sourceTree = "<group>"; };
+		E7D4625D1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "Blue Ballad - Pattern 2 - 96 - 7.wav"; path = "PlayTheWheels/assets/Blue Ballad - Pattern 2 - 96 - 7.wav"; sourceTree = "<group>"; };
 		F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,7 +149,14 @@
 			isa = PBXGroup;
 			children = (
 				E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */,
-				E79CAC4D1B85EF9F00BA3D41 /* sample.mp3 */,
+				E7D462561B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav */,
+				E7D462571B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav */,
+				E7D462581B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav */,
+				E7D462591B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 3.wav */,
+				E7D4625A1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 4.wav */,
+				E7D4625B1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 5.wav */,
+				E7D4625C1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 6.wav */,
+				E7D4625D1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 7.wav */,
 			);
 			name = assets;
 			path = ..;
@@ -233,10 +254,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7D462601B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 2.wav in Resources */,
+				E7D462611B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 3.wav in Resources */,
 				E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */,
 				E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */,
-				E79CAC4F1B85EF9F00BA3D41 /* sample.mp3 in Resources */,
+				E7D4625E1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 0.wav in Resources */,
+				E7D462651B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 7.wav in Resources */,
+				E7D462641B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 6.wav in Resources */,
 				E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */,
+				E7D462631B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 5.wav in Resources */,
+				E7D4625F1B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 1.wav in Resources */,
+				E7D462621B86DC3200FB3396 /* Blue Ballad - Pattern 2 - 96 - 4.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
