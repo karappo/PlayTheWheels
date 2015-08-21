@@ -142,50 +142,16 @@ class ViewController: UIViewController {
         player.play()
         
         // Konashi通信
-//        let h = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
-//        let h = CGFloat(Float(slit_index)/Float(slits_count))
-//        NSLog("\(slit_index)/\(slits_count) = \(h)")
-//        let color: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-//        var r: CGFloat = 0.0
-//        var g: CGFloat = 0.0
-//        var b: CGFloat = 0.0
-//        var a: CGFloat = 0.0
-//        color.getRed(&r, green: &g, blue: &b, alpha: &a)
         
-//        NSLog("\(r) \(g) \(b) \(a)")
-//        uart("\(wheel(slit_index))\n")
-        
-        let rand = Int(arc4random_uniform(UInt32(3)))
-        if rand == 0 {
-          tapSendR(nil)
-        }
-        else if rand == 1 {
-          tapSendG(nil)
-        }
-        else {
-          tapSendB(nil)
-        }
-//        NSLog("\(slit_index)")
-//        switch slit_index {
-//          case 0:
-//            uart("255.000.000\n")
-//          case 1:
-//            uart("144.230.020\n")
-//          case 2:
-//            uart("100.040.200\n")
-//          case 3:
-//            uart("255.000.255\n")
-//          case 4:
-//            uart("255.255.255\n")
-//          case 5:
-//            uart("255.130.010\n")
-//          case 6:
-//            uart("000.240.100\n")
-//          case 7:
-//            uart("255.230.050\n")
-//          default:
-//            break
-//        }
+        // slit位置に応じて色を決定
+        let h = CGFloat(Float(slit_index)/Float(slits_count))
+        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        // RGB値を3桁ゼロ埋めで取得
+        let r = NSString(format: "%03d", Int(slitColor.getRed()))
+        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
+        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
+        NSLog("\(h) - \(r).\(g).\(b)")
+        uart("\(r).\(g).\(b)\n")
         
       }
     }
