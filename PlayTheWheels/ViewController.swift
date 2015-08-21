@@ -177,7 +177,7 @@ class ViewController: UIViewController {
     return value * 180.0 / M_PI + 180.0
   }
   
-  func wheel(position: Int) -> String{
+  func wheel(position: Int) -> String {
     let MAX_VAL = 60
     if position < 85 {
       return "\((position*3)*MAX_VAL/255).\((255-position*3)*MAX_VAL/255).0"
@@ -228,7 +228,5 @@ class ViewController: UIViewController {
     // 回転が早く通過slitが多い場合は、どちら向きか判定しにくいので、数の少ない方を返す
     return ((rest.count < result.count) ? rest : result)
   }
-
-
 }
 
