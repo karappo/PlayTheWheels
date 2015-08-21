@@ -181,19 +181,6 @@ class ViewController: UIViewController {
     return value * 180.0 / M_PI + 180.0
   }
   
-  func wheel(position: Int) -> String {
-    let MAX_VAL = 60
-    if position < 85 {
-      return "\((position*3)*MAX_VAL/255).\((255-position*3)*MAX_VAL/255).0"
-    }
-    else if position < 170 {
-      return "\((255-position*3)*MAX_VAL/255)).0.\((position*3)*MAX_VAL/255)"
-    }
-    else {
-      return "0.\((position*3)*MAX_VAL/255).\((255-position*3)*MAX_VAL/255))"
-    }
-  }
-  
   // 0 <= value < 360 の範囲に値を収める
   private func restrict(value: Double) -> Double {
     var deg = value
