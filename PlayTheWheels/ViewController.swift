@@ -87,8 +87,8 @@ class ViewController: UIViewController {
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
 
       // LED2を点灯させる
-//      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
-//      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
+      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
       NSLog("UartRx \(data.description)")
@@ -120,7 +120,7 @@ class ViewController: UIViewController {
   func uart(str: String){
     let res = Konashi.uartWriteString(str)
     if res == KonashiResult.Success {
-      NSLog("KonashiResultSuccess")
+//      NSLog("KonashiResultSuccess")
     }
     else {
       NSLog("KonashiResultFailure")
@@ -133,11 +133,60 @@ class ViewController: UIViewController {
     let passed_index = self.getSlitIndexInRange(self.prev_deg, current: current_deg)
     if 0 < passed_index.count {
       for slit_index in passed_index {
+        // スクリーンのLED
         let led = leds[slit_index]
         activate(led)
         
+        // Sound
         let player = players[slit_index]
         player.play()
+        
+        // 通信
+//        let h = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+//        let h = CGFloat(Float(slit_index)/Float(slits_count))
+//        NSLog("\(slit_index)/\(slits_count) = \(h)")
+//        let color: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+//        var r: CGFloat = 0.0
+//        var g: CGFloat = 0.0
+//        var b: CGFloat = 0.0
+//        var a: CGFloat = 0.0
+//        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+//        NSLog("\(r) \(g) \(b) \(a)")
+//        uart("\(wheel(slit_index))\n")
+        
+        let rand = Int(arc4random_uniform(UInt32(3)))
+        if rand == 0 {
+          tapSendR(nil)
+        }
+        else if rand == 1 {
+          tapSendG(nil)
+        }
+        else {
+          tapSendB(nil)
+        }
+//        NSLog("\(slit_index)")
+//        switch slit_index {
+//          case 0:
+//            uart("255.000.000\n")
+//          case 1:
+//            uart("144.230.020\n")
+//          case 2:
+//            uart("100.040.200\n")
+//          case 3:
+//            uart("255.000.255\n")
+//          case 4:
+//            uart("255.255.255\n")
+//          case 5:
+//            uart("255.130.010\n")
+//          case 6:
+//            uart("000.240.100\n")
+//          case 7:
+//            uart("255.230.050\n")
+//          default:
+//            break
+//        }
+        
       }
     }
     prev_deg = current_deg
@@ -158,6 +207,19 @@ class ViewController: UIViewController {
   
   func radiansToDegrees(value: Double) -> Double {
     return value * 180.0 / M_PI + 180.0
+  }
+  
+  func wheel(position: Int) -> String{
+    let MAX_VAL = 60
+    if position < 85 {
+      return "\((position*3)*MAX_VAL/255).\((255-position*3)*MAX_VAL/255).0"
+    }
+    else if position < 170 {
+      return "\((255-position*3)*MAX_VAL/255)).0.\((position*3)*MAX_VAL/255)"
+    }
+    else {
+      return "0.\((position*3)*MAX_VAL/255).\((255-position*3)*MAX_VAL/255))"
+    }
   }
   
   // 0 <= value < 360 の範囲に値を収める
