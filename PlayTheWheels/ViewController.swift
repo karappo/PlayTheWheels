@@ -141,7 +141,7 @@ class ViewController: UIViewController {
         let player = players[slit_index]
         player.play()
         
-        // 通信
+        // Konashi通信
 //        let h = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
 //        let h = CGFloat(Float(slit_index)/Float(slits_count))
 //        NSLog("\(slit_index)/\(slits_count) = \(h)")
