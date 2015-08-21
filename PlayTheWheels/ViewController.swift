@@ -140,7 +140,8 @@ class ViewController: UIViewController {
         activate(led)
         
         // Sound
-        let player = players[slit_index]
+        let player: AVAudioPlayer = players[slit_index]
+        player.currentTime = 0
         player.play()
         
         // Konashi通信
