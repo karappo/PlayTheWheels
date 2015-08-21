@@ -82,7 +82,9 @@ class ViewController: UIViewController {
     Konashi.shared().connectedHandler = {
       NSLog("[Konashi] Connected")
     }
-    
+    Konashi.shared().disconnectedHandler = {
+      NSLog("[Konashi] Disonnected")
+    }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
       
@@ -123,7 +125,7 @@ class ViewController: UIViewController {
     if Konashi.isConnected() {
       let res = Konashi.uartWriteString(str)
       if res == KonashiResult.Success {
-        NSLog("[Konashi] KonashiResultSuccess")
+//        NSLog("[Konashi] KonashiResultSuccess")
       }
       else {
         NSLog("[Konashi] KonashiResultFailure")
