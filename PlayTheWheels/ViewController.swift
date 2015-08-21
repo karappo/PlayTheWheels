@@ -33,18 +33,18 @@ class ViewController: UIViewController {
   
   var players: Array<AVAudioPlayer> = []
   
-  let slits_count = 8
+  let SLIT_COUNT = 8
   var leds: Array<UIView> = []
-  var prev_deg: Double = 0.0
-  var slit_degs: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
+  var prevDeg: Double = 0.0
+  var slitDegs: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     // 画面上のLEDの準備
-    let count = Double(slits_count)
-    for i in 0..<slits_count {
-      slit_degs += [360.0/count*Double(i)]
+    let count = Double(SLIT_COUNT)
+    for i in 0..<SLIT_COUNT {
+      slitDegs += [360.0/count*Double(i)]
     }
     leds = [
       led1,
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
     ]
     
     // AudioPlayerの準備
-    for i in 0..<slits_count {
+    for i in 0..<SLIT_COUNT {
       let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!)
       let player = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
       player.prepareToPlay()
@@ -134,7 +134,7 @@ class ViewController: UIViewController {
   func updateRotation(radian: Double) {
     let current_deg = self.radiansToDegrees(radian)
     label.text = "\(floor(current_deg))"
-    let passed_index = self.getSlitIndexInRange(self.prev_deg, current: current_deg)
+    let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
     if 0 < passed_index.count {
       for slit_index in passed_index {
         // スクリーンのLED
@@ -149,7 +149,7 @@ class ViewController: UIViewController {
         // Konashi通信
         
         // slit位置に応じて色を決定
-        let h = CGFloat(Float(slit_index)/Float(slits_count))
+        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
         let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
         // RGB値を3桁ゼロ埋めで取得
         let r = NSString(format: "%03d", Int(slitColor.getRed()))
@@ -159,7 +159,7 @@ class ViewController: UIViewController {
         uart("\(r).\(g).\(b)\n")
       }
     }
-    prev_deg = current_deg
+    prevDeg = current_deg
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
   }
@@ -217,8 +217,8 @@ class ViewController: UIViewController {
     var result: Array<Int> = [] // range内にあるslit
     var rest: Array<Int> = [] // range外にあるslit
     
-    for i in 0..<slits_count {
-      let slit = slit_degs[i]
+    for i in 0..<SLIT_COUNT {
+      let slit = slitDegs[i]
       if _min <= slit && slit <= _max {
         result += [i]
       }
