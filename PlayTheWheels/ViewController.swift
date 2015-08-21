@@ -120,12 +120,14 @@ class ViewController: UIViewController {
   }
   // シリアル通信で送信
   func uart(str: String){
-    let res = Konashi.uartWriteString(str)
-    if res == KonashiResult.Success {
-//      NSLog("KonashiResultSuccess")
-    }
-    else {
-      NSLog("KonashiResultFailure")
+    if Konashi.isConnected() {
+      let res = Konashi.uartWriteString(str)
+      if res == KonashiResult.Success {
+        NSLog("KonashiResultSuccess")
+      }
+      else {
+        NSLog("KonashiResultFailure")
+      }
     }
   }
   
