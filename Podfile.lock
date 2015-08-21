@@ -1,10 +1,13 @@
 PODS:
+  - Colorkit (0.1.0)
   - konashi-ios-sdk (4.0.1)
 
 DEPENDENCIES:
+  - Colorkit
   - konashi-ios-sdk (~> 4.0.0)
 
 SPEC CHECKSUMS:
+  Colorkit: 796f40223fbbec3fc9c24d32608202ef82bfb90a
   konashi-ios-sdk: 2a11146c5fd2fecb39dd0531201e4b836dea8f11
 
 COCOAPODS: 0.38.2
