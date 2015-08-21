@@ -41,6 +41,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // 画面上のLEDの準備
     let count = Double(slits_count)
     for i in 0..<slits_count {
       slit_degs += [360.0/count*Double(i)]
@@ -56,6 +57,7 @@ class ViewController: UIViewController {
       led8
     ]
     
+    // AudioPlayerの準備
     for i in 0..<slits_count {
       let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!)
       let player = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
@@ -63,8 +65,7 @@ class ViewController: UIViewController {
       players += [player]
     }
     
-    MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
-    
+    // モーションセンサー
     if MM.deviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
       MM.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
@@ -75,14 +76,15 @@ class ViewController: UIViewController {
       }
     }
     
+    // Konashi関係
     NSLog("Konashi.isConnected:\(Konashi.isConnected())")
     
     Konashi.shared().connectedHandler = {
-      NSLog("CONNECTED");
+      NSLog("CONNECTED")
     }
     
     Konashi.shared().readyHandler = {
-      NSLog("READY");
+      NSLog("READY")
       
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
 
@@ -151,9 +153,7 @@ class ViewController: UIViewController {
         let g = NSString(format: "%03d", Int(slitColor.getGreen()))
         let b = NSString(format: "%03d", Int(slitColor.getBlue()))
         
-        NSLog("\(h) - \(r).\(g).\(b)")
         uart("\(r).\(g).\(b)\n")
-        
       }
     }
     prev_deg = current_deg
