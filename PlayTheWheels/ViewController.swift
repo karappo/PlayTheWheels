@@ -123,10 +123,10 @@ class ViewController: UIViewController {
     if Konashi.isConnected() {
       let res = Konashi.uartWriteString(str)
       if res == KonashiResult.Success {
-        NSLog("KonashiResultSuccess")
+        NSLog("[Konashi] KonashiResultSuccess")
       }
       else {
-        NSLog("KonashiResultFailure")
+        NSLog("[Konashi] KonashiResultFailure")
       }
     }
   }
