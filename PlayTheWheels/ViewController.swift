@@ -22,13 +22,12 @@ class ViewController: UIViewController {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   
-  @IBOutlet weak var reverbSlider: UISlider!
-  
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
   var engine: AVAudioEngine!
   var reverb: AVAudioUnitReverb!
+  var distortion: AVAudioUnitDistortion!
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
@@ -58,12 +57,19 @@ class ViewController: UIViewController {
     ]
     
     engine = AVAudioEngine()
+    
+    distortion = AVAudioUnitDistortion()
+    distortion.loadFactoryPreset(.SpeechWaves)
+    distortion.preGain = -80
+    distortion.wetDryMix = 0
+    
     reverb = AVAudioUnitReverb()
     reverb.loadFactoryPreset(.LargeHall2)
     reverb.wetDryMix = 0
     
     mixer = AVAudioMixerNode()
     
+    engine.attachNode(distortion)
     engine.attachNode(reverb)
     engine.attachNode(mixer)
     
@@ -86,7 +92,8 @@ class ViewController: UIViewController {
       players += [player]
     }
     
-    engine.connect(mixer, to: reverb, format: format)
+    engine.connect(mixer, to: distortion, format: format)
+    engine.connect(distortion, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
     engine.startAndReturnError(nil)
   
@@ -122,8 +129,6 @@ class ViewController: UIViewController {
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
       NSLog("[Konashi] UartRx \(data.description)")
     }
-    
-    reverbSlider.addTarget(self, action: "sliderChanged:", forControlEvents: .ValueChanged)
   }
 
   override func didReceiveMemoryWarning() {
@@ -143,8 +148,14 @@ class ViewController: UIViewController {
   @IBAction func tapB(sender: UIButton) {
     uart("000.000.255\n")
   }
-  func sliderChanged(sender: UISlider!) {
-    reverb.wetDryMix = reverbSlider.value
+  @IBAction func changeDistortionPreGain(sender: UISlider) {
+    distortion.preGain = sender.value
+  }
+  @IBAction func changeDistortionWetDry(sender: UISlider) {
+    distortion.wetDryMix = sender.value
+  }
+  @IBAction func changeReverbWetDry(sender: UISlider) {
+    reverb.wetDryMix = sender.value
   }
   
   // シリアル通信で送信
