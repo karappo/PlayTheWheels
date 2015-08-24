@@ -12,7 +12,6 @@ import CoreMotion
 
 class ViewController: UIViewController {
 
-  @IBOutlet weak var label: UILabel!
   @IBOutlet weak var arrow: UIImageView!
   @IBOutlet weak var led1: UIView!
   @IBOutlet weak var led2: UIView!
@@ -171,7 +170,6 @@ class ViewController: UIViewController {
   
   func updateRotation(radian: Double) {
     let current_deg = self.radiansToDegrees(radian)
-    label.text = "\(floor(current_deg))"
     let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
     if 0 < passed_index.count {
       for slit_index in passed_index {
