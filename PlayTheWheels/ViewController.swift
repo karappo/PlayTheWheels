@@ -22,10 +22,6 @@ class ViewController: UIViewController {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   
-  @IBOutlet weak var find: UIButton!
-  @IBOutlet weak var sendR: UIButton!
-  @IBOutlet weak var sendG: UIButton!
-  @IBOutlet weak var sendB: UIButton!
   @IBOutlet weak var reverbSlider: UISlider!
   
   let MM: CMMotionManager = CMMotionManager()
@@ -126,10 +122,7 @@ class ViewController: UIViewController {
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
       NSLog("[Konashi] UartRx \(data.description)")
     }
-    find.addTarget(self, action: "tapFind:", forControlEvents: .TouchUpInside)
-    sendR.addTarget(self, action: "tapSendR:", forControlEvents: .TouchUpInside)
-    sendG.addTarget(self, action: "tapSendG:", forControlEvents: .TouchUpInside)
-    sendB.addTarget(self, action: "tapSendB:", forControlEvents: .TouchUpInside)
+    
     reverbSlider.addTarget(self, action: "sliderChanged:", forControlEvents: .ValueChanged)
   }
 
@@ -137,17 +130,17 @@ class ViewController: UIViewController {
     super.didReceiveMemoryWarning()
   }
   
-  func tapFind(sender:UIButton!) {
+  @IBAction func tapFind(sender: UIButton) {
     Konashi.find()
   }
   
-  func tapSendR(sender:UIButton!) {
+  @IBAction func tapR(sender: UIButton) {
     uart("255.000.000\n")
   }
-  func tapSendG(sender:UIButton!) {
+  @IBAction func tapG(sender: UIButton) {
     uart("000.255.000\n")
   }
-  func tapSendB(sender:UIButton!) {
+  @IBAction func tapB(sender: UIButton) {
     uart("000.000.255\n")
   }
   func sliderChanged(sender: UISlider!) {
