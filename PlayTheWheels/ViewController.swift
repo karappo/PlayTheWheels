@@ -27,11 +27,16 @@ class ViewController: UIViewController {
   @IBOutlet weak var sendR: UIButton!
   @IBOutlet weak var sendG: UIButton!
   @IBOutlet weak var sendB: UIButton!
+  @IBOutlet weak var reverbSlider: UISlider!
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
-  var players: Array<AVAudioPlayer> = []
+  var engine: AVAudioEngine!
+  var reverb: AVAudioUnitReverb!
+  var mixer: AVAudioMixerNode!
+  var players: Array<AVAudioPlayerNode> = []
+  var audioFiles: Array<AVAudioFile> = []
   
   let SLIT_COUNT = 8
   var leds: Array<UIView> = []
@@ -57,14 +62,39 @@ class ViewController: UIViewController {
       led8
     ]
     
+    engine = AVAudioEngine()
+    reverb = AVAudioUnitReverb()
+    reverb.loadFactoryPreset(.LargeHall2)
+    reverb.wetDryMix = 0
+    
+    mixer = AVAudioMixerNode()
+    
+    engine.attachNode(reverb)
+    engine.attachNode(mixer)
+    
     // AudioPlayerの準備
+    var format: AVAudioFormat! = nil
     for i in 0..<SLIT_COUNT {
-      let sound_data = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!)
-      let player = AVAudioPlayer(contentsOfURL: sound_data, error: nil)
-      player.prepareToPlay()
+      
+      let player = AVAudioPlayerNode()
+      let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!), error: nil)
+      audioFiles += [audioFile]
+      
+      engine.attachNode(player)
+      
+      if format == nil {
+        format = audioFile.processingFormat
+      }
+      
+      engine.connect(player, to: mixer, format: format)
+      
       players += [player]
     }
     
+    engine.connect(mixer, to: reverb, format: format)
+    engine.connect(reverb, to: engine.mainMixerNode, format: format)
+    engine.startAndReturnError(nil)
+  
     // モーションセンサー
     if MM.deviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
@@ -101,6 +131,7 @@ class ViewController: UIViewController {
     sendR.addTarget(self, action: "tapSendR:", forControlEvents: .TouchUpInside)
     sendG.addTarget(self, action: "tapSendG:", forControlEvents: .TouchUpInside)
     sendB.addTarget(self, action: "tapSendB:", forControlEvents: .TouchUpInside)
+    reverbSlider.addTarget(self, action: "sliderChanged:", forControlEvents: .ValueChanged)
   }
 
   override func didReceiveMemoryWarning() {
@@ -120,6 +151,11 @@ class ViewController: UIViewController {
   func tapSendB(sender:UIButton!) {
     uart("000.000.255\n")
   }
+  func sliderChanged(sender: UISlider!) {
+    NSLog("\(reverbSlider.value)")
+    reverb.wetDryMix = reverbSlider.value
+  }
+  
   // シリアル通信で送信
   func uart(str: String){
     if Konashi.isConnected() {
@@ -144,8 +180,16 @@ class ViewController: UIViewController {
         activate(led)
         
         // Sound
-        let player: AVAudioPlayer = players[slit_index]
-        player.currentTime = 0
+        let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
+        let player: AVAudioPlayerNode = players[slit_index] as AVAudioPlayerNode
+        if player.playing {
+          player.stop()
+        }
+        
+        // playerにオーディオファイルを設定
+        player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+        
+        // 再生開始
         player.play()
         
         // Konashi通信
