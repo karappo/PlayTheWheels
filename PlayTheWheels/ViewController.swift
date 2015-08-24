@@ -28,6 +28,7 @@ class ViewController: UIViewController {
   var engine: AVAudioEngine!
   var reverb: AVAudioUnitReverb!
   var distortion: AVAudioUnitDistortion!
+  var delay: AVAudioUnitDelay!
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
@@ -63,6 +64,12 @@ class ViewController: UIViewController {
     distortion.preGain = -80
     distortion.wetDryMix = 0
     
+    delay = AVAudioUnitDelay()
+    delay.delayTime = 0
+    delay.feedback = 100
+    delay.lowPassCutoff = 1500
+    delay.wetDryMix = 0
+    
     reverb = AVAudioUnitReverb()
     reverb.loadFactoryPreset(.LargeHall2)
     reverb.wetDryMix = 0
@@ -70,6 +77,7 @@ class ViewController: UIViewController {
     mixer = AVAudioMixerNode()
     
     engine.attachNode(distortion)
+    engine.attachNode(delay)
     engine.attachNode(reverb)
     engine.attachNode(mixer)
     
@@ -93,7 +101,8 @@ class ViewController: UIViewController {
     }
     
     engine.connect(mixer, to: distortion, format: format)
-    engine.connect(distortion, to: reverb, format: format)
+    engine.connect(distortion, to: delay, format: format)
+    engine.connect(delay, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
     engine.startAndReturnError(nil)
   
@@ -157,6 +166,19 @@ class ViewController: UIViewController {
   @IBAction func changeReverbWetDry(sender: UISlider) {
     reverb.wetDryMix = sender.value
   }
+  @IBAction func changeDelayTime(sender: UISlider) {
+    delay.delayTime = NSTimeInterval(sender.value)
+  }
+  @IBAction func changeDelayFeedback(sender: UISlider) {
+    delay.feedback = sender.value
+  }
+  @IBAction func changeDelayLowPassCutOff(sender: UISlider) {
+    delay.lowPassCutoff = sender.value
+  }
+  @IBAction func changeDelayWetDry(sender: UISlider) {
+    delay.wetDryMix = sender.value
+  }
+  
   
   // シリアル通信で送信
   func uart(str: String){
