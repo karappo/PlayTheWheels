@@ -151,7 +151,6 @@ class ViewController: UIViewController {
     uart("000.000.255\n")
   }
   func sliderChanged(sender: UISlider!) {
-    NSLog("\(reverbSlider.value)")
     reverb.wetDryMix = reverbSlider.value
   }
   
