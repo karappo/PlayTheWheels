@@ -247,7 +247,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="QGF-1P-2zN">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="QGF-1P-2zN">
                                         <rect key="frame" x="150" y="458" width="142" height="31"/>
                                         <connections>
                                             <action selector="changeDelayWetDry:" destination="vXZ-lx-hvc" eventType="valueChanged" id="SXL-36-fWA"/>
@@ -259,7 +259,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="5aU-91-kb3">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="5aU-91-kb3">
                                         <rect key="frame" x="150" y="313" width="142" height="31"/>
                                         <connections>
                                             <action selector="changeDistortionWetDry:" destination="vXZ-lx-hvc" eventType="valueChanged" id="tgF-Rd-Dvi"/>

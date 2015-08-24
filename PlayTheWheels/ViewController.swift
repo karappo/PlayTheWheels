@@ -62,13 +62,13 @@ class ViewController: UIViewController {
     distortion = AVAudioUnitDistortion()
     distortion.loadFactoryPreset(.SpeechWaves)
     distortion.preGain = -80
-    distortion.wetDryMix = 0
+    distortion.wetDryMix = 50
     
     delay = AVAudioUnitDelay()
     delay.delayTime = 0
     delay.feedback = 100
     delay.lowPassCutoff = 1500
-    delay.wetDryMix = 0
+    delay.wetDryMix = 50
     
     reverb = AVAudioUnitReverb()
     reverb.loadFactoryPreset(.LargeHall2)
@@ -89,6 +89,7 @@ class ViewController: UIViewController {
       let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!), error: nil)
       audioFiles += [audioFile]
       
+      player.volume = 9.0
       engine.attachNode(player)
       
       if format == nil {
