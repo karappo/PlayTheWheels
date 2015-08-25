@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import CoreMotion
 
+
 class ViewController: UIViewController {
 
   @IBOutlet weak var arrow: UIImageView!
@@ -21,6 +22,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var led6: UIView!
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
+  @IBOutlet weak var reverbPresetsBtn: UIButton!
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -32,6 +34,36 @@ class ViewController: UIViewController {
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
+  let reverbPresetsStrings = [
+    "SmallRoom",
+    "MediumRoom",
+    "LargeRoom",
+    "MediumHall",
+    "LargeHall",
+    "Plate",
+    "MediumChamber",
+    "LargeChamber",
+    "Cathedral",
+    "LargeRoom2",
+    "MediumHall2",
+    "MediumHall3",
+    "LargeHall2"
+  ]
+  let reverbPresetsEnums: Array<AVAudioUnitReverbPreset> = [
+    AVAudioUnitReverbPreset.SmallRoom,
+    AVAudioUnitReverbPreset.MediumRoom,
+    AVAudioUnitReverbPreset.LargeRoom,
+    AVAudioUnitReverbPreset.MediumHall,
+    AVAudioUnitReverbPreset.LargeHall,
+    AVAudioUnitReverbPreset.Plate,
+    AVAudioUnitReverbPreset.MediumChamber,
+    AVAudioUnitReverbPreset.LargeChamber,
+    AVAudioUnitReverbPreset.Cathedral,
+    AVAudioUnitReverbPreset.LargeRoom2,
+    AVAudioUnitReverbPreset.MediumHall2,
+    AVAudioUnitReverbPreset.MediumHall3,
+    AVAudioUnitReverbPreset.LargeHall2
+  ]
   
   let SLIT_COUNT = 8
   var leds: Array<UIView> = []
@@ -71,8 +103,8 @@ class ViewController: UIViewController {
     delay.wetDryMix = 50
     
     reverb = AVAudioUnitReverb()
-    reverb.loadFactoryPreset(.LargeHall2)
     reverb.wetDryMix = 0
+    reverbPresets(12)
     
     mixer = AVAudioMixerNode()
     
@@ -179,7 +211,19 @@ class ViewController: UIViewController {
   @IBAction func changeDelayWetDry(sender: UISlider) {
     delay.wetDryMix = sender.value
   }
+  @IBAction func tapReverbPreset(sender: UIButton) {
+    ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: find(self.reverbPresetsStrings, reverbPresetsBtn.titleLabel!.text!)!, doneBlock: {
+      picker, value, index in
+        self.reverbPresets(value)
+        return
+      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+  }
   
+  func reverbPresets(index: Int) {
+    NSLog("reverbPresets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
+    reverb.loadFactoryPreset(reverbPresetsEnums[index])
+    reverbPresetsBtn.setTitle("\(reverbPresetsStrings[index])", forState: UIControlState.Normal)
+  }
   
   // シリアル通信で送信
   func uart(str: String){
