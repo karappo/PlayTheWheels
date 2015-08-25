@@ -132,20 +132,8 @@
                                         <state key="normal" title="Find Konashi">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EFh-gW-DOs">
-                                        <rect key="frame" x="299" y="231" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="3bg-5C-CSN"/>
-                                            <constraint firstAttribute="width" constant="30" id="vaO-gv-CSO"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="R">
-                                            <color key="titleColor" red="0.88627451660000001" green="0.02089278772" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
                                         <connections>
-                                            <action selector="tapR:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3aZ-Qj-gYX"/>
+                                            <action selector="tapFind:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="53Z-hB-JIM"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xlS-Z1-xgF">
@@ -249,6 +237,12 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="YkM-wU-ODi" userLabel="Delay-DelayTime">
+                                        <rect key="frame" x="205" y="491" width="196" height="31"/>
+                                        <connections>
+                                            <action selector="changeDelayDelayTime:" destination="vXZ-lx-hvc" eventType="valueChanged" id="dCB-at-Zqd"/>
+                                        </connections>
+                                    </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QdY-4r-zCE">
                                         <rect key="frame" x="30" y="532" width="47" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
@@ -345,12 +339,21 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="YkM-wU-ODi" userLabel="Delay-DelayTime">
-                                        <rect key="frame" x="205" y="491" width="196" height="31"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EFh-gW-DOs">
+                                        <rect key="frame" x="296" y="231" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="3bg-5C-CSN"/>
+                                            <constraint firstAttribute="width" constant="30" id="vaO-gv-CSO"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="R">
+                                            <color key="titleColor" red="0.88627451660000001" green="0.02089278772" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                         <connections>
-                                            <action selector="changeDelayDelayTime:" destination="vXZ-lx-hvc" eventType="valueChanged" id="dCB-at-Zqd"/>
+                                            <action selector="tapR:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="3aZ-Qj-gYX"/>
                                         </connections>
-                                    </slider>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="5aU-91-kb3" firstAttribute="trailing" secondItem="A0w-lJ-jGW" secondAttribute="trailing" id="06i-GQ-XM9"/>
