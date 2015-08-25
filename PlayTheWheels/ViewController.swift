@@ -277,14 +277,14 @@ class ViewController: UIViewController {
   }
   
   func distortionPresets(index: Int) {
-    NSLog("Distortion Presets: \(index), \(distortionPresetsEnums[index]), \(distortionPresetsStrings[index])")
+//    NSLog("Distortion Presets: \(index), \(distortionPresetsEnums[index]), \(distortionPresetsStrings[index])")
     distortion.loadFactoryPreset(distortionPresetsEnums[index])
-    distortionPresetsBtn.setTitle("\(distortionPresetsStrings[index])", forState: UIControlState.Normal)
+    distortionPresetsBtn.setTitle(distortionPresetsStrings[index], forState: UIControlState.Normal)
   }
   func reverbPresets(index: Int) {
-    NSLog("Reverb Presets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
+//    NSLog("Reverb Presets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
     reverb.loadFactoryPreset(reverbPresetsEnums[index])
-    reverbPresetsBtn.setTitle("\(reverbPresetsStrings[index])", forState: UIControlState.Normal)
+    reverbPresetsBtn.setTitle(reverbPresetsStrings[index], forState: UIControlState.Normal)
   }
   
   // シリアル通信で送信
