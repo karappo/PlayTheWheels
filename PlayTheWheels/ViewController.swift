@@ -22,8 +22,18 @@ class ViewController: UIViewController {
   @IBOutlet weak var led6: UIView!
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
-  @IBOutlet weak var reverbPresetsBtn: UIButton!
+  
+  @IBOutlet weak var distortionDryWetLabel: UILabel!
   @IBOutlet weak var distortionPresetsBtn: UIButton!
+  @IBOutlet weak var distortionPreGainLabel: UILabel!
+  
+  @IBOutlet weak var delayDryWetLabel: UILabel!
+  @IBOutlet weak var delayDelayTimeLabel: UILabel!
+  @IBOutlet weak var delayFeedbackLabel: UILabel!
+  @IBOutlet weak var delayLowPassCutOffLabel: UILabel!
+  
+  @IBOutlet weak var reverbDryWetLabel: UILabel!
+  @IBOutlet weak var reverbPresetsBtn: UIButton!
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -142,19 +152,19 @@ class ViewController: UIViewController {
     engine = AVAudioEngine()
     
     distortion = AVAudioUnitDistortion()
-    distortion.preGain = -80
-    distortion.wetDryMix = 50
-    distortionPresets(1)
+    setDistortionPreGain(-80)
+    setDistortionWetDry(50)
+    setDistortionPresets(1)
     
     delay = AVAudioUnitDelay()
-    delay.delayTime = 0
-    delay.feedback = 100
-    delay.lowPassCutoff = 1500
-    delay.wetDryMix = 50
+    setDelayDelayTime(0)
+    setDelayFeedback(100)
+    setDelayLowPassCutOff(1500)
+    setDelayWetDry(50)
     
     reverb = AVAudioUnitReverb()
-    reverb.wetDryMix = 0
-    reverbPresets(1)
+    setReverbWetDry(0)
+    setReverbPresets(1)
     
     mixer = AVAudioMixerNode()
     
@@ -240,49 +250,80 @@ class ViewController: UIViewController {
   @IBAction func tapB(sender: UIButton) {
     uart("000.000.255\n")
   }
-  @IBAction func changeDistortionPreGain(sender: UISlider) {
-    distortion.preGain = sender.value
-  }
+  
+  // Distortion
   @IBAction func changeDistortionWetDry(sender: UISlider) {
-    distortion.wetDryMix = sender.value
+    setDistortionWetDry(sender.value)
   }
-  @IBAction func changeReverbWetDry(sender: UISlider) {
-    reverb.wetDryMix = sender.value
-  }
-  @IBAction func changeDelayTime(sender: UISlider) {
-    delay.delayTime = NSTimeInterval(sender.value)
-  }
-  @IBAction func changeDelayFeedback(sender: UISlider) {
-    delay.feedback = sender.value
-  }
-  @IBAction func changeDelayLowPassCutOff(sender: UISlider) {
-    delay.lowPassCutoff = sender.value
-  }
-  @IBAction func changeDelayWetDry(sender: UISlider) {
-    delay.wetDryMix = sender.value
+  func setDistortionWetDry(val: Float) {
+    distortion.wetDryMix = val
+    distortionDryWetLabel.text = "\(val)"
   }
   @IBAction func tapDistortionPresets(sender: UIButton) {
     ActionSheetStringPicker.showPickerWithTitle("Distortion presets", rows: distortionPresetsStrings, initialSelection: find(self.distortionPresetsStrings, distortionPresetsBtn.titleLabel!.text!)!, doneBlock: {
       picker, value, index in
-        self.distortionPresets(value)
+        self.setDistortionPresets(value)
         return
       }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+  }
+  func setDistortionPresets(index: Int) {
+    distortion.loadFactoryPreset(distortionPresetsEnums[index])
+    distortionPresetsBtn.setTitle(distortionPresetsStrings[index], forState: UIControlState.Normal)
+  }
+  @IBAction func changeDistortionPreGain(sender: UISlider) {
+    setDistortionPreGain(sender.value)
+  }
+  func setDistortionPreGain(val: Float) {
+    distortion.preGain = val
+    distortionPreGainLabel.text = "\(val)"
+  }
+  
+  // Delay
+  @IBAction func changeDelayWetDry(sender: UISlider) {
+    setDelayWetDry(sender.value)
+  }
+  func setDelayWetDry(val: Float) {
+    delay.wetDryMix = val
+    delayDryWetLabel.text = "\(val)"
+  }
+  @IBAction func changeDelayDelayTime(sender: UISlider) {
+    setDelayDelayTime(sender.value)
+  }
+  func setDelayDelayTime(val: Float) {
+    delay.delayTime = NSTimeInterval(val)
+    delayDelayTimeLabel.text = "\(val)"
+  }
+  @IBAction func changeDelayFeedback(sender: UISlider) {
+    setDelayFeedback(sender.value)
+  }
+  func setDelayFeedback(val: Float) {
+    delay.feedback = val
+    delayFeedbackLabel.text = "\(val)"
+  }
+  @IBAction func changeDelayLowPassCutOff(sender: UISlider) {
+    setDelayLowPassCutOff(sender.value)
+  }
+  func setDelayLowPassCutOff(val: Float) {
+    delay.lowPassCutoff = val
+    delayLowPassCutOffLabel.text = "\(val)"
+  }
+  
+  // Reverb
+  @IBAction func changeReverbWetDry(sender: UISlider) {
+    setReverbWetDry(sender.value)
+  }
+  func setReverbWetDry(val: Float) {
+    reverb.wetDryMix = val
+    reverbDryWetLabel.text = "\(val)"
   }
   @IBAction func tapReverbPresets(sender: UIButton) {
     ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: find(self.reverbPresetsStrings, reverbPresetsBtn.titleLabel!.text!)!, doneBlock: {
       picker, value, index in
-        self.reverbPresets(value)
+        self.setReverbPresets(value)
         return
     }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
   }
-  
-  func distortionPresets(index: Int) {
-//    NSLog("Distortion Presets: \(index), \(distortionPresetsEnums[index]), \(distortionPresetsStrings[index])")
-    distortion.loadFactoryPreset(distortionPresetsEnums[index])
-    distortionPresetsBtn.setTitle(distortionPresetsStrings[index], forState: UIControlState.Normal)
-  }
-  func reverbPresets(index: Int) {
-//    NSLog("Reverb Presets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
+  func setReverbPresets(index: Int) {
     reverb.loadFactoryPreset(reverbPresetsEnums[index])
     reverbPresetsBtn.setTitle(reverbPresetsStrings[index], forState: UIControlState.Normal)
   }
