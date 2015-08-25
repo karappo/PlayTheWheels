@@ -10,8 +10,7 @@ import UIKit
 import AVFoundation
 import CoreMotion
 
-
-class ViewController: UIViewController {
+class ViewController: UIViewController, ESTBeaconManagerDelegate {
 
   @IBOutlet weak var arrow: UIImageView!
   @IBOutlet weak var led1: UIView!
@@ -22,6 +21,17 @@ class ViewController: UIViewController {
   @IBOutlet weak var led6: UIView!
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
+  
+  @IBOutlet weak var logLabel: UILabel!
+  
+  // Sliders
+  @IBOutlet weak var distortionDryWetSlider: UISlider!
+  @IBOutlet weak var distortionPreGainSlider: UISlider!
+  @IBOutlet weak var delayDryWetSlider: UISlider!
+  @IBOutlet weak var delayDelayTimeSlider: UISlider!
+  @IBOutlet weak var delayFeedbackSlider: UISlider!
+  @IBOutlet weak var delayLowPassCutOffSlider: UISlider!
+  @IBOutlet weak var reverbDryWetSlider: UISlider!
   
   @IBOutlet weak var distortionDryWetLabel: UILabel!
   @IBOutlet weak var distortionPresetsBtn: UIButton!
@@ -34,6 +44,15 @@ class ViewController: UIViewController {
   
   @IBOutlet weak var reverbDryWetLabel: UILabel!
   @IBOutlet weak var reverbPresetsBtn: UIButton!
+  
+  // Beacon
+  let beaconManager = ESTBeaconManager()
+  let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
+  let effectBeacons = [
+    "9152:49340": "Distortion",
+    "38936:27676": "Delay",
+    "30062:7399": "Reverb"
+  ]
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -124,7 +143,7 @@ class ViewController: UIViewController {
     AVAudioUnitReverbPreset.MediumHall3,
     AVAudioUnitReverbPreset.LargeHall2
   ]
-  
+
   let SLIT_COUNT = 8
   var leds: Array<UIView> = []
   var prevDeg: Double = 0.0
@@ -132,6 +151,10 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    // Estimote Beacon
+    beaconManager.delegate = self
+    beaconManager.requestAlwaysAuthorization()
     
     // 画面上のLEDの準備
     let count = Double(SLIT_COUNT)
@@ -152,19 +175,19 @@ class ViewController: UIViewController {
     engine = AVAudioEngine()
     
     distortion = AVAudioUnitDistortion()
-    setDistortionWetDry(50)
-    setDistortionPresets(0)
-    setDistortionPreGain(-80)
+    setDistortionWetDry(0)
+    setDistortionPresets(2)
+    setDistortionPreGain(-30)
     
     delay = AVAudioUnitDelay()
-    setDelayWetDry(50)
-    setDelayDelayTime(0)
-    setDelayFeedback(100)
+    setDelayWetDry(0)
+    setDelayDelayTime(0.2)
+    setDelayFeedback(-55)
     setDelayLowPassCutOff(1500)
     
     reverb = AVAudioUnitReverb()
     setReverbWetDry(0)
-    setReverbPresets(0)
+    setReverbPresets(4)
     
     mixer = AVAudioMixerNode()
     
@@ -232,9 +255,58 @@ class ViewController: UIViewController {
       NSLog("[Konashi] UartRx \(data.description)")
     }
   }
+  
+  override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(animated)
+    beaconManager.startRangingBeaconsInRegion(beaconRegion)
+  }
+  
+  override func viewDidDisappear(animated: Bool) {
+    super.viewDidDisappear(animated)
+    beaconManager.stopRangingBeaconsInRegion(beaconRegion)
+  }
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
+  }
+  
+  // Beacon
+  func beaconManager(manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!,
+    inRegion region: CLBeaconRegion!) {
+      if let _beacons = beacons as? [CLBeacon] {
+        var str: String = ""
+        for _beacon: CLBeacon in _beacons {
+          let beaconKey = "\(_beacon.major):\(_beacon.minor)"
+          if let effectName = effectBeacons[beaconKey] as String! {
+            let accuracy = Float(Int(_beacon.accuracy * 100.0)) / 100.0 // 小数点第１位まで
+            str += "\(effectName): \(accuracy)\n"
+            
+            // accuracy: 5 - 0 => 0 - 50 に変換
+            var dryWet = Float(50 - _beacon.accuracy * 10)
+            dryWet = max(min(50, dryWet), 0) // 範囲内に収める
+            
+            switch effectName {
+              case "Distortion":
+                setDistortionWetDry(dryWet)
+                distortionDryWetSlider.setValue(dryWet, animated: true)
+              case "Delay":
+                setDelayWetDry(dryWet)
+                delayDryWetSlider.setValue(dryWet, animated: true)
+              case "Reverb":
+                setReverbWetDry(dryWet)
+                reverbDryWetSlider.setValue(dryWet, animated: true)
+              default :
+                break
+            }
+          }
+        }
+        logLabel.text = str
+      }
+  }
+  
+  // oldMin～oldMax内のoldValをnewMin〜newMax内の値に変換して返す
+  func map(oldVal: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float) -> Float{
+    return (((oldVal - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin
   }
   
   @IBAction func tapFind(sender: UIButton) {
