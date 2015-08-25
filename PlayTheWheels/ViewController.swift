@@ -152,19 +152,19 @@ class ViewController: UIViewController {
     engine = AVAudioEngine()
     
     distortion = AVAudioUnitDistortion()
-    setDistortionPreGain(-80)
     setDistortionWetDry(50)
-    setDistortionPresets(1)
+    setDistortionPresets(0)
+    setDistortionPreGain(-80)
     
     delay = AVAudioUnitDelay()
+    setDelayWetDry(50)
     setDelayDelayTime(0)
     setDelayFeedback(100)
     setDelayLowPassCutOff(1500)
-    setDelayWetDry(50)
     
     reverb = AVAudioUnitReverb()
     setReverbWetDry(0)
-    setReverbPresets(1)
+    setReverbPresets(0)
     
     mixer = AVAudioMixerNode()
     
