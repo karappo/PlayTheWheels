@@ -23,6 +23,7 @@ class ViewController: UIViewController {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   @IBOutlet weak var reverbPresetsBtn: UIButton!
+  @IBOutlet weak var distortionPresetsBtn: UIButton!
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -34,7 +35,56 @@ class ViewController: UIViewController {
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
-  let reverbPresetsStrings = [
+  let distortionPresetsStrings: Array<String> = [
+    "DrumsBitBrush",
+    "DrumsBufferBeats",
+    "DrumsLoFi",
+    "MultiBrokenSpeaker",
+    "MultiCellphoneConcert",
+    "MultiDecimated1",
+    "MultiDecimated2",
+    "MultiDecimated3",
+    "MultiDecimated4",
+    "MultiDistortedFunk",
+    "MultiDistortedCubed",
+    "MultiDistortedSquared",
+    "MultiEcho1",
+    "MultiEcho2",
+    "MultiEchoTight1",
+    "MultiEchoTight2",
+    "MultiEverythingIsBroken",
+    "SpeechAlienChatter",
+    "SpeechCosmicInterference",
+    "SpeechGoldenPi",
+    "SpeechRadioTower",
+    "SpeechWaves"
+  ]
+  
+  let distortionPresetsEnums: Array<AVAudioUnitDistortionPreset> = [
+    AVAudioUnitDistortionPreset.DrumsBitBrush,
+    AVAudioUnitDistortionPreset.DrumsBufferBeats,
+    AVAudioUnitDistortionPreset.DrumsLoFi,
+    AVAudioUnitDistortionPreset.MultiBrokenSpeaker,
+    AVAudioUnitDistortionPreset.MultiCellphoneConcert,
+    AVAudioUnitDistortionPreset.MultiDecimated1,
+    AVAudioUnitDistortionPreset.MultiDecimated2,
+    AVAudioUnitDistortionPreset.MultiDecimated3,
+    AVAudioUnitDistortionPreset.MultiDecimated4,
+    AVAudioUnitDistortionPreset.MultiDistortedFunk,
+    AVAudioUnitDistortionPreset.MultiDistortedCubed,
+    AVAudioUnitDistortionPreset.MultiDistortedSquared,
+    AVAudioUnitDistortionPreset.MultiEcho1,
+    AVAudioUnitDistortionPreset.MultiEcho2,
+    AVAudioUnitDistortionPreset.MultiEchoTight1,
+    AVAudioUnitDistortionPreset.MultiEchoTight2,
+    AVAudioUnitDistortionPreset.MultiEverythingIsBroken,
+    AVAudioUnitDistortionPreset.SpeechAlienChatter,
+    AVAudioUnitDistortionPreset.SpeechCosmicInterference,
+    AVAudioUnitDistortionPreset.SpeechGoldenPi,
+    AVAudioUnitDistortionPreset.SpeechRadioTower,
+    AVAudioUnitDistortionPreset.SpeechWaves
+  ]
+  let reverbPresetsStrings: Array<String> = [
     "SmallRoom",
     "MediumRoom",
     "LargeRoom",
@@ -92,9 +142,9 @@ class ViewController: UIViewController {
     engine = AVAudioEngine()
     
     distortion = AVAudioUnitDistortion()
-    distortion.loadFactoryPreset(.SpeechWaves)
     distortion.preGain = -80
     distortion.wetDryMix = 50
+    distortionPresets(1)
     
     delay = AVAudioUnitDelay()
     delay.delayTime = 0
@@ -104,7 +154,7 @@ class ViewController: UIViewController {
     
     reverb = AVAudioUnitReverb()
     reverb.wetDryMix = 0
-    reverbPresets(12)
+    reverbPresets(1)
     
     mixer = AVAudioMixerNode()
     
@@ -211,16 +261,28 @@ class ViewController: UIViewController {
   @IBAction func changeDelayWetDry(sender: UISlider) {
     delay.wetDryMix = sender.value
   }
-  @IBAction func tapReverbPreset(sender: UIButton) {
+  @IBAction func tapDistortionPresets(sender: UIButton) {
+    ActionSheetStringPicker.showPickerWithTitle("Distortion presets", rows: distortionPresetsStrings, initialSelection: find(self.distortionPresetsStrings, distortionPresetsBtn.titleLabel!.text!)!, doneBlock: {
+      picker, value, index in
+        self.distortionPresets(value)
+        return
+      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+  }
+  @IBAction func tapReverbPresets(sender: UIButton) {
     ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: find(self.reverbPresetsStrings, reverbPresetsBtn.titleLabel!.text!)!, doneBlock: {
       picker, value, index in
         self.reverbPresets(value)
         return
-      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+    }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
   }
   
+  func distortionPresets(index: Int) {
+    NSLog("Distortion Presets: \(index), \(distortionPresetsEnums[index]), \(distortionPresetsStrings[index])")
+    distortion.loadFactoryPreset(distortionPresetsEnums[index])
+    distortionPresetsBtn.setTitle("\(distortionPresetsStrings[index])", forState: UIControlState.Normal)
+  }
   func reverbPresets(index: Int) {
-    NSLog("reverbPresets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
+    NSLog("Reverb Presets: \(index), \(reverbPresetsEnums[index]), \(reverbPresetsStrings[index])")
     reverb.loadFactoryPreset(reverbPresetsEnums[index])
     reverbPresetsBtn.setTitle("\(reverbPresetsStrings[index])", forState: UIControlState.Normal)
   }
