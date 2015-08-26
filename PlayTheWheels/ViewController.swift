@@ -22,7 +22,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   
-  // Beacon Section
+  // # Beacon Section
   
   @IBOutlet weak var beaconDistortionLabel: UILabel!
   @IBOutlet weak var beaconDistortionSlider: UISlider!
@@ -31,7 +31,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var beaconReverbLabel: UILabel!
   @IBOutlet weak var beaconReverbSlider: UISlider!
   
-  // Effect Section
+  // # Tone Section
+  
+  @IBOutlet weak var toneNameBtn: UIButton!
+  let tones = [
+    // [label]: [directory]
+    "Blue Ballad - L": "Blue Ballad/hi",
+    "Blue Ballad - R": "Blue Ballad/low",
+    "Pianokind - L": "Pianokind/hi",
+    "Pianokind - R": "Pianokind/low",
+    "Soufeed 1 - L": "Soufeed 1/hi",
+    "Soufeed 1 - R": "Soufeed 1/low"
+  ]
+  var toneDir: String!
+  
+  // # Effect Section
   
   // Distortion
   @IBOutlet weak var distortionSwitch: UISwitch!
@@ -60,6 +74,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let beaconManager = ESTBeaconManager()
   let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
   let effectBeacons = [
+    // major:minor
     "9152:49340": "Distortion",
     "38936:27676": "Delay",
     "30062:7399": "Reverb"
@@ -208,19 +223,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.attachNode(mixer)
     
     // AudioPlayerの準備
-    var format: AVAudioFormat! = nil
+    var format: AVAudioFormat = setAudioFile("Blue Ballad - R")
     for i in 0..<SLIT_COUNT {
       
       let player = AVAudioPlayerNode()
-      let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Blue Ballad - Pattern 2 - 96 - \(i)", ofType: "wav")!), error: nil)
-      audioFiles += [audioFile]
-      
       player.volume = 9.0
       engine.attachNode(player)
-      
-      if format == nil {
-        format = audioFile.processingFormat
-      }
       
       engine.connect(player, to: mixer, format: format)
       
@@ -332,6 +340,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     return (((oldVal - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin
   }
   
+  
   @IBAction func tapFind(sender: UIButton) {
     Konashi.find()
   }
@@ -346,6 +355,38 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("000.000.255\n")
   }
   
+  // Tone
+  
+  @IBAction func tapToneName(sender: UIButton) {
+    let keys: Array = Array(tones.keys)
+    let initial: Int = find(keys, toneNameBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: keys, initialSelection: initial, doneBlock: {
+      picker, value, index in
+        let key: String = "\(index)"
+        self.setAudioFile(key)
+        return
+    }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+  }
+  
+  func setAudioFile(key: String) -> AVAudioFormat!{
+    var format: AVAudioFormat! = nil
+    audioFiles = []
+    
+    self.toneNameBtn.setTitle(key, forState: UIControlState.Normal)
+    
+    toneDir = tones[key]
+    
+    for i in 0..<SLIT_COUNT {
+      let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(i)", ofType: "wav")!), error: nil)
+      audioFiles += [audioFile]
+      if format == nil {
+        format = audioFile.processingFormat
+      }
+    }
+    return format
+  }
+  
+  
   // Distortion
   @IBAction func changeDistortionWetDry(sender: UISlider) {
     setDistortionWetDry(sender.value)
@@ -355,7 +396,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     distortionDryWetLabel.text = "\(val)"
   }
   @IBAction func tapDistortionPresets(sender: UIButton) {
-    ActionSheetStringPicker.showPickerWithTitle("Distortion presets", rows: distortionPresetsStrings, initialSelection: find(self.distortionPresetsStrings, distortionPresetsBtn.titleLabel!.text!)!, doneBlock: {
+    let initial: Int = find(self.distortionPresetsStrings, distortionPresetsBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("Distortion presets", rows: distortionPresetsStrings, initialSelection: initial, doneBlock: {
       picker, value, index in
         self.setDistortionPresets(value)
         return
