@@ -22,7 +22,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   
-  @IBOutlet weak var logLabel: UILabel!
+  // Beacon Section
+  
+  @IBOutlet weak var beaconDistortionLabel: UILabel!
+  @IBOutlet weak var beaconDistortionSlider: UISlider!
+  @IBOutlet weak var beaconDelayLabel: UILabel!
+  @IBOutlet weak var beaconDelaySlider: UISlider!
+  @IBOutlet weak var beaconReverbLabel: UILabel!
+  @IBOutlet weak var beaconReverbSlider: UISlider!
+  
+  // Effect Section
   
   // Distortion
   @IBOutlet weak var distortionSwitch: UISwitch!
@@ -31,7 +40,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var distortionDryWetLabel: UILabel!
   @IBOutlet weak var distortionPresetsBtn: UIButton!
   @IBOutlet weak var distortionPreGainLabel: UILabel!
-  
   // Delay
   @IBOutlet weak var delaySwitch: UISwitch!
   @IBOutlet weak var delayDryWetSlider: UISlider!
@@ -42,7 +50,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var delayDelayTimeLabel: UILabel!
   @IBOutlet weak var delayFeedbackLabel: UILabel!
   @IBOutlet weak var delayLowPassCutOffLabel: UILabel!
-  
   // Reverb
   @IBOutlet weak var reverbSwitch: UISwitch!
   @IBOutlet weak var reverbDryWetSlider: UISlider!
@@ -286,21 +293,28 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             str += "\(effectName): \(accuracy)\n"
             
             // accuracy: 5 - 0 => 0 - 50 に変換
+            // TODO やり方変える
             var dryWet = Float(50 - _beacon.accuracy * 10)
             dryWet = max(min(50, dryWet), 0) // 範囲内に収める
             
             switch effectName {
               case "Distortion":
+                beaconDistortionLabel.text = "\(accuracy)"
+                beaconDistortionSlider.setValue(accuracy, animated: true)
                 if distortionSwitch.on {
                   setDistortionWetDry(dryWet)
                   distortionDryWetSlider.setValue(dryWet, animated: true)
                 }
               case "Delay":
+                beaconDelayLabel.text = "\(accuracy)"
+                beaconDelaySlider.setValue(accuracy, animated: true)
                 if delaySwitch.on {
                   setDelayWetDry(dryWet)
                   delayDryWetSlider.setValue(dryWet, animated: true)
                 }
               case "Reverb":
+                beaconReverbLabel.text = "\(accuracy)"
+                beaconReverbSlider.setValue(accuracy, animated: true)
                 if reverbSwitch.on {
                   setReverbWetDry(dryWet)
                   reverbDryWetSlider.setValue(dryWet, animated: true)
@@ -310,7 +324,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
           }
         }
-        logLabel.text = str
       }
   }
   
