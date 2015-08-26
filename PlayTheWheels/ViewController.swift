@@ -36,13 +36,30 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var toneNameBtn: UIButton!
   let tones = [
     // [label]: [directory]
+    "Aczid bit-crash - L": "Aczid bit-crash/hi",
+    "Aczid bit-crash - R": "Aczid bit-crash/low",
+    "Around the World sin - L": "Around the World sin/hi",
+    "Around the World sin - R": "Around the World sin/low",
+    "Around the World square - L": "Around the World square/hi",
+    "Around the World square - R": "Around the World square/low",
+    "Around the World tri - L": "Around the World tri/hi",
+    "Around the World tri - R": "Around the World tri/low",
+    "Bali Metalophone - L": "Bali Metalophone/hi",
+    "Bali Metalophone - R": "Bali Metalophone/low",
     "Blue Ballad - L": "Blue Ballad/hi",
     "Blue Ballad - R": "Blue Ballad/low",
+    "Borgs - L": "Borgs/hi",
+    "Borgs - R": "Borgs/low",
+    "Desert - L": "Desert/hi",
+    "Desert - R": "Desert/low",
     "Pianokind - L": "Pianokind/hi",
     "Pianokind - R": "Pianokind/low",
+    "Robot Bass - L": "Robot Bass/hi",
+    "Robot Bass - R": "Robot Bass/low",
     "Soufeed 1 - L": "Soufeed 1/hi",
     "Soufeed 1 - R": "Soufeed 1/low"
   ]
+  var toneKeys: Array<String> = []
   var toneDir: String!
   
   // # Effect Section
@@ -178,6 +195,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
+    toneKeys = sorted(Array(tones.keys), {(s1:String,s2:String) -> Bool in
+      return (s1.uppercaseString < s2.uppercaseString)
+    })
+    
     // Estimote Beacon
     beaconManager.delegate = self
     beaconManager.requestAlwaysAuthorization()
@@ -223,7 +245,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.attachNode(mixer)
     
     // AudioPlayerの準備
-    var format: AVAudioFormat = setAudioFile("Blue Ballad - R")
+    var format: AVAudioFormat = setAudioFile(toneKeys.first!)
     for i in 0..<SLIT_COUNT {
       
       let player = AVAudioPlayerNode()
@@ -358,9 +380,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Tone
   
   @IBAction func tapToneName(sender: UIButton) {
-    let keys: Array = Array(tones.keys)
-    let initial: Int = find(keys, toneNameBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: keys, initialSelection: initial, doneBlock: {
+    NSLog("toneKeys: \(toneKeys)")
+    let initial: Int = find(toneKeys, toneNameBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.toneKeys, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
         self.setAudioFile(key)
