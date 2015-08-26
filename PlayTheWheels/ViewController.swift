@@ -24,24 +24,28 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var logLabel: UILabel!
   
-  // Sliders
+  // Distortion
+  @IBOutlet weak var distortionSwitch: UISwitch!
   @IBOutlet weak var distortionDryWetSlider: UISlider!
   @IBOutlet weak var distortionPreGainSlider: UISlider!
-  @IBOutlet weak var delayDryWetSlider: UISlider!
-  @IBOutlet weak var delayDelayTimeSlider: UISlider!
-  @IBOutlet weak var delayFeedbackSlider: UISlider!
-  @IBOutlet weak var delayLowPassCutOffSlider: UISlider!
-  @IBOutlet weak var reverbDryWetSlider: UISlider!
-  
   @IBOutlet weak var distortionDryWetLabel: UILabel!
   @IBOutlet weak var distortionPresetsBtn: UIButton!
   @IBOutlet weak var distortionPreGainLabel: UILabel!
   
+  // Delay
+  @IBOutlet weak var delaySwitch: UISwitch!
+  @IBOutlet weak var delayDryWetSlider: UISlider!
+  @IBOutlet weak var delayDelayTimeSlider: UISlider!
+  @IBOutlet weak var delayFeedbackSlider: UISlider!
+  @IBOutlet weak var delayLowPassCutOffSlider: UISlider!
   @IBOutlet weak var delayDryWetLabel: UILabel!
   @IBOutlet weak var delayDelayTimeLabel: UILabel!
   @IBOutlet weak var delayFeedbackLabel: UILabel!
   @IBOutlet weak var delayLowPassCutOffLabel: UILabel!
   
+  // Reverb
+  @IBOutlet weak var reverbSwitch: UISwitch!
+  @IBOutlet weak var reverbDryWetSlider: UISlider!
   @IBOutlet weak var reverbDryWetLabel: UILabel!
   @IBOutlet weak var reverbPresetsBtn: UIButton!
   
@@ -287,14 +291,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             
             switch effectName {
               case "Distortion":
-                setDistortionWetDry(dryWet)
-                distortionDryWetSlider.setValue(dryWet, animated: true)
+                if distortionSwitch.on {
+                  setDistortionWetDry(dryWet)
+                  distortionDryWetSlider.setValue(dryWet, animated: true)
+                }
               case "Delay":
-                setDelayWetDry(dryWet)
-                delayDryWetSlider.setValue(dryWet, animated: true)
+                if delaySwitch.on {
+                  setDelayWetDry(dryWet)
+                  delayDryWetSlider.setValue(dryWet, animated: true)
+                }
               case "Reverb":
-                setReverbWetDry(dryWet)
-                reverbDryWetSlider.setValue(dryWet, animated: true)
+                if reverbSwitch.on {
+                  setReverbWetDry(dryWet)
+                  reverbDryWetSlider.setValue(dryWet, animated: true)
+                }
               default :
                 break
             }
