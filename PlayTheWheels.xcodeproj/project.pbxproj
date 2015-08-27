@@ -13,8 +13,8 @@
 		E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7509F621B7C4DDB001C54E8 /* Main.storyboard */; };
 		E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7509F651B7C4DDB001C54E8 /* Images.xcassets */; };
 		E7509F751B7C4DDB001C54E8 /* PlayTheWheelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */; };
+		E7977DAB1B8F35760067FABF /* tones in Resources */ = {isa = PBXBuildFile; fileRef = E7977DAA1B8F35760067FABF /* tones */; };
 		E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */; };
-		E7CB6BB21B8D746500E01C91 /* tones in Resources */ = {isa = PBXBuildFile; fileRef = E7CB6BB11B8D746500E01C91 /* tones */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,9 +39,9 @@
 		E7509F6E1B7C4DDB001C54E8 /* PlayTheWheelsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlayTheWheelsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7509F731B7C4DDB001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7509F741B7C4DDB001C54E8 /* PlayTheWheelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTheWheelsTests.swift; sourceTree = "<group>"; };
+		E7977DAA1B8F35760067FABF /* tones */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tones; path = PlayTheWheels/assets/tones; sourceTree = "<group>"; };
 		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
 		E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
-		E7CB6BB11B8D746500E01C91 /* tones */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tones; path = PlayTheWheels/assets/tones; sourceTree = "<group>"; };
 		F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,7 +134,7 @@
 		E79CAC4B1B85EF9500BA3D41 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				E7CB6BB11B8D746500E01C91 /* tones */,
+				E7977DAA1B8F35760067FABF /* tones */,
 				E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */,
 			);
 			name = assets;
@@ -236,7 +236,7 @@
 			files = (
 				E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */,
 				E79CAC4E1B85EF9F00BA3D41 /* arrow.jpg in Resources */,
-				E7CB6BB21B8D746500E01C91 /* tones in Resources */,
+				E7977DAB1B8F35760067FABF /* tones in Resources */,
 				E7509F661B7C4DDB001C54E8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
