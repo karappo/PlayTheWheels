@@ -379,7 +379,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func map(oldVal: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float) -> Float{
     return (((oldVal - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin
   }
-  
+
+  // Initialize Section
   
   @IBAction func tapFind(sender: UIButton) {
     if Konashi.isConnected() {
@@ -410,7 +411,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
   }
-  
   @IBAction func tapR(sender: UIButton) {
     uart("255.000.000\n")
   }
@@ -420,6 +420,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func tapB(sender: UIButton) {
     uart("000.000.255\n")
   }
+  
+  @IBAction func tapLoadTones(sender: UIButton) {
+    
+  }
+  
   
   // Tone
   
