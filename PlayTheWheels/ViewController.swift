@@ -22,6 +22,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var led7: UIView!
   @IBOutlet weak var led8: UIView!
   
+  // # Konashi Section
+  
+  @IBOutlet weak var konashiBtn: UIButton!
+  
   // # Beacon Section
   
   @IBOutlet weak var beaconDistortionLabel: UILabel!
@@ -275,16 +279,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Konashi関係
-    NSLog("[Konashi] isConnected:\(Konashi.isConnected())")
+    logKonashiStatus()
     
     Konashi.shared().connectedHandler = {
       NSLog("[Konashi] Connected")
     }
     Konashi.shared().disconnectedHandler = {
       NSLog("[Konashi] Disonnected")
+      
+      // button
+      self.konashiBtn.setTitle("Find Konashi", forState: UIControlState.Normal)
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
+      self.logKonashiStatus()
+      
+      // button
+      self.konashiBtn.setTitle(Konashi.peripheralName(), forState: UIControlState.Normal)
       
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
 
@@ -293,7 +304,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
-      NSLog("[Konashi] UartRx \(data.description)")
+//      NSLog("[Konashi] UartRx \(data.description)")
     }
   }
   
@@ -311,6 +322,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     super.didReceiveMemoryWarning()
   }
   
+  func logKonashiStatus() {
+    NSLog("[Konashi] connected:\(Konashi.isConnected())")
+    NSLog("[Konashi] ready:\(Konashi.isReady())")
+    NSLog("[Konashi] module:\(Konashi.peripheralName())")
+  }
   // Beacon
   func beaconManager(manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!,
     inRegion region: CLBeaconRegion!) {
@@ -364,7 +380,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   
   @IBAction func tapFind(sender: UIButton) {
-    Konashi.find()
+    if Konashi.isConnected() {
+      
+    }
+    else {
+      Konashi.find()
+    }
+    
   }
   
   @IBAction func tapR(sender: UIButton) {

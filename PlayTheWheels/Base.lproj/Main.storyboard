@@ -663,6 +663,7 @@
                         <outlet property="distortionPreGainSlider" destination="A0w-lJ-jGW" id="ogb-fT-yRK"/>
                         <outlet property="distortionPresetsBtn" destination="FGU-tU-Fhy" id="Ra1-hb-fTh"/>
                         <outlet property="distortionSwitch" destination="MXN-XI-WcW" id="BVg-0X-GbV"/>
+                        <outlet property="konashiBtn" destination="K9d-9Z-BlT" id="leC-fq-A1t"/>
                         <outlet property="led1" destination="SRh-NC-u7e" id="XT6-Vv-wSI"/>
                         <outlet property="led2" destination="23o-1f-HOp" id="U45-VL-UHk"/>
                         <outlet property="led3" destination="FC8-T0-kFY" id="qrf-40-Fnc"/>
