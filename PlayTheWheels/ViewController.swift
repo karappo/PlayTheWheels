@@ -9,6 +9,12 @@
 import UIKit
 import AVFoundation
 import CoreMotion
+import konashi_ios_sdk
+import Colorkit
+//import EstimoteSDK // 何故かエラーになってしまうので、このライブラリだけObjCBridge.hで読み込んでいる
+import ActionSheetPicker_3_0
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController, ESTBeaconManagerDelegate {
 
