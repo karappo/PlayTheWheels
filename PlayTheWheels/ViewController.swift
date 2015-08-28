@@ -69,6 +69,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     "Soufeed 1 - R"
   ]
   var toneDir: String!
+  var downloadURLs: Array<String> = []
   
   // # Effect Section
   
@@ -420,10 +421,88 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("000.000.255\n")
   }
   
+  
   @IBAction func tapLoadTones(sender: UIButton) {
     
+    let jsonurl  = "http://wheels.1001p.jp/_data_for_ios_app/"
+    let tonesUrl = "http://wheels.1001p.jp/_data_for_ios_app/tones/"
+    
+    downloadURLs = []
+    
+    // jsonデータの取得
+    var objs:NSArray?
+    Alamofire.request(.GET, jsonurl, parameters: nil, encoding: .JSON)
+      .responseJSON { (request, response, data, error) -> Void in
+        let soundList = JSON(data!)
+        
+        for var i = 0; i < soundList.count; i++ {
+          var toneName = soundList[i].string!
+          for var j = 0; j<8; j++ {
+            self.downloadURLs += ["\(tonesUrl)\(toneName)/\(j).wav"]
+          }
+        }
+        
+        // post urls
+        NSNotificationCenter.defaultCenter().postNotificationName("getImageData", object: self.downloadURLs, userInfo: nil)
+    }
+    // setup observer
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: "showImage:", name: "getImageData", object: nil)
   }
   
+  // ダウンロード先のディレクトリ作成
+//  NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(key)/\(i)", ofType: "wav")!), error: nil)
+  
+//  var err: NSErrorPointer = nil
+////  let docPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+////  let imgPath = docPath.stringByAppendingPathComponent("img")
+//  let imgPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(key)/\(i)", ofType: "wav")!), error: nil)
+//  if NSFileManager.defaultManager().fileExistsAtPath(imgPath) == false {
+//    NSFileManager.defaultManager().createDirectoryAtPath(imgPath, withIntermediateDirectories: false, attributes: nil, error: &err)
+//  }
+//  
+//  //download
+//  let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
+//  let newPath = path.URLByAppendingPathComponent("img/new_name.png")
+//  Alamofire.download(.GET, "http://example.com/images/old_name.png", { _ in newPath })
+  
+
+  
+  // selectror for showImage
+  func showImage(notification:NSNotification?) {
+    let urls = notification?.object as! [String]
+    let url = urls[0]
+    
+    if 0 < downloadURLs.count {
+      let url = downloadURLs[0] as String
+      NSLog("url=\(url)")
+//      let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
+//      NSLog("destination=\(destination)")
+//      let path = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
+//      let newPath = path.URLByAppendingPathComponent("0.wav")
+//      Alamofire.download(.GET, url, destination: destination)
+//      Alamofire.download(.GET, "http://example.com/images/old_name.png", { _ in newPath })
+//      NSLog("\(url) ---- download ----> \(newPath)")
+      Alamofire.download(.GET, "http://wheels.1001p.jp/_data_for_ios_app/idnex.php") { temporaryURL, response in
+        let fileManager = NSFileManager.defaultManager()
+        if let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL {
+          let pathComponent = response.suggestedFilename
+          return directoryURL.URLByAppendingPathComponent(pathComponent!)
+        }
+        NSLog("\(temporaryURL)")
+        return temporaryURL
+      }
+
+    }
+    
+    // サウンドデータの取得
+//    Alamofire.request(.GET, url).response{ (request, response, data, error) in
+//      dispatch_async(dispatch_get_main_queue(), { () -> Void in
+////        self.imageView.image = UIImage(data: data as NSData)
+//        NSLog("---> ")
+//      })
+//    }
+  }
+
   
   // Tone
   
