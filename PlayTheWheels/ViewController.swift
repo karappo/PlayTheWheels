@@ -203,11 +203,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
-//    tones = sorted(tones, {(s1:String,s2:String) -> Bool in
-//      return (s1.uppercaseString < s2.uppercaseString)
-//    })
-    
     // Estimote Beacon
     beaconManager.delegate = self
     beaconManager.requestAlwaysAuthorization()
