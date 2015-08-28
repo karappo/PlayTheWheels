@@ -430,7 +430,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func changeColor(sender: UISlider) {
     
-    instrumentColor = UIColor(hue: sender.value, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+    instrumentColor = UIColor(hue: CGFloat(sender.value), saturation: 1.0, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
   }
   
