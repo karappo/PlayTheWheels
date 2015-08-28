@@ -35,6 +35,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var beaconReverbLabel: UILabel!
   @IBOutlet weak var beaconReverbSlider: UISlider!
   
+  // # Color Section
+  
+  @IBOutlet weak var colorView: UIView!
+  var instrumentColor: UIColor!
+  
   // # Tone Section
   
   @IBOutlet weak var toneNameBtn: UIButton!
@@ -420,6 +425,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func tapB(sender: UIButton) {
     uart("000.000.255\n")
   }
+  
+  // Color
+  
+  @IBAction func changeColor(sender: UISlider) {
+    
+    instrumentColor = UIColor(hue: sender.value, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+    colorView.backgroundColor = instrumentColor
+  }
+  
   
   // Tone
   
