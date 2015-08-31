@@ -38,7 +38,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // # Color Section
   
   @IBOutlet weak var colorView: UIView!
-  var instrumentColor: UIColor!
+  var instrumentColor: UIColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
+  var effectColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
   
   // # Tone Section
   
@@ -302,14 +303,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // button
       self.konashiBtn.setTitle(Konashi.peripheralName(), forState: UIControlState.Normal)
       
+      // Konashi setting
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
-
-      // LED2を点灯させる
       Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
+      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO2, mode: KonashiPinMode.Output)
+      
+      // LED2を点灯
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
-//      NSLog("[Konashi] UartRx \(data.description)")
+      
+      // LED3を消灯
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.Low)
+      
+      NSLog("[Konashi] UartRx \(data.description)")
     }
   }
   
@@ -393,7 +400,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let otherAction = UIAlertAction(title: "Disconnect", style: .Default) {
         action in
           NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
-          // LED2を消灯させる
+          // LED2を消灯
           Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.Low)
           // 接続解除
           Konashi.disconnect()
@@ -416,20 +423,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
   }
   
-  @IBAction func tapR(sender: UIButton) {
-    uart("255.000.000\n")
-  }
-  @IBAction func tapG(sender: UIButton) {
-    uart("000.255.000\n")
-  }
-  @IBAction func tapB(sender: UIButton) {
-    uart("000.000.255\n")
-  }
-  
   // Color
   
+  @IBAction func tapUartTest(sender: UIButton) {
+    uart("instrument", value:"255,100,000")
+  }
+  
   @IBAction func changeColor(sender: UISlider) {
-    
     instrumentColor = UIColor(hue: CGFloat(sender.value), saturation: 1.0, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
   }
@@ -546,11 +546,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // シリアル通信で送信
-  func uart(str: String){
+  func uart(key: String, value: String){
     if Konashi.isConnected() {
-      let res = Konashi.uartWriteString(str)
+      let command = "\(key)=\(value);"
+      NSLog(command)
+      // LED3を点灯
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.High)
+      let res = Konashi.uartWriteString(command)
       if res == KonashiResult.Success {
-//        NSLog("[Konashi] KonashiResultSuccess")
+        NSLog("[Konashi] KonashiResultSuccess")
       }
       else {
         NSLog("[Konashi] KonashiResultFailure")
@@ -582,15 +586,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         // Konashi通信
         
-        // slit位置に応じて色を決定
-        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
-        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-        // RGB値を3桁ゼロ埋めで取得
-        let r = NSString(format: "%03d", Int(slitColor.getRed()))
-        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
-        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
+//        // slit位置に応じて色を決定
+//        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
+//        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+//        // RGB値を3桁ゼロ埋めで取得
+//        let r = NSString(format: "%03d", Int(slitColor.getRed()))
+//        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
+//        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
+//        
+//        uart("\(r).\(g).\(b)")
         
-        uart("\(r).\(g).\(b)\n")
+        onColor()
       }
     }
     prevDeg = current_deg
@@ -598,7 +604,37 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
   }
   
-  // LEDを点灯させる（少ししたら自動で消灯）
+  // light up LED on wheel
+  func onColor() {
+    NSLog("onColor")
+    setLedColor(instrumentColor)
+    NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "offColor:", userInfo: nil, repeats: false)
+  }
+  // lighten down LED on wheel
+  func offColor(timer : NSTimer) {
+    NSLog("offColor")
+    setLedColor(instrumentColor.darkenColor(20.0))
+  }
+  func setLedColor(color: UIColor) {
+    NSLog("setLedColor")
+    // instrument color
+    let iR = NSString(format: "%03d", Int(color.getRed()))
+    let iG = NSString(format: "%03d", Int(color.getGreen()))
+    let iB = NSString(format: "%03d", Int(color.getBlue()))
+    uart("instrument", value:"\(iR).\(iG).\(iB)")
+    
+    effectColor = color.darkenColor(20.0)
+    
+    // effect color
+    let eR = NSString(format: "%03d", Int(effectColor.getRed()))
+    let eG = NSString(format: "%03d", Int(effectColor.getGreen()))
+    let eB = NSString(format: "%03d", Int(effectColor.getBlue()))
+    uart("effect", value:"\(eR).\(eG).\(eB)")
+    
+  }
+  
+  
+  // スクリーンのLEDを点灯させる（少ししたら自動で消灯）
   func activate(led: UIView) {
     led.alpha = 1
     var dic: NSDictionary = NSDictionary(dictionary: ["led": led])
