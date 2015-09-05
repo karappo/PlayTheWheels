@@ -433,6 +433,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func changeColor(sender: UISlider) {
     instrumentColor = UIColor(hue: CGFloat(sender.value), saturation: 1.0, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
+    
+    let r = NSString(format: "%03d", Int(instrumentColor.getRed()))
+    let g = NSString(format: "%03d", Int(instrumentColor.getGreen()))
+    let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
+    
+    uart("i:\(r).\(g).\(b);")
   }
   
   
