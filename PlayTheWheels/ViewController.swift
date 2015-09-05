@@ -610,10 +610,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         let b = NSString(format: "%03d", Int(slitColor.getBlue()))
         
         if CGFloat(Float(arc4random()) / Float(UINT32_MAX)) < 0.5 {
-          uart("0:\(r).\(g).\(b);")
+          uart("i:\(r).\(g).\(b);")
         }
         else {
-          uart("1:\(r).\(g).\(b);")
+          uart("e:\(r).\(g).\(b);")
         }
         
         
