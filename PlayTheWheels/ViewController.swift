@@ -426,7 +426,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Color
   
   @IBAction func tapUartTest(sender: UIButton) {
-    uart("instrument", value:"255,100,000")
+//    uart("instrument", value:"255,100,000")
+    uart("setInstrument:255,000,000;\n")
   }
   
   @IBAction func changeColor(sender: UISlider) {
@@ -561,6 +562,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     }
   }
+  func uart(str: String){
+    if Konashi.isConnected() {
+      NSLog(str)
+      // LED3を点灯
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.High)
+      let res = Konashi.uartWriteString(str)
+      if res == KonashiResult.Success {
+        NSLog("[Konashi] KonashiResultSuccess")
+      }
+      else {
+        NSLog("[Konashi] KonashiResultFailure")
+      }
+    }
+  }
   
   func updateRotation(radian: Double) {
     let current_deg = self.radiansToDegrees(radian)
@@ -586,17 +601,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         // Konashi通信
         
-//        // slit位置に応じて色を決定
-//        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
-//        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-//        // RGB値を3桁ゼロ埋めで取得
-//        let r = NSString(format: "%03d", Int(slitColor.getRed()))
-//        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
-//        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
-//        
-//        uart("\(r).\(g).\(b)")
+        // slit位置に応じて色を決定
+        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
+        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        // RGB値を3桁ゼロ埋めで取得
+        let r = NSString(format: "%03d", Int(slitColor.getRed()))
+        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
+        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
         
-        onColor()
+        if CGFloat(Float(arc4random()) / Float(UINT32_MAX)) < 0.5 {
+          uart("0:\(r).\(g).\(b);")
+        }
+        else {
+          uart("1:\(r).\(g).\(b);")
+        }
+        
+        
+//        onColor()
       }
     }
     prevDeg = current_deg
