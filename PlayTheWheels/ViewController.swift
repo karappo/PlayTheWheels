@@ -26,6 +26,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var konashiBtn: UIButton!
   
+  var simutateRotateIndex = 0 // for battery test
+  
   // # Beacon Section
   
   @IBOutlet weak var beaconDistortionLabel: UILabel!
@@ -426,7 +428,52 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Color
   
   @IBAction func tapUartTest(sender: UIButton) {
-    uart("instrument", value:"255,100,000")
+//    uart("instrument", value:"255,100,000")
+    NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "simulateRotate:", userInfo: nil, repeats: true)
+  }
+  // 順番に音を鳴らす
+  
+  func simulateRotate(timer: NSTimer) {
+    NSLog("simulateRotate: \(simutateRotateIndex)")
+    let passed_index = [simutateRotateIndex]
+    
+    simutateRotateIndex++
+    if 7 < simutateRotateIndex {
+      simutateRotateIndex = 0
+    }
+    
+    if 0 < passed_index.count {
+      for slit_index in passed_index {
+        // スクリーンのLED
+        let led = leds[slit_index]
+        activate(led)
+        
+        // Sound
+        let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
+        let player: AVAudioPlayerNode = players[slit_index] as AVAudioPlayerNode
+        if player.playing {
+          player.stop()
+        }
+        
+        // playerにオーディオファイルを設定
+        player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+        
+        // 再生開始
+        player.play()
+        
+        // Konashi通信
+        
+        // slit位置に応じて色を決定
+        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
+        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        // RGB値を3桁ゼロ埋めで取得
+        let r = NSString(format: "%03d", Int(slitColor.getRed()))
+        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
+        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
+
+        uart("\(r).\(g).\(b)\n")
+      }
+    }
   }
   
   @IBAction func changeColor(sender: UISlider) {
@@ -546,6 +593,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // シリアル通信で送信
+  func uart(command: String){
+    if Konashi.isConnected() {
+      NSLog(command)
+      // LED3を点灯
+      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.High)
+      let res = Konashi.uartWriteString(command)
+      if res == KonashiResult.Success {
+        NSLog("[Konashi] KonashiResultSuccess")
+      }
+      else {
+        NSLog("[Konashi] KonashiResultFailure")
+      }
+    }
+  }
   func uart(key: String, value: String){
     if Konashi.isConnected() {
       let command = "\(key)=\(value);"
