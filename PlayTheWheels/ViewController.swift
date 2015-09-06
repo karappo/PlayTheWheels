@@ -11,7 +11,12 @@ import AVFoundation
 import CoreMotion
 
 class ViewController: UIViewController, ESTBeaconManagerDelegate {
-
+  
+  let UD = NSUserDefaults.standardUserDefaults()
+  // UserDefaultsで使うキー（Public）
+  let UD_KEY_KONASHI = "konashi"
+  
+  
   @IBOutlet weak var arrow: UIImageView!
   @IBOutlet weak var led1: UIView!
   @IBOutlet weak var led2: UIView!
@@ -205,6 +210,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // UserDefaults -------------------
+    
+    // 初期値を指定
+//    UD.registerDefaults([
+//      ViewController.UD_KEY_KONASHI: nil,
+//    ])
+    // 読込
+    
+    // --------------------------------
+    
     // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
     toneKeys = sorted(Array(tones.keys), {(s1:String,s2:String) -> Bool in
       return (s1.uppercaseString < s2.uppercaseString)
@@ -300,8 +315,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog("[Konashi] Ready...")
       self.logKonashiStatus()
       
+      let konashiName = Konashi.peripheralName()
+      
+      self.UD.setObject(konashiName, forKey: self.UD_KEY_KONASHI)
+      
       // button
-      self.konashiBtn.setTitle(Konashi.peripheralName(), forState: UIControlState.Normal)
+      self.konashiBtn.setTitle(konashiName, forState: UIControlState.Normal)
       
       // Konashi setting
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
@@ -317,6 +336,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.Low)
       
       NSLog("[Konashi] UartRx \(data.description)")
+    }
+    
+    // UserDefaultsから前回接続したKonashiを読み、接続を試みる
+    if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
+      NSLog("[Konashi] Auto connecting to \(previously_connected_konashi)...")
+      if Konashi.findWithName(previously_connected_konashi) == KonashiResult.Success {
+        NSLog("[Konashi] Auto connect successed!")
+      }
+      else {
+        NSLog("[Konashi] Auto connect failed!")
+      }
+      
     }
   }
   
