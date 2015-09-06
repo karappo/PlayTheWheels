@@ -12,9 +12,11 @@ import CoreMotion
 
 class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
+  // UserDefaults
   let UD = NSUserDefaults.standardUserDefaults()
-  // UserDefaultsで使うキー（Public）
   let UD_KEY_KONASHI = "konashi"
+  let UD_KEY_INSTRUMENT_COLOR_HUE = "instrument_color_hue"
+  let UD_KEY_INSTRUMENT_COLOR_SATURATION = "instrument_color_saturation"
   
   
   @IBOutlet weak var arrow: UIImageView!
@@ -43,6 +45,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // # Color Section
   
   @IBOutlet weak var colorView: UIView!
+  @IBOutlet weak var hueSlider: UISlider!
+  @IBOutlet weak var saturationSlider: UISlider!
   var instrumentColor: UIColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
   var effectColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
   
@@ -210,16 +214,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // UserDefaults -------------------
-    
-    // 初期値を指定
-//    UD.registerDefaults([
-//      ViewController.UD_KEY_KONASHI: nil,
-//    ])
-    // 読込
-    
-    // --------------------------------
-    
     // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
     toneKeys = sorted(Array(tones.keys), {(s1:String,s2:String) -> Bool in
       return (s1.uppercaseString < s2.uppercaseString)
@@ -299,6 +293,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     }
     
+    // Color
+    
+    hueSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE), animated: true)
+    saturationSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION), animated: true)
+    
     // Konashi関係
     logKonashiStatus()
     
@@ -329,6 +328,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       // LED2を点灯
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
+      
+      self.updateColor()
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
       
@@ -461,8 +462,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("setInstrument:255,000,000;\n")
   }
   
-  @IBAction func changeColor(sender: UISlider) {
-    instrumentColor = UIColor(hue: CGFloat(sender.value), saturation: 1.0, brightness: 1.0, alpha: 1.0)
+  @IBAction func changeHue(sender: UISlider) {
+    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
+    updateColor()
+  }
+  @IBAction func changeSaturation(sender: UISlider) {
+    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
+    updateColor()
+  }
+  func updateColor() {
+    let hue = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE))
+    let saturation = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION))
+    instrumentColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
     
     let r = NSString(format: "%03d", Int(instrumentColor.getRed()))
@@ -471,7 +482,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     uart("i:\(r).\(g).\(b);")
   }
-  
   
   // Tone
   
