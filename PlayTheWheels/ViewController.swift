@@ -466,7 +466,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapUartTest(sender: UIButton) {
 //    uart("instrument", value:"255,100,000")
-    uart("setInstrument:255,000,000;\n")
+    uart("i:255,000,000;\n")
   }
   
   @IBAction func changeHue(sender: UISlider) {
@@ -675,58 +675,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         player.play()
         
         // Konashi通信
-        
-        // slit位置に応じて色を決定
-        let h = CGFloat(Float(slit_index)/Float(SLIT_COUNT))
-        let slitColor: UIColor = UIColor(hue: h, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-        // RGB値を3桁ゼロ埋めで取得
-        let r = NSString(format: "%03d", Int(slitColor.getRed()))
-        let g = NSString(format: "%03d", Int(slitColor.getGreen()))
-        let b = NSString(format: "%03d", Int(slitColor.getBlue()))
-        
-        if CGFloat(Float(arc4random()) / Float(UINT32_MAX)) < 0.5 {
-          uart("i:\(r).\(g).\(b);")
-        }
-        else {
-          uart("e:\(r).\(g).\(b);")
-        }
-        
-        
-//        onColor()
+        uart("s:;")
       }
     }
     prevDeg = current_deg
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
-  }
-  
-  // light up LED on wheel
-  func onColor() {
-    NSLog("onColor")
-    setLedColor(instrumentColor)
-    NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "offColor:", userInfo: nil, repeats: false)
-  }
-  // lighten down LED on wheel
-  func offColor(timer : NSTimer) {
-    NSLog("offColor")
-    setLedColor(instrumentColor.darkenColor(20.0))
-  }
-  func setLedColor(color: UIColor) {
-    NSLog("setLedColor")
-    // instrument color
-    let iR = NSString(format: "%03d", Int(color.getRed()))
-    let iG = NSString(format: "%03d", Int(color.getGreen()))
-    let iB = NSString(format: "%03d", Int(color.getBlue()))
-    uart("instrument", value:"\(iR).\(iG).\(iB)")
-    
-    effectColor = color.darkenColor(20.0)
-    
-    // effect color
-    let eR = NSString(format: "%03d", Int(effectColor.getRed()))
-    let eG = NSString(format: "%03d", Int(effectColor.getGreen()))
-    let eB = NSString(format: "%03d", Int(effectColor.getBlue()))
-    uart("effect", value:"\(eR).\(eG).\(eB)")
-    
   }
   
   
