@@ -19,6 +19,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_INSTRUMENT_COLOR_SATURATION = "instrument_color_saturation"
   let UD_KEY_EFFECT_COLOR_HUE = "effect_color_hue"
   let UD_KEY_EFFECT_COLOR_SATURATION = "effect_color_saturation"
+  let UD_KEY_LED_DIVIDE = "led_divide"
+  let UD_KEY_LED_POSITION = "led_position"
   
   
   @IBOutlet weak var arrow: UIImageView!
@@ -52,6 +54,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var colorView2: UIView!
   @IBOutlet weak var hueSlider2: UISlider!
   @IBOutlet weak var saturationSlider2: UISlider!
+  @IBOutlet weak var divideSlider: UISlider!
+  @IBOutlet weak var divideLabel: UILabel!
+  @IBOutlet weak var positionSlider: UISlider!
+  @IBOutlet weak var positionLabel: UILabel!
   
   var instrumentColor: UIColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
   var effectColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
@@ -304,6 +310,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     saturationSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION), animated: true)
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
+    divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
+    positionSlider.setValue(UD.floatForKey(UD_KEY_LED_POSITION), animated: true)
     
     // Konashi関係
     logKonashiStatus()
@@ -485,6 +493,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
     updateEffectColor()
   }
+  @IBAction func changeDivide(sender: UISlider) {
+    let val = Int(sender.value)
+    UD.setObject(val, forKey: UD_KEY_LED_DIVIDE)
+    divideLabel.text = "\(val)"
+    uart("d:\(val);")
+  }
+  @IBAction func changePosition(sender: UISlider) {
+    let val = sender.value
+    UD.setObject(val, forKey: UD_KEY_LED_POSITION)
+    positionLabel.text = "\(val)"
+    uart("p:\(val);")
+  }
+  
   
   func updateInstrumentColor() {
     let hue = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE))
