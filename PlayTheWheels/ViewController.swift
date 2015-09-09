@@ -134,6 +134,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   var engine: AVAudioEngine!
   var distortion: AVAudioUnitDistortion!
+  var equalizer: AVAudioUnitEQ!
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
@@ -254,6 +255,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     engine = AVAudioEngine()
     
+    equalizer = AVAudioUnitEQ(numberOfBands: 1)
+    var epParams: AVAudioUnitEQFilterParameters = equalizer.bands.first as! AVAudioUnitEQFilterParameters
+    epParams.filterType = .BandPass
+    epParams.frequency = 659.255
+    epParams.bandwidth = 0.05
+    epParams.bypass = false
+
     distortion = AVAudioUnitDistortion()
     setDistortionWetDry(0)
     setDistortionPresets(2)
@@ -272,6 +280,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     mixer = AVAudioMixerNode()
     
     engine.attachNode(distortion)
+    engine.attachNode(equalizer)
     engine.attachNode(delay)
     engine.attachNode(reverb)
     engine.attachNode(mixer)
