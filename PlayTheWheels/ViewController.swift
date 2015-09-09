@@ -54,6 +54,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var colorView2: UIView!
   @IBOutlet weak var hueSlider2: UISlider!
   @IBOutlet weak var saturationSlider2: UISlider!
+  @IBOutlet weak var brightnessLabel: UILabel!
   @IBOutlet weak var divideSlider: UISlider!
   @IBOutlet weak var divideLabel: UILabel!
   @IBOutlet weak var positionSlider: UISlider!
@@ -312,6 +313,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
     divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
     positionSlider.setValue(UD.floatForKey(UD_KEY_LED_POSITION), animated: true)
+    updateInstrumentColor()
+    updateEffectColor()
     
     // Konashi関係
     logKonashiStatus()
@@ -345,6 +348,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
       
       self.updateInstrumentColor()
+      self.updateEffectColor()
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
       
@@ -485,6 +489,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
     updateInstrumentColor()
   }
+  @IBAction func tapBlack(sender: UIButton) {
+    uart("i:000,000,000;\n")
+    instrumentColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
+    colorView.backgroundColor = instrumentColor
+  }
+  
   @IBAction func changeHue2(sender: UISlider) {
     UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_HUE)
     updateEffectColor()
@@ -493,6 +503,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
     updateEffectColor()
   }
+  @IBAction func tapBlack2(sender: UIButton) {
+    uart("e:000,000,000;\n")
+    effectColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
+    colorView2.backgroundColor = effectColor
+  }
+  
+  @IBAction func changeBrightnessMin(sender: UISlider) {
+    let val = sender.value
+    brightnessLabel.text = "\(val)"
+    uart("b:\(val);")
+  }
+  
   @IBAction func changeDivide(sender: UISlider) {
     let val = Int(sender.value)
     UD.setObject(val, forKey: UD_KEY_LED_DIVIDE)
