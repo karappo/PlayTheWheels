@@ -311,8 +311,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     saturationSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION), animated: true)
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
-    divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
-    positionSlider.setValue(UD.floatForKey(UD_KEY_LED_POSITION), animated: true)
+    
+    let divide = Float(UD.integerForKey(UD_KEY_LED_DIVIDE))
+    divideSlider.setValue(divide, animated: true)
+    divideLabel.text = "\(divide)"
+    
+    let position = Float(UD.integerForKey(UD_KEY_LED_DIVIDE))
+    positionSlider.setValue(position, animated: true)
+    positionLabel.text = "\(position)"
+    
     updateInstrumentColor()
     updateEffectColor()
     
