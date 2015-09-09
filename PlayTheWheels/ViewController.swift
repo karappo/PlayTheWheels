@@ -133,9 +133,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
   var engine: AVAudioEngine!
-  var reverb: AVAudioUnitReverb!
   var distortion: AVAudioUnitDistortion!
   var delay: AVAudioUnitDelay!
+  var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
