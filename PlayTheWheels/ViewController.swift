@@ -486,7 +486,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     updateInstrumentColor()
   }
   @IBAction func changeHue2(sender: UISlider) {
-    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
+    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_HUE)
     updateEffectColor()
   }
   @IBAction func changeSaturation2(sender: UISlider) {
