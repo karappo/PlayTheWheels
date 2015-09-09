@@ -312,13 +312,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
     
-    let divide = Float(UD.integerForKey(UD_KEY_LED_DIVIDE))
-    divideSlider.setValue(divide, animated: true)
-    divideLabel.text = "\(divide)"
+    divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
+    changeDivide(divideSlider)
     
-    let position = Float(UD.integerForKey(UD_KEY_LED_DIVIDE))
-    positionSlider.setValue(position, animated: true)
-    positionLabel.text = "\(position)"
+    positionSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_POSITION)), animated: true)
+    changePosition(positionSlider)
     
     updateInstrumentColor()
     updateEffectColor()
@@ -524,10 +522,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("d:\(val);")
   }
   @IBAction func changePosition(sender: UISlider) {
-    let val = sender.value
+    let val = Int(sender.value)
+    NSLog("position: \(val)")
     UD.setObject(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
-    uart("p:\(val);")
+    uart("p:\(Float(val)/100);")
   }
   
   
