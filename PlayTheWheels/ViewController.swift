@@ -490,7 +490,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     updateInstrumentColor()
   }
   @IBAction func tapBlack(sender: UIButton) {
-    uart("instrument:000,000,000;")
+    uart("i:000,000,000;\n")
     instrumentColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
   }
@@ -504,7 +504,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     updateEffectColor()
   }
   @IBAction func tapBlack2(sender: UIButton) {
-    uart("effect:000,000,000;")
+    uart("e:000,000,000;\n")
     effectColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
   }
@@ -512,20 +512,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func changeBrightnessMin(sender: UISlider) {
     let val = sender.value
     brightnessLabel.text = "\(val)"
-    uart("brightness:\(val);")
+    uart("b:\(val);")
   }
   
   @IBAction func changeDivide(sender: UISlider) {
     let val = Int(sender.value)
     UD.setObject(val, forKey: UD_KEY_LED_DIVIDE)
     divideLabel.text = "\(val)"
-    uart("divide:\(val);")
+    uart("d:\(val);")
   }
   @IBAction func changePosition(sender: UISlider) {
     let val = Int(sender.value)
+    NSLog("position: \(val)")
     UD.setObject(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
-    uart("position:\(Float(val)/100);")
+    uart("p:\(Float(val)/100);")
   }
   
   
@@ -539,7 +540,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let g = NSString(format: "%03d", Int(instrumentColor.getGreen()))
     let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
     
-    uart("instrument:\(r).\(g).\(b);")
+    uart("i:\(r).\(g).\(b);")
   }
   func updateEffectColor() {
     let hue = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE))
@@ -551,7 +552,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let g = NSString(format: "%03d", Int(effectColor.getGreen()))
     let b = NSString(format: "%03d", Int(effectColor.getBlue()))
     
-    uart("effect:\(r).\(g).\(b);")
+    uart("e:\(r).\(g).\(b);")
   }
   
   // Tone
@@ -718,7 +719,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         player.play()
         
         // Konashi通信
-        uart("play:;")
+        uart("s:;")
       }
     }
     prevDeg = current_deg
