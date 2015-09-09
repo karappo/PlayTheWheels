@@ -476,11 +476,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Color
   
-  @IBAction func tapUartTest(sender: UIButton) {
-//    uart("instrument", value:"255,100,000")
-    uart("i:255,000,000;\n")
-  }
-  
   @IBAction func changeHue(sender: UISlider) {
     UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
     updateInstrumentColor()

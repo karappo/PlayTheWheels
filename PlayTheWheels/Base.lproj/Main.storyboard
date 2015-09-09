@@ -591,16 +591,6 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvc-49-6AM">
-                                        <rect key="frame" x="188" y="231" width="72" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="UART Test">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="tapUartTest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="jJO-oV-EhV"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tj4-ih-fsr">
                                         <rect key="frame" x="321" y="276" width="39" height="30"/>
                                         <state key="normal" title="Black">
@@ -737,7 +727,6 @@
                                     <constraint firstAttribute="trailing" secondItem="r6J-qj-hId" secondAttribute="trailing" constant="15" id="bdw-iv-70d"/>
                                     <constraint firstItem="KGn-fR-pmC" firstAttribute="leading" secondItem="Exj-al-a76" secondAttribute="trailing" constant="10" id="bjh-cZ-Kzc"/>
                                     <constraint firstItem="hNJ-rI-3K0" firstAttribute="leading" secondItem="2Gi-Au-u37" secondAttribute="leading" id="bpG-4j-IXH"/>
-                                    <constraint firstItem="bvc-49-6AM" firstAttribute="centerY" secondItem="K9d-9Z-BlT" secondAttribute="centerY" id="bw1-Ca-1o6"/>
                                     <constraint firstItem="wBQ-yc-jBi" firstAttribute="top" secondItem="koL-5M-64K" secondAttribute="bottom" constant="20" id="bzl-xq-YLy"/>
                                     <constraint firstItem="DfG-0g-ghx" firstAttribute="leading" secondItem="xWQ-ct-GFa" secondAttribute="leading" constant="15" id="cUD-4b-HZF"/>
                                     <constraint firstItem="fjp-vg-p1X" firstAttribute="leading" secondItem="Ie6-f0-7Mh" secondAttribute="trailing" constant="10" id="d4p-CW-jmT"/>
@@ -801,7 +790,6 @@
                                     <constraint firstItem="CiM-Q5-SkJ" firstAttribute="leading" secondItem="3ya-Yd-N98" secondAttribute="leading" id="ujM-9o-bee"/>
                                     <constraint firstItem="kVz-NY-GKe" firstAttribute="top" secondItem="uxJ-RU-xZn" secondAttribute="bottom" constant="20" id="v3P-Qb-EXl"/>
                                     <constraint firstItem="ApU-97-MRL" firstAttribute="top" secondItem="K9d-9Z-BlT" secondAttribute="bottom" constant="10" id="vG5-Ah-Tse"/>
-                                    <constraint firstItem="bvc-49-6AM" firstAttribute="leading" secondItem="2Gi-Au-u37" secondAttribute="leading" id="vk3-1v-Orl"/>
                                     <constraint firstItem="YNP-8p-Zpy" firstAttribute="leading" secondItem="xWQ-ct-GFa" secondAttribute="leading" constant="30" id="vud-a8-2P5"/>
                                     <constraint firstItem="YkM-wU-ODi" firstAttribute="trailing" secondItem="5aU-91-kb3" secondAttribute="trailing" id="wEA-I7-lbC"/>
                                     <constraint firstItem="2Gi-Au-u37" firstAttribute="leading" secondItem="5aU-91-kb3" secondAttribute="leading" id="xLI-mA-LbI"/>
