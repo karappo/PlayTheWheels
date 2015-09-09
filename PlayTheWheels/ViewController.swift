@@ -351,7 +351,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // LED3を消灯
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.Low)
       
-      NSLog("[Konashi] UartRx \(data.description)")
+//      NSLog("[Konashi] UartRx \(data.description)")
     }
     
     // UserDefaultsから前回接続したKonashiを読み、接続を試みる
