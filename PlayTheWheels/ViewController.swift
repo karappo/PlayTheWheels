@@ -347,14 +347,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     samplerPlayer.volume = 0.0
     engine.attachNode(samplerPlayer)
     engine.connect(samplerPlayer, to: mixer, format: format)
-    
+
     engine.connect(mixer, to: distortion, format: format)
     engine.connect(distortion, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
     engine.connect(delay, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
     engine.startAndReturnError(nil)
-  
+    
     // モーションセンサー
     if MM.deviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
@@ -631,6 +631,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           player.stop()
         }
       }
+      
+      let filePath: String = NSBundle.mainBundle().pathForResource("tones/sinewave", ofType: "aif")!
+      let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
+      let audioFile = AVAudioFile(forReading: fileURL, error: nil)
+      let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+      audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+      
+      samplerPlayer.volume = 0.0
+      samplerPlayer.play()
+      samplerPlayer.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+      
     default:
       NSLog("Error")
     }
@@ -851,23 +862,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     case 1:
       // Sampler
-      NSLog("Sampler")
       // 変化量
-      let variation = prevDeg - current_deg
+      let variation = Float(abs(prevDeg - current_deg))
       NSLog("\(variation)")
-      
-      if !samplerPlayer.playing {
-        
-        let sampleAudioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/sinewave-10s", ofType: "wav")!), error: nil)
-        samplerPlayer.scheduleFile(sampleAudioFile, atTime: nil, completionHandler: nil)
-        
-        // 再生開始
-        samplerPlayer.play()
-      }
-      else {
-        samplerPlayer.volume = 9.0
-      }
-      
+      samplerPlayer.volume = variation
     default:
       NSLog("Error")
     }
