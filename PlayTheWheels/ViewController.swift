@@ -103,6 +103,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var distortionDryWetLabel: UILabel!
   @IBOutlet weak var distortionPresetsBtn: UIButton!
   @IBOutlet weak var distortionPreGainLabel: UILabel!
+  // EQ
+  @IBOutlet weak var eqBypassSwitch: UISwitch!
+  @IBOutlet weak var eqFilterTypeBtn: UIButton!
+  @IBOutlet weak var eqFrequencySlider: UISlider!
+  @IBOutlet weak var eqFrequencyLabel: UILabel!
+  @IBOutlet weak var eqBandwidthSlider: UISlider!
+  @IBOutlet weak var eqBandwidthLabel: UILabel!
+  @IBOutlet weak var eqGainSlider: UISlider!
+  @IBOutlet weak var eqGainLabel: UILabel!
   // Delay
   @IBOutlet weak var delaySwitch: UISwitch!
   @IBOutlet weak var delayDryWetSlider: UISlider!
@@ -134,7 +143,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   var engine: AVAudioEngine!
   var distortion: AVAudioUnitDistortion!
-  var equalizer: AVAudioUnitEQ!
+  var eq: AVAudioUnitEQ!
+  var epParams: AVAudioUnitEQFilterParameters!
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
@@ -219,6 +229,32 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     AVAudioUnitReverbPreset.MediumHall3,
     AVAudioUnitReverbPreset.LargeHall2
   ]
+  let eqFilterTypesStrings: Array<String> = [
+    "Parametric",
+    "LowPass",
+    "HighPass",
+    "ResonantLowPass",
+    "ResonantHighPass",
+    "BandPass",
+    "BandStop",
+    "LowShelf",
+    "HighShelf",
+    "ResonantLowShelf",
+    "ResonantHighShelf"
+  ]
+  let eqFilterTypesEnums: Array<AVAudioUnitEQFilterType> = [
+    AVAudioUnitEQFilterType.Parametric,
+    AVAudioUnitEQFilterType.LowPass,
+    AVAudioUnitEQFilterType.HighPass,
+    AVAudioUnitEQFilterType.ResonantLowPass,
+    AVAudioUnitEQFilterType.ResonantHighPass,
+    AVAudioUnitEQFilterType.BandPass,
+    AVAudioUnitEQFilterType.BandStop,
+    AVAudioUnitEQFilterType.LowShelf,
+    AVAudioUnitEQFilterType.HighShelf,
+    AVAudioUnitEQFilterType.ResonantLowShelf,
+    AVAudioUnitEQFilterType.ResonantHighShelf
+  ]
 
   let SLIT_COUNT = 8
   var leds: Array<UIView> = []
@@ -255,12 +291,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     engine = AVAudioEngine()
     
-    equalizer = AVAudioUnitEQ(numberOfBands: 1)
-    var epParams: AVAudioUnitEQFilterParameters = equalizer.bands.first as! AVAudioUnitEQFilterParameters
-    epParams.filterType = .BandPass
-    epParams.frequency = 659.255
-    epParams.bandwidth = 0.05
-    epParams.bypass = false
+    eq = AVAudioUnitEQ(numberOfBands: 1)
+    epParams = eq.bands.first as! AVAudioUnitEQFilterParameters
+    setEqFilterTypes(1)
+    setEqFrequency(659.255)
+    setEqBandwidth(0.05)
+    setEqGain(0.0)
+    epParams.bypass = eqBypassSwitch.on
 
     distortion = AVAudioUnitDistortion()
     setDistortionWetDry(0)
@@ -280,7 +317,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     mixer = AVAudioMixerNode()
     
     engine.attachNode(distortion)
-    engine.attachNode(equalizer)
+    engine.attachNode(eq)
     engine.attachNode(delay)
     engine.attachNode(reverb)
     engine.attachNode(mixer)
@@ -299,7 +336,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     engine.connect(mixer, to: distortion, format: format)
-    engine.connect(distortion, to: delay, format: format)
+    engine.connect(distortion, to: eq, format: format)
+    engine.connect(eq, to: delay, format: format)
     engine.connect(delay, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
     engine.startAndReturnError(nil)
@@ -622,6 +660,44 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func setDistortionPreGain(val: Float) {
     distortion.preGain = val
     distortionPreGainLabel.text = "\(val)"
+  }
+  
+  // EQ
+  @IBAction func changeEqBypass(sender: UISwitch) {
+    epParams.bypass = sender.on
+  }
+  @IBAction func tapFilterType(sender: UIButton) {
+    let initial: Int = find(self.eqFilterTypesStrings, eqFilterTypeBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("EQ FilterType", rows: eqFilterTypesStrings, initialSelection: initial, doneBlock: {
+      picker, value, index in
+      self.setEqFilterTypes(value)
+      return
+      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+  }
+  func setEqFilterTypes(index: Int) {
+    epParams.filterType = eqFilterTypesEnums[index]
+    eqFilterTypeBtn.setTitle(eqFilterTypesStrings[index], forState: UIControlState.Normal)
+  }
+  @IBAction func changeEqFrequency(sender: UISlider) {
+    setEqFrequency(sender.value)
+  }
+  func setEqFrequency(val: Float) {
+    epParams.frequency = val
+    eqFrequencyLabel.text = "\(val)"
+  }
+  @IBAction func changeEqBandwidth(sender: UISlider) {
+    setEqBandwidth(sender.value)
+  }
+  func setEqBandwidth(val: Float) {
+    epParams.bandwidth = val
+    eqBandwidthLabel.text = "\(val)"
+  }
+  @IBAction func changeEqGain(sender: UISlider) {
+    setEqGain(sender.value)
+  }
+  func setEqGain(val: Float) {
+    epParams.gain = val
+    eqGainLabel.text = "\(val)"
   }
   
   // Delay
