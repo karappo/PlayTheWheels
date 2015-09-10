@@ -63,6 +63,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var instrumentColor: UIColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
   var effectColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
   
+  // # Player Section
+  
+  @IBOutlet weak var playerTypeSegment: UISegmentedControl!
+  
+  
   // # Tone Section
   
   @IBOutlet weak var toneNameBtn: UIButton!
@@ -148,6 +153,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
+  var samplerPlayer: AVAudioPlayerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
   let distortionPresetsStrings: Array<String> = [
@@ -334,6 +340,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       players += [player]
     }
+    
+    // playerにオーディオファイルを設定
+    
+    samplerPlayer = AVAudioPlayerNode()
+    samplerPlayer.volume = 0.0
+    engine.attachNode(samplerPlayer)
+    engine.connect(samplerPlayer, to: mixer, format: format)
     
     engine.connect(mixer, to: distortion, format: format)
     engine.connect(distortion, to: eq, format: format)
@@ -602,6 +615,28 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("e:\(r).\(g).\(b);")
   }
   
+  // Player
+  
+  @IBAction func changePlayer(sender: UISegmentedControl) {
+    switch sender.selectedSegmentIndex {
+    case 0:
+      // Music Box
+      if samplerPlayer.playing {
+        samplerPlayer.stop()
+      }
+    case 1:
+      // Sampler
+      for player in players {
+        if player.playing {
+          player.stop()
+        }
+      }
+    default:
+      NSLog("Error")
+    }
+  }
+  
+  
   // Tone
   
   @IBAction func tapToneName(sender: UIButton) {
@@ -782,34 +817,62 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   func updateRotation(radian: Double) {
+    
     let current_deg = self.radiansToDegrees(radian)
-    let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
-    if 0 < passed_index.count {
-      for slit_index in passed_index {
-        // スクリーンのLED
-        let led = leds[slit_index]
-        activate(led)
-        
-        // Sound
-        let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
-        let player: AVAudioPlayerNode = players[slit_index] as AVAudioPlayerNode
-        if player.playing {
-          player.stop()
-        }
-        
-        // playerにオーディオファイルを設定
-        player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-        
-        // 再生開始
-        player.play()
-        
-        // Konashi通信
-        uart("s:;")
-      }
-    }
-    prevDeg = current_deg
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
+    
+    switch playerTypeSegment.selectedSegmentIndex {
+    case 0:
+      // Music Box
+      let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
+      if 0 < passed_index.count {
+        for slit_index in passed_index {
+          // スクリーンのLED
+          let led = leds[slit_index]
+          activate(led)
+          
+          // Sound
+          let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
+          let player: AVAudioPlayerNode = players[slit_index] as AVAudioPlayerNode
+          if player.playing {
+            player.stop()
+          }
+          
+          // playerにオーディオファイルを設定
+          player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+          
+          // 再生開始
+          player.play()
+          
+          // Konashi通信
+          uart("s:;")
+        }
+      }
+    case 1:
+      // Sampler
+      NSLog("Sampler")
+      // 変化量
+      let variation = prevDeg - current_deg
+      NSLog("\(variation)")
+      
+      if !samplerPlayer.playing {
+        
+        let sampleAudioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/sinewave-10s", ofType: "wav")!), error: nil)
+        samplerPlayer.scheduleFile(sampleAudioFile, atTime: nil, completionHandler: nil)
+        
+        // 再生開始
+        samplerPlayer.play()
+      }
+      else {
+        samplerPlayer.volume = 9.0
+      }
+      
+    default:
+      NSLog("Error")
+    }
+    
+    prevDeg = current_deg
   }
   
   
