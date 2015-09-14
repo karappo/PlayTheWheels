@@ -864,7 +864,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // Sampler
       // 変化量
       let variation = Float(abs(prevDeg - current_deg))
-      NSLog("\(variation)")
       samplerPlayer.volume = variation
     default:
       NSLog("Error")
