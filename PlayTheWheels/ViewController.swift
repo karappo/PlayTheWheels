@@ -634,7 +634,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
       
-      let filePath: String = NSBundle.mainBundle().pathForResource("tones/sinewave", ofType: "aif")!
+      let filePath: String = NSBundle.mainBundle().pathForResource("tones/sinewave", ofType: "wav")!
       let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
       let audioFile = AVAudioFile(forReading: fileURL, error: nil)
       let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
