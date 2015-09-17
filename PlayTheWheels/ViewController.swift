@@ -73,8 +73,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var toneNameBtn: UIButton!
   let tones = [
     // [label]: [directory]
-    "0913_A_test - L": "0913_A_test/l",
-    "0913_A_test - R": "0913_A_test/r",
+    "0916_test - L": "0916_test/l",
+    "0916_test - R": "0916_test/r",
     "Aczid bit-crash - L": "Aczid bit-crash/hi",
     "Aczid bit-crash - R": "Aczid bit-crash/low",
     "Around the World sin - L": "Around the World sin/hi",
