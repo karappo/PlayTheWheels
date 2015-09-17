@@ -413,7 +413,7 @@
 				INFOPLIST_FILE = PlayTheWheels/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "cb98f027-5660-4b17-a4db-b2a7f8d2f9e2";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 			};
 			name = Debug;
@@ -428,7 +428,7 @@
 				INFOPLIST_FILE = PlayTheWheels/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "cb98f027-5660-4b17-a4db-b2a7f8d2f9e2";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 			};
 			name = Release;
