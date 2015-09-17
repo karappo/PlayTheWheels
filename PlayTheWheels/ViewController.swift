@@ -39,8 +39,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // # Beacon Section
   
-  @IBOutlet weak var beaconDistortionLabel: UILabel!
-  @IBOutlet weak var beaconDistortionSlider: UISlider!
   @IBOutlet weak var beaconDelayLabel: UILabel!
   @IBOutlet weak var beaconDelaySlider: UISlider!
   @IBOutlet weak var beaconReverbLabel: UILabel!
@@ -103,13 +101,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // # Effect Section
   
-  // Distortion
-  @IBOutlet weak var distortionSwitch: UISwitch!
-  @IBOutlet weak var distortionDryWetSlider: UISlider!
-  @IBOutlet weak var distortionPreGainSlider: UISlider!
-  @IBOutlet weak var distortionDryWetLabel: UILabel!
-  @IBOutlet weak var distortionPresetsBtn: UIButton!
-  @IBOutlet weak var distortionPreGainLabel: UILabel!
   // EQ
   @IBOutlet weak var eqBypassSwitch: UISwitch!
   @IBOutlet weak var eqFilterTypeBtn: UIButton!
@@ -149,7 +140,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
   var engine: AVAudioEngine!
-  var distortion: AVAudioUnitDistortion!
   var eq: AVAudioUnitEQ!
   var epParams: AVAudioUnitEQFilterParameters!
   var delay: AVAudioUnitDelay!
@@ -158,55 +148,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var samplerPlayer: AVAudioPlayerNode!
   var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
-  let distortionPresetsStrings: Array<String> = [
-    "DrumsBitBrush",
-    "DrumsBufferBeats",
-    "DrumsLoFi",
-    "MultiBrokenSpeaker",
-    "MultiCellphoneConcert",
-    "MultiDecimated1",
-    "MultiDecimated2",
-    "MultiDecimated3",
-    "MultiDecimated4",
-    "MultiDistortedFunk",
-    "MultiDistortedCubed",
-    "MultiDistortedSquared",
-    "MultiEcho1",
-    "MultiEcho2",
-    "MultiEchoTight1",
-    "MultiEchoTight2",
-    "MultiEverythingIsBroken",
-    "SpeechAlienChatter",
-    "SpeechCosmicInterference",
-    "SpeechGoldenPi",
-    "SpeechRadioTower",
-    "SpeechWaves"
-  ]
-  
-  let distortionPresetsEnums: Array<AVAudioUnitDistortionPreset> = [
-    AVAudioUnitDistortionPreset.DrumsBitBrush,
-    AVAudioUnitDistortionPreset.DrumsBufferBeats,
-    AVAudioUnitDistortionPreset.DrumsLoFi,
-    AVAudioUnitDistortionPreset.MultiBrokenSpeaker,
-    AVAudioUnitDistortionPreset.MultiCellphoneConcert,
-    AVAudioUnitDistortionPreset.MultiDecimated1,
-    AVAudioUnitDistortionPreset.MultiDecimated2,
-    AVAudioUnitDistortionPreset.MultiDecimated3,
-    AVAudioUnitDistortionPreset.MultiDecimated4,
-    AVAudioUnitDistortionPreset.MultiDistortedFunk,
-    AVAudioUnitDistortionPreset.MultiDistortedCubed,
-    AVAudioUnitDistortionPreset.MultiDistortedSquared,
-    AVAudioUnitDistortionPreset.MultiEcho1,
-    AVAudioUnitDistortionPreset.MultiEcho2,
-    AVAudioUnitDistortionPreset.MultiEchoTight1,
-    AVAudioUnitDistortionPreset.MultiEchoTight2,
-    AVAudioUnitDistortionPreset.MultiEverythingIsBroken,
-    AVAudioUnitDistortionPreset.SpeechAlienChatter,
-    AVAudioUnitDistortionPreset.SpeechCosmicInterference,
-    AVAudioUnitDistortionPreset.SpeechGoldenPi,
-    AVAudioUnitDistortionPreset.SpeechRadioTower,
-    AVAudioUnitDistortionPreset.SpeechWaves
-  ]
   let reverbPresetsStrings: Array<String> = [
     "SmallRoom",
     "MediumRoom",
@@ -306,11 +247,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     setEqBandwidth(0.05)
     setEqGain(0.0)
     epParams.bypass = eqBypassSwitch.on
-
-    distortion = AVAudioUnitDistortion()
-    setDistortionWetDry(0)
-    setDistortionPresets(2)
-    setDistortionPreGain(-30)
     
     delay = AVAudioUnitDelay()
     setDelayWetDry(0)
@@ -324,7 +260,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     mixer = AVAudioMixerNode()
     
-    engine.attachNode(distortion)
     engine.attachNode(eq)
     engine.attachNode(delay)
     engine.attachNode(reverb)
@@ -350,8 +285,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.attachNode(samplerPlayer)
     engine.connect(samplerPlayer, to: mixer, format: format)
 
-    engine.connect(mixer, to: distortion, format: format)
-    engine.connect(distortion, to: eq, format: format)
+    engine.connect(mixer, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
     engine.connect(delay, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
@@ -476,13 +410,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             dryWet = max(min(50, dryWet), 0) // 範囲内に収める
             
             switch effectName {
-              case "Distortion":
-                beaconDistortionLabel.text = "\(accuracy)"
-                beaconDistortionSlider.setValue(accuracy, animated: true)
-                if distortionSwitch.on {
-                  setDistortionWetDry(dryWet)
-                  distortionDryWetSlider.setValue(dryWet, animated: true)
-                }
               case "Delay":
                 beaconDelayLabel.text = "\(accuracy)"
                 beaconDelaySlider.setValue(accuracy, animated: true)
@@ -679,35 +606,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     }
     return format
-  }
-  
-  
-  // Distortion
-  @IBAction func changeDistortionWetDry(sender: UISlider) {
-    setDistortionWetDry(sender.value)
-  }
-  func setDistortionWetDry(val: Float) {
-    distortion.wetDryMix = val
-    distortionDryWetLabel.text = "\(val)"
-  }
-  @IBAction func tapDistortionPresets(sender: UIButton) {
-    let initial: Int = find(self.distortionPresetsStrings, distortionPresetsBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("Distortion presets", rows: distortionPresetsStrings, initialSelection: initial, doneBlock: {
-      picker, value, index in
-        self.setDistortionPresets(value)
-        return
-      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
-  }
-  func setDistortionPresets(index: Int) {
-    distortion.loadFactoryPreset(distortionPresetsEnums[index])
-    distortionPresetsBtn.setTitle(distortionPresetsStrings[index], forState: UIControlState.Normal)
-  }
-  @IBAction func changeDistortionPreGain(sender: UISlider) {
-    setDistortionPreGain(sender.value)
-  }
-  func setDistortionPreGain(val: Float) {
-    distortion.preGain = val
-    distortionPreGainLabel.text = "\(val)"
   }
   
   // EQ
