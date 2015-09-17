@@ -421,7 +421,7 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rdR-oD-dOc" userLabel="Eq-Bypass">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rdR-oD-dOc" userLabel="Eq-Bypass">
                                         <rect key="frame" x="350" y="973" width="51" height="31"/>
                                         <connections>
                                             <action selector="changeEqBypass:" destination="vXZ-lx-hvc" eventType="valueChanged" id="VQg-tO-RsJ"/>
