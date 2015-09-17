@@ -620,10 +620,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NP5-sU-biI">
-                                        <rect key="frame" x="242" y="802" width="157" height="29"/>
+                                        <rect key="frame" x="252" y="802" width="147" height="29"/>
                                         <segments>
-                                            <segment title="Music Box"/>
-                                            <segment title="Sampler"/>
+                                            <segment title="OneShot"/>
+                                            <segment title="LongShot"/>
                                         </segments>
                                         <connections>
                                             <action selector="changePlayer:" destination="vXZ-lx-hvc" eventType="valueChanged" id="bgb-hN-GP5"/>

@@ -549,12 +549,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func changePlayer(sender: UISegmentedControl) {
     switch sender.selectedSegmentIndex {
     case 0:
-      // Music Box
+      // OneShot
       if samplerPlayer.playing {
         samplerPlayer.stop()
       }
     case 1:
-      // Sampler
+      // LongShot
       for player in players {
         if player.playing {
           player.stop()
