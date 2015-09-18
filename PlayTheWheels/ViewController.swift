@@ -128,7 +128,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Beacon
   let beaconManager = ESTBeaconManager()
-  let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
+  let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4")!, identifier: "ranged region")
   let effectBeacons = [
     // major:minor
     "9152:49340": "Distortion",
@@ -214,7 +214,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     super.viewDidLoad()
     
     // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
-    toneKeys = sorted(Array(tones.keys), {(s1:String,s2:String) -> Bool in
+    toneKeys = Array(tones.keys).sort({(s1:String,s2:String) -> Bool in
       return (s1.uppercaseString < s2.uppercaseString)
     })
     
@@ -241,7 +241,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine = AVAudioEngine()
     
     eq = AVAudioUnitEQ(numberOfBands: 1)
-    epParams = eq.bands.first as! AVAudioUnitEQFilterParameters
+    epParams = eq.bands.first
     setEqFilterTypes(1)
     setEqFrequency(659.255)
     setEqBandwidth(0.05)
@@ -289,16 +289,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.connect(eq, to: delay, format: format)
     engine.connect(delay, to: reverb, format: format)
     engine.connect(reverb, to: engine.mainMixerNode, format: format)
-    engine.startAndReturnError(nil)
+    do {
+      try engine.start()
+    } catch _ {
+    }
     
     // モーションセンサー
     if MM.deviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
-      MM.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
-        [weak self] (data: CMDeviceMotion!, error: NSError!) in
+      MM.startDeviceMotionUpdatesToQueue(NSOperationQueue()) {
+        (data: CMDeviceMotion?, error: NSError?) in
         
-        let rotation = atan2(data.gravity.x, data.gravity.y) - M_PI
-        self?.updateRotation(rotation)
+        if let isError = error {
+          NSLog("Error: %@", isError)
+        }
+        
+        let rotation = atan2(data!.gravity.x, data!.gravity.y) - M_PI
+        self.updateRotation(rotation)
       }
     }
     
@@ -440,7 +447,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapFind(sender: UIButton) {
     if Konashi.isConnected() {
-      var alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .Alert)
+      let alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .Alert)
       
       let otherAction = UIAlertAction(title: "Disconnect", style: .Default) {
         action in
@@ -562,10 +569,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       let filePath: String = NSBundle.mainBundle().pathForResource("tones/sinewave", ofType: "wav")!
-      let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
-      let audioFile = AVAudioFile(forReading: fileURL, error: nil)
-      let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-      audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+      let fileURL: NSURL = NSURL(fileURLWithPath: filePath)
+      let audioFile = try? AVAudioFile(forReading: fileURL)
+      let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile!.processingFormat, frameCapacity: UInt32(audioFile!.length))
+      do {
+        try audioFile!.readIntoBuffer(audioFileBuffer)
+      } catch _ {
+      }
       
       samplerPlayer.volume = 0.0
       samplerPlayer.play()
@@ -581,7 +591,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapToneName(sender: UIButton) {
     NSLog("toneKeys: \(toneKeys)")
-    let initial: Int = find(toneKeys, toneNameBtn.titleLabel!.text!)!
+    let initial: Int = toneKeys.indexOf((toneNameBtn.titleLabel!.text!))!
     ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.toneKeys, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
@@ -599,10 +609,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     toneDir = tones[key]
     
     for i in 0..<SLIT_COUNT {
-      let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(i)", ofType: "wav")!), error: nil)
-      audioFiles += [audioFile]
+      let audioFile = try? AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(i)", ofType: "wav")!))
+      audioFiles += Array<AVAudioFile>(arrayLiteral: audioFile!)
       if format == nil {
-        format = audioFile.processingFormat
+        format = audioFile!.processingFormat
       }
     }
     return format
@@ -613,7 +623,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     epParams.bypass = sender.on
   }
   @IBAction func tapFilterType(sender: UIButton) {
-    let initial: Int = find(self.eqFilterTypesStrings, eqFilterTypeBtn.titleLabel!.text!)!
+    let initial: Int = self.eqFilterTypesStrings.indexOf((eqFilterTypeBtn.titleLabel!.text!))!
     ActionSheetStringPicker.showPickerWithTitle("EQ FilterType", rows: eqFilterTypesStrings, initialSelection: initial, doneBlock: {
       picker, value, index in
       self.setEqFilterTypes(value)
@@ -685,7 +695,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     reverbDryWetLabel.text = "\(val)"
   }
   @IBAction func tapReverbPresets(sender: UIButton) {
-    ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: find(self.reverbPresetsStrings, reverbPresetsBtn.titleLabel!.text!)!, doneBlock: {
+    ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: self.reverbPresetsStrings.indexOf((reverbPresetsBtn.titleLabel!.text!))!, doneBlock: {
       picker, value, index in
         self.setReverbPresets(value)
         return
@@ -776,7 +786,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // スクリーンのLEDを点灯させる（少ししたら自動で消灯）
   func activate(led: UIView) {
     led.alpha = 1
-    var dic: NSDictionary = NSDictionary(dictionary: ["led": led])
+    let dic: NSDictionary = NSDictionary(dictionary: ["led": led])
     NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "onTimer:", userInfo: dic, repeats: false)
   }
   func onTimer(timer : NSTimer) {
