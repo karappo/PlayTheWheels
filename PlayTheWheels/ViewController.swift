@@ -145,7 +145,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
-  var longShotPlayer: AVAudioPlayerNode!
+  var longShotPlayers: Array<AVAudioPlayerNode> = []
   var oneShotPlayers: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
   let reverbPresetsStrings: Array<String> = [
@@ -272,18 +272,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let player = AVAudioPlayerNode()
       player.volume = 9.0
       engine.attachNode(player)
-      
       engine.connect(player, to: mixer, format: format)
-      
       oneShotPlayers += [player]
     }
     
     // playerにオーディオファイルを設定
+    for i in 0..<2 {
+        let player = AVAudioPlayerNode()
+        player.volume = 0.0
+        engine.attachNode(player)
+        engine.connect(player, to: mixer, format: format)
+        longShotPlayers += [player]
+    }
     
-    longShotPlayer = AVAudioPlayerNode()
-    longShotPlayer.volume = 0.0
-    engine.attachNode(longShotPlayer)
-    engine.connect(longShotPlayer, to: mixer, format: format)
 
     engine.connect(mixer, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
@@ -549,30 +550,35 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func changePlayer(sender: UISegmentedControl) {
     switch sender.selectedSegmentIndex {
     case 0:
-      // OneShot
-      if longShotPlayer.playing {
-        longShotPlayer.stop()
-      }
-    case 1:
-      // LongShot
-      for player in oneShotPlayers {
-        if player.playing {
-          player.stop()
+        // OneShot
+        for player in longShotPlayers {
+            if player.playing {
+                player.stop()
+            }
         }
-      }
-      
-      let filePath: String = NSBundle.mainBundle().pathForResource("tones/sinewave", ofType: "wav")!
-      let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
-      let audioFile = AVAudioFile(forReading: fileURL, error: nil)
-      let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-      audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-      
-      longShotPlayer.volume = 0.0
-      longShotPlayer.play()
-      longShotPlayer.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-      
+    case 1:
+        // LongShot
+        for player in oneShotPlayers {
+            if player.playing {
+                player.stop()
+            }
+        }
+        
+        var i = 0
+        for file in ["tones/squarewave1000Hz","tones/sinewave2000Hz"] {
+            let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
+            let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
+            let audioFile = AVAudioFile(forReading: fileURL, error: nil)
+            let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+            audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+            longShotPlayers[i].volume = 0.0
+            longShotPlayers[i].play()
+            longShotPlayers[i].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+            i++
+        }
+        
     default:
-      NSLog("Error")
+        NSLog("Error")
     }
   }
   
@@ -761,10 +767,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     case 1:
-      // LongShot
-      // 変化量
-      let variation = Float(abs(prevDeg - current_deg))
-      longShotPlayer.volume = variation
+        // LongShot
+        // 変化量
+        let variation = Float(prevDeg - current_deg)
+        if 0 < variation {
+            longShotPlayers[0].volume = abs(variation)
+            longShotPlayers[1].volume = 0
+        }
+        else {
+            longShotPlayers[0].volume = 0
+            longShotPlayers[1].volume = abs(variation)
+        }
     default:
       NSLog("Error")
     }
