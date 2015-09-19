@@ -145,8 +145,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
-  var samplerPlayer: AVAudioPlayerNode!
-  var players: Array<AVAudioPlayerNode> = []
+  var longShotPlayer: AVAudioPlayerNode!
+  var oneShotPlayers: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
   let reverbPresetsStrings: Array<String> = [
     "SmallRoom",
@@ -275,15 +275,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       engine.connect(player, to: mixer, format: format)
       
-      players += [player]
+      oneShotPlayers += [player]
     }
     
     // playerにオーディオファイルを設定
     
-    samplerPlayer = AVAudioPlayerNode()
-    samplerPlayer.volume = 0.0
-    engine.attachNode(samplerPlayer)
-    engine.connect(samplerPlayer, to: mixer, format: format)
+    longShotPlayer = AVAudioPlayerNode()
+    longShotPlayer.volume = 0.0
+    engine.attachNode(longShotPlayer)
+    engine.connect(longShotPlayer, to: mixer, format: format)
 
     engine.connect(mixer, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
@@ -550,12 +550,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     switch sender.selectedSegmentIndex {
     case 0:
       // OneShot
-      if samplerPlayer.playing {
-        samplerPlayer.stop()
+      if longShotPlayer.playing {
+        longShotPlayer.stop()
       }
     case 1:
       // LongShot
-      for player in players {
+      for player in oneShotPlayers {
         if player.playing {
           player.stop()
         }
@@ -567,9 +567,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
       audioFile.readIntoBuffer(audioFileBuffer, error: nil)
       
-      samplerPlayer.volume = 0.0
-      samplerPlayer.play()
-      samplerPlayer.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+      longShotPlayer.volume = 0.0
+      longShotPlayer.play()
+      longShotPlayer.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
       
     default:
       NSLog("Error")
@@ -735,7 +735,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     switch playerTypeSegment.selectedSegmentIndex {
     case 0:
-      // Music Box
+      // OneShot
       let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
       if 0 < passed_index.count {
         for slit_index in passed_index {
@@ -745,7 +745,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           
           // Sound
           let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
-          let player: AVAudioPlayerNode = players[slit_index] as AVAudioPlayerNode
+          let player: AVAudioPlayerNode = oneShotPlayers[slit_index] as AVAudioPlayerNode
           if player.playing {
             player.stop()
           }
@@ -761,10 +761,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     case 1:
-      // Sampler
+      // LongShot
       // 変化量
       let variation = Float(abs(prevDeg - current_deg))
-      samplerPlayer.volume = variation
+      longShotPlayer.volume = variation
     default:
       NSLog("Error")
     }
