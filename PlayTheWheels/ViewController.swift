@@ -65,6 +65,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var toneNameBtn: UIButton!
   @IBOutlet weak var tonePlayerTypeLabel: UILabel!
+  @IBOutlet weak var toneCountLabel: UILabel!
   enum PlayerType: String {
     case OneShot  = "One Shot"
     case LongShot = "Long Shot"
@@ -565,12 +566,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     let itemsCount = items!.count
+    toneCountLabel.text = "\(itemsCount)"
     if 0 < itemsCount {
       
       // switch player type
       
       if itemsCount == 2 {
-        NSLog("LONG SHOT")
         setTonePlayerType(PlayerType.LongShot)
         
         for (index, file) in enumerate(["tones/\(toneDir)/01","tones/\(toneDir)/02"]) {
