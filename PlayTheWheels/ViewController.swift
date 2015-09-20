@@ -61,14 +61,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var instrumentColor: UIColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
   var effectColor: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
   
-  // # Player Section
-  
-  @IBOutlet weak var playerTypeSegment: UISegmentedControl!
-  
-  
   // # Tone Section
   
   @IBOutlet weak var toneNameBtn: UIButton!
+  @IBOutlet weak var tonePlayerTypeLabel: UILabel!
+  enum PlayerType: String {
+    case OneShot  = "One Shot"
+    case LongShot = "Long Shot"
+  }
+  var playerType = PlayerType.OneShot
   let tones = [
     // [label]: [directory]
     "0919 C L": "0919_C_L",
@@ -260,11 +261,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // playerにオーディオファイルを設定
     for i in 0..<2 {
-        let player = AVAudioPlayerNode()
-        player.volume = 0.0
-        engine.attachNode(player)
-        engine.connect(player, to: mixer, format: format)
-        longShotPlayers += [player]
+      let player = AVAudioPlayerNode()
+      player.volume = 0.0
+      engine.attachNode(player)
+      engine.connect(player, to: mixer, format: format)
+      longShotPlayers += [player]
     }
     
 
@@ -527,46 +528,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("e:\(r).\(g).\(b);")
   }
   
-  // Player
-  
-  @IBAction func changePlayer(sender: UISegmentedControl) {
-    switch sender.selectedSegmentIndex {
-    case 0:
-        // OneShot
-        for player in longShotPlayers {
-            if player.playing {
-                player.stop()
-            }
-        }
-    case 1:
-        // LongShot
-        for player in oneShotPlayers {
-            if player.playing {
-                player.stop()
-            }
-        }
-        
-        for (index, file) in enumerate(["tones/squarewave1000Hz","tones/sinewave2000Hz"]) {
-            let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
-            let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
-            let audioFile = AVAudioFile(forReading: fileURL, error: nil)
-            let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-            audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-            longShotPlayers[index].volume = 0.0
-            longShotPlayers[index].play()
-            longShotPlayers[index].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-        }
-        
-    default:
-        NSLog("Error")
-    }
-  }
-  
-  
   // Tone
   
   @IBAction func tapToneName(sender: UIButton) {
-    NSLog("toneKeys: \(toneKeys)")
     let initial: Int = find(toneKeys, toneNameBtn.titleLabel!.text!)!
     ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.toneKeys, initialSelection: initial, doneBlock: {
       picker, value, index in
@@ -584,15 +548,65 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     toneDir = tones[key]
     
-    for i in 1..<SLIT_COUNT+1 {
-        let num = NSString(format: "%02d", i)
-        let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!), error: nil)
-        audioFiles += [audioFile]
-        if format == nil {
-            format = audioFile.processingFormat
-        }
+    let fm = NSFileManager.defaultManager()
+    let items = fm.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
+    
+    
+    // stop players
+    for player in oneShotPlayers {
+      if player.playing {
+        player.stop()
+      }
     }
+    for player in longShotPlayers {
+      if player.playing {
+        player.stop()
+      }
+    }
+    
+    let itemsCount = items!.count
+    if 0 < itemsCount {
+      
+      // switch player type
+      
+      if itemsCount == 2 {
+        NSLog("LONG SHOT")
+        setTonePlayerType(PlayerType.LongShot)
+        
+        for (index, file) in enumerate(["tones/\(toneDir)/01","tones/\(toneDir)/02"]) {
+          let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
+          let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
+          let audioFile = AVAudioFile(forReading: fileURL, error: nil)
+          let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+          audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+          longShotPlayers[index].volume = 0.0
+          longShotPlayers[index].play()
+          longShotPlayers[index].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+        }
+      }
+      else {
+        NSLog("ONE SHOT")
+        setTonePlayerType(PlayerType.OneShot)
+        
+        for i in 1..<SLIT_COUNT+1 {
+          let num = NSString(format: "%02d", i)
+          let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
+          NSLog("\(url)")
+          let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
+          audioFiles += [audioFile]
+          if format == nil {
+            format = audioFile.processingFormat
+          }
+        }
+      }
+    }
+    
     return format
+  }
+  
+  func setTonePlayerType(type: PlayerType) {
+    playerType = type
+    tonePlayerTypeLabel.text = type.rawValue
   }
   
   // EQ
@@ -720,8 +734,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
     
-    switch playerTypeSegment.selectedSegmentIndex {
-    case 0:
+    switch playerType {
+    case PlayerType.OneShot:
       // OneShot
       let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
       if 0 < passed_index.count {
@@ -747,18 +761,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           uart("s:;")
         }
       }
-    case 1:
-        // LongShot
-        // 変化量
-        let variation = Float(prevDeg - current_deg)
-        if 0 < variation {
-            longShotPlayers[0].volume = abs(variation)
-            longShotPlayers[1].volume = 0
-        }
-        else {
-            longShotPlayers[0].volume = 0
-            longShotPlayers[1].volume = abs(variation)
-        }
+    case PlayerType.LongShot:
+      // LongShot
+      // 変化量
+      let variation = Float(prevDeg - current_deg)
+      if 0 < variation {
+        longShotPlayers[0].volume = abs(variation)
+        longShotPlayers[1].volume = 0
+      }
+      else {
+        longShotPlayers[0].volume = 0
+        longShotPlayers[1].volume = abs(variation)
+      }
     default:
       NSLog("Error")
     }
