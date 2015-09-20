@@ -850,6 +850,11 @@
                                     <constraint firstItem="QLJ-Oz-Ier" firstAttribute="leading" secondItem="xWQ-ct-GFa" secondAttribute="leading" constant="15" id="z9m-EJ-q6G"/>
                                     <constraint firstItem="lR5-TY-mfp" firstAttribute="top" secondItem="RZN-68-KFY" secondAttribute="bottom" constant="20" id="zl0-hI-DfI"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6kP-cl-gWk"/>
+                                    </mask>
+                                </variation>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
