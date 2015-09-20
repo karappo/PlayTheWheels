@@ -71,30 +71,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var toneNameBtn: UIButton!
   let tones = [
     // [label]: [directory]
-    "0916_test - L": "0916_test/l",
-    "0916_test - R": "0916_test/r",
-    "Aczid bit-crash - L": "Aczid bit-crash/hi",
-    "Aczid bit-crash - R": "Aczid bit-crash/low",
-    "Around the World sin - L": "Around the World sin/hi",
-    "Around the World sin - R": "Around the World sin/low",
-    "Around the World square - L": "Around the World square/hi",
-    "Around the World square - R": "Around the World square/low",
-    "Around the World tri - L": "Around the World tri/hi",
-    "Around the World tri - R": "Around the World tri/low",
-    "Bali Metalophone - L": "Bali Metalophone/hi",
-    "Bali Metalophone - R": "Bali Metalophone/low",
-    "Blue Ballad - L": "Blue Ballad/hi",
-    "Blue Ballad - R": "Blue Ballad/low",
-    "Borgs - L": "Borgs/hi",
-    "Borgs - R": "Borgs/low",
-    "Desert - L": "Desert/hi",
-    "Desert - R": "Desert/low",
-    "Pianokind - L": "Pianokind/hi",
-    "Pianokind - R": "Pianokind/low",
-    "Robot Bass - L": "Robot Bass/hi",
-    "Robot Bass - R": "Robot Bass/low",
-    "Soufeed 1 - L": "Soufeed 1/hi",
-    "Soufeed 1 - R": "Soufeed 1/low"
+    "0919 C L": "0919_C_L",
+    "0919 C R": "0919_C_R",
+    "0919 D L": "0919_D_L",
+    "0919 D R": "0919_D_R",
+    "0919 F L": "0919_F_L",
+    "0919 F R": "0919_F_R",
   ]
   var toneKeys: Array<String> = []
   var toneDir: String!
@@ -602,12 +584,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     toneDir = tones[key]
     
-    for i in 0..<SLIT_COUNT {
-      let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(i)", ofType: "wav")!), error: nil)
-      audioFiles += [audioFile]
-      if format == nil {
-        format = audioFile.processingFormat
-      }
+    for i in 1..<SLIT_COUNT+1 {
+        let num = NSString(format: "%02d", i)
+        let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!), error: nil)
+        audioFiles += [audioFile]
+        if format == nil {
+            format = audioFile.processingFormat
+        }
     }
     return format
   }
