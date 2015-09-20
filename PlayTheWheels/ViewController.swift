@@ -71,6 +71,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     case LongShot = "Long Shot"
   }
   var playerType = PlayerType.OneShot
+  // TODO ディレクトリ構成から自動的にtone名を作成する
   let tones = [
     // [label]: [directory]
     "0919 C L": "0919_C_L",
@@ -234,9 +235,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     delay = AVAudioUnitDelay()
     setDelayWetDry(0)
-    setDelayDelayTime(0.2)
-    setDelayFeedback(-55)
-    setDelayLowPassCutOff(1500)
+    setDelayDelayTime(0.4)
+    setDelayFeedback(70)
+    setDelayLowPassCutOff(700)
     
     reverb = AVAudioUnitReverb()
     setReverbWetDry(0)
@@ -390,7 +391,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             
             // accuracy: 5 - 0 => 0 - 50 に変換
             // TODO やり方変える
-            var dryWet = Float(50 - _beacon.accuracy * 10)
+//            var dryWet = Float(50 - _beacon.accuracy * 10)
+            var dryWet = Float(_beacon.accuracy * 10)
             dryWet = max(min(50, dryWet), 0) // 範囲内に収める
             
             switch effectName {
