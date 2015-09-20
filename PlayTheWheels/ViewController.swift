@@ -81,7 +81,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     "0919 F R": "0919_F_R",
   ]
   var toneKeys: Array<String> = []
-  var toneDir: String!
+  var toneDir: NSString!
   
   // # Effect Section
   
@@ -268,7 +268,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       engine.connect(player, to: mixer, format: format)
       longShotPlayers += [player]
     }
-    
 
     engine.connect(mixer, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
@@ -569,12 +568,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     toneCountLabel.text = "\(itemsCount)"
     if 0 < itemsCount {
       
+      // 左用の音かどうか判定
+      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil) // Lで終わっていたら左
+      let isLeft: Bool = regex?.firstMatchInString(toneDir as String, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, toneDir.length)) != nil
+      
       // switch player type
       
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
-        for (index, file) in enumerate(["tones/\(toneDir)/01","tones/\(toneDir)/02"]) {
+        let _tones = isLeft ? ["tones/\(toneDir)/02","tones/\(toneDir)/01"] : ["tones/\(toneDir)/01","tones/\(toneDir)/02"]
+        
+        for (index, file) in enumerate(_tones) {
           let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
           let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
           let audioFile = AVAudioFile(forReading: fileURL, error: nil)
@@ -586,17 +591,33 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
       else {
-        NSLog("ONE SHOT")
         setTonePlayerType(PlayerType.OneShot)
         
-        for i in 1..<SLIT_COUNT+1 {
-          let num = NSString(format: "%02d", i)
-          let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
-          NSLog("\(url)")
-          let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
-          audioFiles += [audioFile]
-          if format == nil {
-            format = audioFile.processingFormat
+        // TODO 重複を整理
+        if isLeft {
+          // Left
+          var i = SLIT_COUNT
+          while 0<i {
+            let num = NSString(format: "%02d", i)
+            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
+            let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
+            audioFiles += [audioFile]
+            if format == nil {
+              format = audioFile.processingFormat
+            }
+            i--
+          }
+        }
+        else {
+          // Right
+          for i in 1..<SLIT_COUNT+1 {
+            let num = NSString(format: "%02d", i)
+            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
+            let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
+            audioFiles += [audioFile]
+            if format == nil {
+              format = audioFile.processingFormat
+            }
           }
         }
       }
@@ -767,12 +788,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // 変化量
       let variation = Float(prevDeg - current_deg)
       if 0 < variation {
-        longShotPlayers[0].volume = abs(variation)
-        longShotPlayers[1].volume = 0
-      }
-      else {
         longShotPlayers[0].volume = 0
         longShotPlayers[1].volume = abs(variation)
+      }
+      else {
+        longShotPlayers[0].volume = abs(variation)
+        longShotPlayers[1].volume = 0
       }
     default:
       NSLog("Error")
