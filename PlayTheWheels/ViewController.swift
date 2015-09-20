@@ -564,17 +564,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
         }
         
-        var i = 0
-        for file in ["tones/squarewave1000Hz","tones/sinewave2000Hz"] {
+        for (index, file) in enumerate(["tones/squarewave1000Hz","tones/sinewave2000Hz"]) {
             let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
             let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
             let audioFile = AVAudioFile(forReading: fileURL, error: nil)
             let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-            longShotPlayers[i].volume = 0.0
-            longShotPlayers[i].play()
-            longShotPlayers[i].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-            i++
+            longShotPlayers[index].volume = 0.0
+            longShotPlayers[index].play()
+            longShotPlayers[index].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
         }
         
     default:
