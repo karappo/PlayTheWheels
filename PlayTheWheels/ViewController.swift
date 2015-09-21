@@ -211,6 +211,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     setReverbWetDry(0)
     setReverbPresets(4)
     
+    setBrightnessMin(0.15)
+    
     mixer = AVAudioMixerNode()
     
     engine.attachNode(eq)
@@ -453,7 +455,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   @IBAction func changeBrightnessMin(sender: UISlider) {
-    let val = sender.value
+    setBrightnessMin(sender.value)
+  }
+  func setBrightnessMin(val: Float) {
     brightnessLabel.text = "\(val)"
     uart("b:\(val);")
   }
@@ -482,7 +486,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let r = NSString(format: "%03d", Int(instrumentColor.getRed()))
     let g = NSString(format: "%03d", Int(instrumentColor.getGreen()))
     let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
-    
     uart("i:\(r).\(g).\(b);")
   }
   func updateEffectColor() {
@@ -490,11 +493,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let saturation = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION))
     effectColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
-    
+
     let r = NSString(format: "%03d", Int(effectColor.getRed()))
     let g = NSString(format: "%03d", Int(effectColor.getGreen()))
     let b = NSString(format: "%03d", Int(effectColor.getBlue()))
-    
     uart("e:\(r).\(g).\(b);")
   }
   
