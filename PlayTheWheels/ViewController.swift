@@ -22,7 +22,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_LED_DIVIDE = "led_divide"
   let UD_KEY_LED_POSITION = "led_position"
   
-  
   @IBOutlet weak var arrow: UIImageView!
   @IBOutlet weak var led1: UIView!
   @IBOutlet weak var led2: UIView!
@@ -71,18 +70,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     case LongShot = "Long Shot"
   }
   var playerType = PlayerType.OneShot
-  // TODO ディレクトリ構成から自動的にtone名を作成する
-  let tones = [
-    // [label]: [directory]
-    "0919 C L": "0919_C_L",
-    "0919 C R": "0919_C_R",
-    "0919 D L": "0919_D_L",
-    "0919 D R": "0919_D_R",
-    "0919 F L": "0919_F_L",
-    "0919 F R": "0919_F_R",
-  ]
-  var toneKeys: Array<String> = []
-  var toneDir: NSString!
+  var tones: [String] = []
   
   // # Effect Section
   
@@ -120,6 +108,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     "38936:27676": "Delay",
     "30062:7399": "Reverb"
   ]
+  
+  let FM = NSFileManager.defaultManager()
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -198,10 +188,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // Toneのキーだけを配列に格納しておく（アルファベット順にソート）
-    toneKeys = sorted(Array(tones.keys), {(s1:String,s2:String) -> Bool in
-      return (s1.uppercaseString < s2.uppercaseString)
-    })
+    tones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
     // Estimote Beacon
     beaconManager.delegate = self
@@ -251,7 +238,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.attachNode(mixer)
     
     // AudioPlayerの準備
-    var format: AVAudioFormat = setAudioFile(toneKeys.first!)
+    var format: AVAudioFormat = setAudioFile(tones.first!)
     for i in 0..<SLIT_COUNT {
       
       let player = AVAudioPlayerNode()
@@ -533,8 +520,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Tone
   
   @IBAction func tapToneName(sender: UIButton) {
-    let initial: Int = find(toneKeys, toneNameBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.toneKeys, initialSelection: initial, doneBlock: {
+    let initial: Int = find(tones, toneNameBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.tones, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
         self.setAudioFile(key)
@@ -542,17 +529,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
   }
   
-  func setAudioFile(key: String) -> AVAudioFormat!{
+  func setAudioFile(toneDir: String) -> AVAudioFormat!{
     var format: AVAudioFormat! = nil
     audioFiles = []
     
-    self.toneNameBtn.setTitle(key, forState: UIControlState.Normal)
+    self.toneNameBtn.setTitle(toneDir, forState: UIControlState.Normal)
     
-    toneDir = tones[key]
-    
-    let fm = NSFileManager.defaultManager()
-    let items = fm.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
-    
+    let items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
     
     // stop players
     for player in oneShotPlayers {
@@ -572,7 +555,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       // 左用の音かどうか判定
       var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil) // Lで終わっていたら左
-      let isLeft: Bool = regex?.firstMatchInString(toneDir as String, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, toneDir.length)) != nil
+      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
       
       // switch player type
       
@@ -601,7 +584,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           var i = SLIT_COUNT
           while 0<i {
             let num = NSString(format: "%02d", i)
-            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
+            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
             let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
             audioFiles += [audioFile]
             if format == nil {
@@ -614,7 +597,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           // Right
           for i in 1..<SLIT_COUNT+1 {
             let num = NSString(format: "%02d", i)
-            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir!)/\(num)", ofType: "wav")!
+            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
             let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
             audioFiles += [audioFile]
             if format == nil {
