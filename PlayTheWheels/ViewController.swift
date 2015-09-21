@@ -470,7 +470,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   @IBAction func changePosition(sender: UISlider) {
     let val = Int(sender.value)
-    NSLog("position: \(val)")
     UD.setObject(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
     uart("p:\(Float(val)/100);")
