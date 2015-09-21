@@ -23,14 +23,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_LED_POSITION = "led_position"
   
   @IBOutlet weak var arrow: UIImageView!
-  @IBOutlet weak var led1: UIView!
-  @IBOutlet weak var led2: UIView!
-  @IBOutlet weak var led3: UIView!
-  @IBOutlet weak var led4: UIView!
-  @IBOutlet weak var led5: UIView!
-  @IBOutlet weak var led6: UIView!
-  @IBOutlet weak var led7: UIView!
-  @IBOutlet weak var led8: UIView!
   
   // # Konashi Section
   
@@ -181,7 +173,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   ]
 
   let SLIT_COUNT = 8
-  var leds: Array<UIView> = []
   var prevDeg: Double = 0.0
   var slitDegs: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
   
@@ -199,16 +190,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     for i in 0..<SLIT_COUNT {
       slitDegs += [360.0/count*Double(i)]
     }
-    leds = [
-      led1,
-      led2,
-      led3,
-      led4,
-      led5,
-      led6,
-      led7,
-      led8
-    ]
     
     engine = AVAudioEngine()
     
@@ -747,9 +728,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
       if 0 < passed_index.count {
         for slit_index in passed_index {
-          // スクリーンのLED
-          let led = leds[slit_index]
-          activate(led)
           
           // Sound
           let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
@@ -785,18 +763,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     prevDeg = current_deg
-  }
-  
-  
-  // スクリーンのLEDを点灯させる（少ししたら自動で消灯）
-  func activate(led: UIView) {
-    led.alpha = 1
-    var dic: NSDictionary = NSDictionary(dictionary: ["led": led])
-    NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "onTimer:", userInfo: dic, repeats: false)
-  }
-  func onTimer(timer : NSTimer) {
-    let led = timer.userInfo!.objectForKey("led") as! UIView
-    led.alpha = 0.3
   }
   
   func radiansToDegrees(value: Double) -> Double {
