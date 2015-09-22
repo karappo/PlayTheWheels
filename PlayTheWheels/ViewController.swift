@@ -174,7 +174,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 
   let SLIT_COUNT = 8
   var prevDeg: Double = 0.0
-  var slitDegs: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
+  var playerPoints: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -185,10 +185,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     beaconManager.delegate = self
     beaconManager.requestAlwaysAuthorization()
     
-    // 画面上のLEDの準備
+    // sound
     let count = Double(SLIT_COUNT)
     for i in 0..<SLIT_COUNT {
-      slitDegs += [360.0/count*Double(i)]
+      playerPoints += [360.0/count*Double(i)]
     }
     
     engine = AVAudioEngine()
@@ -223,7 +223,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // AudioPlayerの準備
     var format: AVAudioFormat = setAudioFile(tones.first!)
     for i in 0..<SLIT_COUNT {
-      
       let player = AVAudioPlayerNode()
       player.volume = 9.0
       engine.attachNode(player)
@@ -589,7 +588,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     }
-    
     return format
   }
   
@@ -796,7 +794,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     var rest: Array<Int> = [] // range外にあるslit
     
     for i in 0..<SLIT_COUNT {
-      let slit = slitDegs[i]
+      let slit = playerPoints[i]
       if _min <= slit && slit <= _max {
         result += [i]
       }
