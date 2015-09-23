@@ -550,10 +550,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
           
           let player = AVAudioPlayerNode()
-          player.volume = 0.0
           engine.attachNode(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
-          
+          player.volume = 0.0
           player.play()
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
           
@@ -574,9 +573,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           audioFiles += [audioFile]
           
           let player = AVAudioPlayerNode()
-          player.volume = 9.0
           engine.attachNode(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
+          player.volume = 9.0
+          
           oneShotPlayers += [player]
           
           if format == nil {
@@ -732,7 +732,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             player.stop()
           }
           
-          // playerにオーディオファイルを設定
+          // playerにオーディオファイルを設定　※ 再生直前にセットしないと再生されない？
           player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
           
           // 再生開始
