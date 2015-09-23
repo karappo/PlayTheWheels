@@ -185,12 +185,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     beaconManager.delegate = self
     beaconManager.requestAlwaysAuthorization()
     
-    // sound
+    // playerPoints
     let count = Double(SLIT_COUNT)
     for i in 0..<SLIT_COUNT {
       playerPoints += [360.0/count*Double(i)]
     }
     
+    // Sound
     engine = AVAudioEngine()
     
     eq = AVAudioUnitEQ(numberOfBands: 1)
@@ -543,10 +544,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
-        let _tones = isLeft ? ["tones/\(toneDir)/02","tones/\(toneDir)/01"] : ["tones/\(toneDir)/01","tones/\(toneDir)/02"]
+        let _tones = isLeft ? ["02","01"] : ["01","02"]
         
         for (index, file) in enumerate(_tones) {
-          let filePath: String = NSBundle.mainBundle().pathForResource(file, ofType: "wav")!
+          let filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
           let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
           let audioFile = AVAudioFile(forReading: fileURL, error: nil)
           let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
