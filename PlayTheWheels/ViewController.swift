@@ -62,7 +62,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     case LongShot = "Long Shot"
   }
   var playerType = PlayerType.OneShot
-  var tones: [String] = []
+  var toneDirs: [String] = []
   
   // # Effect Section
   
@@ -106,7 +106,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
-  var engine: AVAudioEngine!
+  var engine: AVAudioEngine = AVAudioEngine()
   var eq: AVAudioUnitEQ!
   var epParams: AVAudioUnitEQFilterParameters!
   var delay: AVAudioUnitDelay!
@@ -172,14 +172,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     AVAudioUnitEQFilterType.ResonantHighShelf
   ]
 
-  let SLIT_COUNT = 8
+  let SLIT_COUNT = 8 // 円周を何分割してplayerPointsにするか
   var prevDeg: Double = 0.0
   var playerPoints: Array<Double> = [] // 分割数に応じて360度を当分した角度を保持しておく配列
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    tones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
+    toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
     // Estimote Beacon
     beaconManager.delegate = self
@@ -192,7 +192,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Sound
-    engine = AVAudioEngine()
     
     eq = AVAudioUnitEQ(numberOfBands: 1)
     epParams = eq.bands.first as! AVAudioUnitEQFilterParameters
@@ -222,7 +221,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.attachNode(mixer)
     
     // AudioPlayerの準備
-    var format: AVAudioFormat = setAudioFile(tones.first!)
+    // OneShot
+    var format: AVAudioFormat = setAudioFile(toneDirs.first!)
     for i in 0..<SLIT_COUNT {
       let player = AVAudioPlayerNode()
       player.volume = 9.0
@@ -230,8 +230,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       engine.connect(player, to: mixer, format: format)
       oneShotPlayers += [player]
     }
-    
-    // playerにオーディオファイルを設定
+    // LongShot
     for i in 0..<2 {
       let player = AVAudioPlayerNode()
       player.volume = 0.0
@@ -502,8 +501,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Tone
   
   @IBAction func tapToneName(sender: UIButton) {
-    let initial: Int = find(tones, toneNameBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: self.tones, initialSelection: initial, doneBlock: {
+    let initial: Int = find(toneDirs, toneNameBtn.titleLabel!.text!)!
+    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
         self.setAudioFile(key)
@@ -560,31 +559,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       else {
         setTonePlayerType(PlayerType.OneShot)
         
-        // TODO 重複を整理
-        if isLeft {
-          // Left
-          var i = SLIT_COUNT
-          while 0<i {
-            let num = NSString(format: "%02d", i)
-            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
-            let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
-            audioFiles += [audioFile]
-            if format == nil {
-              format = audioFile.processingFormat
-            }
-            i--
-          }
-        }
-        else {
-          // Right
-          for i in 1..<SLIT_COUNT+1 {
-            let num = NSString(format: "%02d", i)
-            let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
-            let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
-            audioFiles += [audioFile]
-            if format == nil {
-              format = audioFile.processingFormat
-            }
+        for i in 1..<SLIT_COUNT+1 {
+          let num = NSString(format: "%02d", isLeft ? SLIT_COUNT+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
+          let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
+          let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
+          audioFiles += [audioFile]
+          if format == nil {
+            format = audioFile.processingFormat
           }
         }
       }
@@ -749,6 +730,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     case PlayerType.LongShot:
       // LongShot
       // 変化量
+      // TODO 実際の車輪のスピードの範囲とうまくマッピングする
       let variation = Float(prevDeg - current_deg)
       if 0 < variation {
         longShotPlayers[0].volume = 0
@@ -758,6 +740,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         longShotPlayers[0].volume = abs(variation)
         longShotPlayers[1].volume = 0
       }
+      // TODO Konashi通信
     default:
       NSLog("Error")
     }
