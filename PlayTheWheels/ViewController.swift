@@ -222,22 +222,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // AudioPlayerの準備
     // OneShot
-    var format: AVAudioFormat = setAudioFile(toneDirs.first!)
-    for i in 0..<SLIT_COUNT {
-      let player = AVAudioPlayerNode()
-      player.volume = 9.0
-      engine.attachNode(player)
-      engine.connect(player, to: mixer, format: format)
-      oneShotPlayers += [player]
-    }
-    // LongShot
-    for i in 0..<2 {
-      let player = AVAudioPlayerNode()
-      player.volume = 0.0
-      engine.attachNode(player)
-      engine.connect(player, to: mixer, format: format)
-      longShotPlayers += [player]
-    }
+    var format: AVAudioFormat = initPlayers(toneDirs.first!)
 
     engine.connect(mixer, to: eq, format: format)
     engine.connect(eq, to: delay, format: format)
@@ -505,32 +490,42 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     ActionSheetStringPicker.showPickerWithTitle("Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
-        self.setAudioFile(key)
+        self.initPlayers(key)
         return
     }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
   }
   
-  func setAudioFile(toneDir: String) -> AVAudioFormat!{
+  // AVAudioPlayerNode の生成やAudioFileの設定
+  // その他のノードの初期化のために、最初のAudioFileのAVAudioFormatを返す
+  func initPlayers(toneDir: String) -> AVAudioFormat!{
+    
+    toneNameBtn.setTitle(toneDir, forState: UIControlState.Normal)
+    
     var format: AVAudioFormat! = nil
     if 1<audioFiles.count {
       audioFiles.removeAll(keepCapacity: false)
     }
     
-    self.toneNameBtn.setTitle(toneDir, forState: UIControlState.Normal)
-    
-    let items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
-    
-    // stop players
+    // stop and remove players
     for player in oneShotPlayers {
       if player.playing {
         player.stop()
+        engine.disconnectNodeInput(player)
       }
     }
     for player in longShotPlayers {
       if player.playing {
         player.stop()
+        engine.disconnectNodeInput(player)
       }
     }
+    // remove players
+    oneShotPlayers.removeAll(keepCapacity: false)
+    longShotPlayers.removeAll(keepCapacity: false)
+    
+    // ------------
+    
+    let items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
     
     let itemsCount = items!.count
     toneCountLabel.text = "\(itemsCount)"
@@ -553,9 +548,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           let audioFile = AVAudioFile(forReading: fileURL, error: nil)
           let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-          longShotPlayers[index].volume = 0.0
-          longShotPlayers[index].play()
-          longShotPlayers[index].scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+          
+          let player = AVAudioPlayerNode()
+          player.volume = 0.0
+          engine.attachNode(player)
+          engine.connect(player, to: mixer, format: audioFile.processingFormat)
+          
+          player.play()
+          player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+          
+          longShotPlayers += [player]
+          
+          if format == nil {
+            format = audioFile.processingFormat
+          }
         }
       }
       else {
@@ -566,6 +572,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
           let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
           audioFiles += [audioFile]
+          
+          let player = AVAudioPlayerNode()
+          player.volume = 9.0
+          engine.attachNode(player)
+          engine.connect(player, to: mixer, format: audioFile.processingFormat)
+          oneShotPlayers += [player]
+          
           if format == nil {
             format = audioFile.processingFormat
           }
