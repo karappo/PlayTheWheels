@@ -512,7 +512,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   func setAudioFile(toneDir: String) -> AVAudioFormat!{
     var format: AVAudioFormat! = nil
-    audioFiles = []
+    if 1<audioFiles.count {
+      audioFiles.removeAll(keepCapacity: false)
+    }
     
     self.toneNameBtn.setTitle(toneDir, forState: UIControlState.Normal)
     
@@ -534,8 +536,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     toneCountLabel.text = "\(itemsCount)"
     if 0 < itemsCount {
       
-      // 左用の音かどうか判定
-      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil) // Lで終わっていたら左
+      // 左用の音かどうか判定（Lで終わっていたら左）
+      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil)
       let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
       
       // switch player type
