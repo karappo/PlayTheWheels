@@ -115,6 +115,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var longShotPlayers: Array<AVAudioPlayerNode> = []
   var oneShotPlayers: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
+  var current_index: Int = 0
   let reverbPresetsStrings: Array<String> = [
     "SmallRoom",
     "MediumRoom",
@@ -566,8 +567,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       else {
         setTonePlayerType(PlayerType.OneShot)
         
-        for i in 1..<SLIT_COUNT+1 {
-          let num = NSString(format: "%02d", isLeft ? SLIT_COUNT+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
+        for i in 1..<itemsCount+1 {
+          let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
           let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
           let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
           audioFiles += [audioFile]
@@ -714,17 +715,46 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   func updateRotation(radian: Double) {
     
-    let current_deg = self.radiansToDegrees(radian)
+    let currentDeg = self.radiansToDegrees(radian)
+//    let variation = Float(prevDeg - current_deg)
+    let _variation = variation(prevDeg, current: currentDeg)
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
     
     switch playerType {
     case PlayerType.OneShot:
       // OneShot
-      let passed_index = self.getSlitIndexInRange(self.prevDeg, current: current_deg)
-      if 0 < passed_index.count {
-        for slit_index in passed_index {
-          
+      let passed_slit = slitIndexInRange(prevDeg, current: currentDeg)
+      
+      if 0 < passed_slit.count {
+        NSLog("--------------------------")
+        NSLog("passed_slit:\(passed_slit)")
+        NSLog("prev:\(prevDeg),current:\(currentDeg)")
+        NSLog("_variation:\(_variation)")
+        NSLog("current_index:\(current_index)")
+        NSLog("---")
+        let audioIndexes = Array(0..<audioFiles.count) // 0 - 15
+        var passed_players: Array<Int> = []
+        
+        if 0<_variation {
+          NSLog("+")
+          for i in 0..<passed_slit.count {
+            passed_players += [audioIndexes[passed_slit.get(i)!]]
+          }
+          current_index = audioFiles.relativeIndex(current_index+audioIndexes.count)
+        }
+        else {
+          NSLog("-")
+          for i in 0..<passed_slit.count {
+            passed_players += [audioIndexes[passed_slit.get(i)!]]
+          }
+          current_index = audioFiles.relativeIndex(current_index-audioIndexes.count)
+        }
+        NSLog("current_index:\(current_index)")
+        NSLog("passed_players:\(passed_players)")
+        
+        
+        for slit_index in passed_slit {
           // Sound
           let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
           let player: AVAudioPlayerNode = oneShotPlayers[slit_index] as AVAudioPlayerNode
@@ -746,13 +776,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // LongShot
       // 変化量
       // TODO 実際の車輪のスピードの範囲とうまくマッピングする
-      let variation = Float(prevDeg - current_deg)
-      if 0 < variation {
+      if 0 < _variation {
         longShotPlayers[0].volume = 0
-        longShotPlayers[1].volume = abs(variation)
+        longShotPlayers[1].volume = abs(_variation)
       }
       else {
-        longShotPlayers[0].volume = abs(variation)
+        longShotPlayers[0].volume = abs(_variation)
         longShotPlayers[1].volume = 0
       }
       // TODO Konashi通信
@@ -760,7 +789,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog("Error")
     }
     
-    prevDeg = current_deg
+    prevDeg = currentDeg
   }
   
   func radiansToDegrees(value: Double) -> Double {
@@ -780,7 +809,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // 引数で与えた角度の中に含まれるスリットのindexを配列にして返す
-  private func getSlitIndexInRange(prev: Double, current: Double) -> Array<Int> {
+  private func slitIndexInRange(prev: Double, current: Double) -> Array<Int> {
     if prev == current {
       return []
     }
@@ -805,5 +834,40 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // 回転が早く通過slitが多い場合は、どちら向きか判定しにくいので、数の少ない方を返す
     return ((rest.count < result.count) ? rest : result)
   }
+  
+  // 変化量を計算（359°->2°などに変化した時に正しく回転方向を算出）
+  // [left wheel]  forward: plus, back: minus
+  // [right wheel] forward: minus, back: plus
+  private func variation(prev: Double, current: Double) -> Float {
+    let diff = abs(prev - current)
+    
+    if 180 < diff {
+      if 180 < prev {
+        return Float((360 - prev) + current)
+      }
+      else {
+        return Float((360.0 - current) + prev)
+      }
+    }
+    return Float(prev - current)
+  }
 }
 
+internal extension Array {
+  
+  //  If the index is out of bounds it's assumed relative
+  func relativeIndex (index: Int) -> Int {
+    var _index = (index % count)
+    
+    if _index < 0 {
+      _index = count + _index
+    }
+    
+    return _index
+  }
+  
+  func get (index: Int) -> Element? {
+    let _index = relativeIndex(index)
+    return _index < count ? self[_index] : nil
+  }
+}
