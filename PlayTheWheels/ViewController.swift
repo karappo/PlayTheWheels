@@ -736,28 +736,28 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         let audioIndexes = Array(0..<audioFiles.count) // 0 - 15
         var passed_players: Array<Int> = []
         
+        for i in current_index..<current_index+passed_slit.count {
+          NSLog("i=\(i)")
+          passed_players += [audioIndexes.get(i)!]
+        }
         if 0<_variation {
           NSLog("+")
-          for i in 0..<passed_slit.count {
-            passed_players += [audioIndexes[passed_slit.get(i)!]]
-          }
-          current_index = audioFiles.relativeIndex(current_index+audioIndexes.count)
+          NSLog("index+:\(current_index+passed_slit.count)")
+          current_index = audioFiles.relativeIndex(current_index+passed_slit.count)
         }
         else {
           NSLog("-")
-          for i in 0..<passed_slit.count {
-            passed_players += [audioIndexes[passed_slit.get(i)!]]
-          }
-          current_index = audioFiles.relativeIndex(current_index-audioIndexes.count)
+          NSLog("index-:\(current_index-passed_slit.count)")
+          current_index = audioFiles.relativeIndex(current_index-passed_slit.count)
         }
         NSLog("current_index:\(current_index)")
         NSLog("passed_players:\(passed_players)")
         
         
-        for slit_index in passed_slit {
+        for index in passed_players {
           // Sound
-          let audioFile: AVAudioFile = audioFiles[slit_index] as AVAudioFile
-          let player: AVAudioPlayerNode = oneShotPlayers[slit_index] as AVAudioPlayerNode
+          let audioFile: AVAudioFile = audioFiles[index] as AVAudioFile
+          let player: AVAudioPlayerNode = oneShotPlayers[index] as AVAudioPlayerNode
           if player.playing {
             player.stop()
           }
