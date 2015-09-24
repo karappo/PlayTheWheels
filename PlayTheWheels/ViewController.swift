@@ -759,11 +759,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     case PlayerType.LongShot:
       // LongShot
       // 変化量
-      // TODO 実際の車輪のスピードの範囲とうまくマッピングする
-      // 実際にクルマイスに乗って試したところ_variationは最大で719だった
-      
-//      let vol = 9.0 * abs(_variation)/719
-      let vol = 1.5 * abs(_variation)
+      // 実際の車輪のスピードの範囲とうまくマッピングする
+      // 実際にクルマイスに乗って試したところ前進で_variationは最大で5くらいだった
+      let vol = 9.0 * min(abs(_variation)/5,1)
       
       if 0 < _variation {
         longShotPlayers[0].volume = 0
