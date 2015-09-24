@@ -715,7 +715,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   func updateRotation(radian: Double) {
     
-    let currentDeg = self.radiansToDegrees(radian)
+    let currentDeg = radiansToDegrees(radian)
 //    let variation = Float(prevDeg - current_deg)
     let _variation = variation(prevDeg, current: currentDeg)
     
@@ -783,7 +783,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   func radiansToDegrees(value: Double) -> Double {
-    return value * 180.0 / M_PI + 180.0
+    return value * 180.0 / M_PI + 360.0
   }
   
   // 0 <= value < 360 の範囲に値を収める
