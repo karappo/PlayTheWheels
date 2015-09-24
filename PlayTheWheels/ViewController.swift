@@ -727,31 +727,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let passed_slit = slitIndexInRange(prevDeg, current: currentDeg)
       
       if 0 < passed_slit.count {
-        NSLog("--------------------------")
-        NSLog("passed_slit:\(passed_slit)")
-        NSLog("prev:\(prevDeg),current:\(currentDeg)")
-        NSLog("_variation:\(_variation)")
-        NSLog("current_index:\(current_index)")
-        NSLog("---")
-        let audioIndexes = Array(0..<audioFiles.count) // 0 - 15
+        
+        let audioIndexes = Array(0..<audioFiles.count)
         var passed_players: Array<Int> = []
         
         for i in current_index..<current_index+passed_slit.count {
-          NSLog("i=\(i)")
           passed_players += [audioIndexes.get(i)!]
         }
-        if 0<_variation {
-          NSLog("+")
-          NSLog("index+:\(current_index+passed_slit.count)")
-          current_index = audioFiles.relativeIndex(current_index+passed_slit.count)
-        }
-        else {
-          NSLog("-")
-          NSLog("index-:\(current_index-passed_slit.count)")
-          current_index = audioFiles.relativeIndex(current_index-passed_slit.count)
-        }
-        NSLog("current_index:\(current_index)")
-        NSLog("passed_players:\(passed_players)")
+        let _idx = current_index + passed_slit.count*(0<_variation ? 1 : -1)
+        current_index = audioFiles.relativeIndex(_idx)
         
         
         for index in passed_players {
