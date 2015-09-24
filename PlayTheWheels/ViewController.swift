@@ -760,14 +760,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // LongShot
       // 変化量
       // TODO 実際の車輪のスピードの範囲とうまくマッピングする
+      // 実際にクルマイスに乗って試したところ_variationは最大で719だった
+      
+//      let vol = 9.0 * abs(_variation)/719
+      let vol = 1.5 * abs(_variation)
+      
       if 0 < _variation {
         longShotPlayers[0].volume = 0
-        longShotPlayers[1].volume = abs(_variation)
+        longShotPlayers[1].volume = vol
       }
       else {
-        longShotPlayers[0].volume = abs(_variation)
+        longShotPlayers[0].volume = vol
         longShotPlayers[1].volume = 0
       }
+      
       // TODO Konashi通信
     default:
       NSLog("Error")
