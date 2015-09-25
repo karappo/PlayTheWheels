@@ -112,8 +112,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var delay: AVAudioUnitDelay!
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
-  var longShotPlayers: Array<AVAudioPlayerNode> = []
-  var oneShotPlayers: Array<AVAudioPlayerNode> = []
+  var players: Array<AVAudioPlayerNode> = []
   var audioFiles: Array<AVAudioFile> = []
   var current_index: Int = 0
   let reverbPresetsStrings: Array<String> = [
@@ -516,21 +515,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // stop and remove players
-    for player in oneShotPlayers {
+    for player in players {
       if player.playing {
         player.stop()
         engine.disconnectNodeInput(player)
       }
     }
-    for player in longShotPlayers {
-      if player.playing {
-        player.stop()
-        engine.disconnectNodeInput(player)
-      }
-    }
-    // remove players
-    oneShotPlayers.removeAll(keepCapacity: false)
-    longShotPlayers.removeAll(keepCapacity: false)
+    players.removeAll(keepCapacity: false)
+    
     
     // ------------
     
@@ -565,7 +557,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           player.play()
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
           
-          longShotPlayers += [player]
+          players += [player]
           
           if format == nil {
             format = audioFile.processingFormat
@@ -586,7 +578,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 9.0
           
-          oneShotPlayers += [player]
+          players += [player]
           
           if format == nil {
             format = audioFile.processingFormat
@@ -749,7 +741,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         for index in passed_players {
           // Sound
           let audioFile: AVAudioFile = audioFiles[index] as AVAudioFile
-          let player: AVAudioPlayerNode = oneShotPlayers[index] as AVAudioPlayerNode
+          let player: AVAudioPlayerNode = players[index] as AVAudioPlayerNode
           if player.playing {
             player.stop()
           }
@@ -772,12 +764,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let vol = 9.0 * min(abs(_variation)/5,1)
       
       if 0 < _variation {
-        longShotPlayers[0].volume = 0
-        longShotPlayers[1].volume = vol
+        players[0].volume = 0
+        players[1].volume = vol
       }
       else {
-        longShotPlayers[0].volume = vol
-        longShotPlayers[1].volume = 0
+        players[0].volume = vol
+        players[1].volume = 0
       }
       
       // TODO Konashi通信
