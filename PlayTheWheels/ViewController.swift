@@ -186,9 +186,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     beaconManager.requestAlwaysAuthorization()
     
     // playerPoints
-    let count = Double(SLIT_COUNT)
     for i in 0..<SLIT_COUNT {
-      playerPoints += [360.0/count*Double(i)]
+      playerPoints += [360.0/Double(SLIT_COUNT)*Double(i)]
     }
     
     // Sound
