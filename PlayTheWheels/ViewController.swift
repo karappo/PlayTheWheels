@@ -349,8 +349,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                 beaconDelayLabel.text = "\(accuracy)"
                 beaconDelaySlider.setValue(accuracy, animated: true)
                 if delaySwitch.on {
-                  let beacon_min = 3
-                  let beacon_max = 2.2
+                  let beacon_min: Float = 1.5
+                  let beacon_max: Float = 0.7
                   let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
                   let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
                   setDelayFeedback(feedback)
