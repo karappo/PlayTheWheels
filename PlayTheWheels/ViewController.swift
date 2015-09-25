@@ -203,10 +203,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     epParams.bypass = eqBypassSwitch.on
     
     delay = AVAudioUnitDelay()
-    setDelayWetDry(0)
-    setDelayDelayTime(0.4)
-    setDelayFeedback(70)
-    setDelayLowPassCutOff(700)
+    setDelayWetDry(0) // 可変 0-80
+    setDelayDelayTime(0.295) // 不変
+    setDelayFeedback(0) // 可変 0-90
+    setDelayLowPassCutOff(700) // 不変
     
     reverb = AVAudioUnitReverb()
     setReverbWetDry(0)
@@ -344,26 +344,32 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let accuracy = Float(Int(_beacon.accuracy * 100.0)) / 100.0 // 小数点第１位まで
             str += "\(effectName): \(accuracy)\n"
             
-            // accuracy: 5 - 0 => 0 - 50 に変換
-            // TODO やり方変える
-//            var dryWet = Float(50 - _beacon.accuracy * 10)
-            var dryWet = Float(_beacon.accuracy * 10)
-            dryWet = max(min(50, dryWet), 0) // 範囲内に収める
-            
             switch effectName {
               case "Delay":
                 beaconDelayLabel.text = "\(accuracy)"
                 beaconDelaySlider.setValue(accuracy, animated: true)
                 if delaySwitch.on {
-                  setDelayWetDry(dryWet)
-                  delayDryWetSlider.setValue(dryWet, animated: true)
+                  let beacon_min = 3
+                  let beacon_max = 2.2
+                  let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
+                  let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
+                  setDelayFeedback(feedback)
+                  delayFeedbackSlider.setValue(feedback, animated: true)
+                  setDelayWetDry(drywet)
+                  delayDryWetSlider.setValue(drywet, animated: true)
+                  print(NSString(format: "%.3f ", accuracy))
+                  let percent = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100)
+                  let arr = Array(count: Int(percent), repeatedValue: "=")
+                  if 0<arr.count { println(join("", arr)) }
+                  else { println() }
                 }
               case "Reverb":
                 beaconReverbLabel.text = "\(accuracy)"
                 beaconReverbSlider.setValue(accuracy, animated: true)
                 if reverbSwitch.on {
-                  setReverbWetDry(dryWet)
-                  reverbDryWetSlider.setValue(dryWet, animated: true)
+                  let drywet   = map(Float(_beacon.accuracy), in_min:10, in_max:0, out_min:0, out_max:80)
+                  setReverbWetDry(drywet)
+                  reverbDryWetSlider.setValue(drywet, animated: true)
                 }
               default :
                 break
@@ -373,9 +379,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
   }
   
-  // oldMin～oldMax内のoldValをnewMin〜newMax内の値に変換して返す
-  func map(oldVal: Float, oldMin: Float, oldMax: Float, newMin: Float, newMax: Float) -> Float{
-    return (((oldVal - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin
+  // in_min～in_max内のxをout_min〜out_max内の値に変換して返す
+  private func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Float{
+    // restrict 'x' in 'in' range
+    let x_in_range = in_min < in_max ? max(min(x, in_max), in_min) : max(min(x, in_min), in_max)
+    return (x_in_range - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   }
   
   

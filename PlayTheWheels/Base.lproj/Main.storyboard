@@ -17,8 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="1736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xWQ-ct-GFa">
-                                <rect key="frame" x="0.0" y="20" width="414" height="1716"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWQ-ct-GFa">
+                                <rect key="frame" x="0.0" y="-147" width="414" height="1716"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="83y-3O-qFb" userLabel="WheelStatus">
                                         <rect key="frame" x="157" y="10" width="100" height="100"/>
@@ -318,7 +318,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DryWet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUp-jc-caa">
                                         <rect key="frame" x="30" y="1091" width="34" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.56055808070000002" green="1" blue="0.35838103290000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DryWet" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RZN-68-KFY">
@@ -422,7 +422,7 @@
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="VX8-Nh-RcQ" userLabel="Delay Switch">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VX8-Nh-RcQ" userLabel="Delay Switch">
                                         <rect key="frame" x="350" y="1041" width="51" height="31"/>
                                     </switch>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="QGF-1P-2zN" userLabel="Delay-WetDry">
@@ -447,11 +447,12 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QdY-4r-zCE">
                                         <rect key="frame" x="30" y="1155" width="47" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.56055808070000002" green="1" blue="0.35838103290000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-100" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="buH-Qo-fks" userLabel="Delay-Feedback">
                                         <rect key="frame" x="205" y="1146" width="196" height="31"/>
+                                        <color key="tintColor" red="0.56055808070000002" green="1" blue="0.35838103290000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="changeDelayFeedback:" destination="vXZ-lx-hvc" eventType="valueChanged" id="ijO-Nc-grC"/>
                                         </connections>
