@@ -113,6 +113,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
+  var layeredPlayers: Array<AVAudioPlayerNode> = []
+  var layeredPlayerVol: Float = 0.0
   var audioFiles: Array<AVAudioFile> = []
   var current_index: Int = 0
   let reverbPresetsStrings: Array<String> = [
@@ -347,7 +349,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                 beaconDelayLabel.text = "\(accuracy)"
                 beaconDelaySlider.setValue(accuracy, animated: true)
                 if delaySwitch.on {
-                  let beacon_min: Float = 1.5
+                  let beacon_min: Float = 1.0
                   let beacon_max: Float = 0.7
                   let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
                   let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
@@ -355,11 +357,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                   delayFeedbackSlider.setValue(feedback, animated: true)
                   setDelayWetDry(drywet)
                   delayDryWetSlider.setValue(drywet, animated: true)
+                  
+                  if playerType == PlayerType.LongShot {
+                    layeredPlayerVol = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
+                  }
+                  
+                  // for debug
                   print(NSString(format: "%.3f ", accuracy))
                   let percent = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100)
-                  let arr = Array(count: Int(percent), repeatedValue: "=")
+                  let arr = Array(count: Int(percent), repeatedValue: "*")
                   if 0<arr.count { println(join("", arr)) }
                   else { println() }
+                  
                 }
               case "Reverb":
                 beaconReverbLabel.text = "\(accuracy)"
@@ -513,21 +522,27 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       audioFiles.removeAll(keepCapacity: false)
     }
     
-    // stop and remove players
+    // cleanup players
     for player in players {
       if player.playing {
         player.stop()
-        engine.disconnectNodeInput(player)
       }
+      engine.disconnectNodeInput(player)
     }
     players.removeAll(keepCapacity: false)
     
     
     // ------------
     
-    let items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil)
+    var items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil) as! [String]
     
-    let itemsCount = items!.count
+    // wavファイル以外は無視
+    items = items.filter { (name: String) -> Bool in
+      var regex = NSRegularExpression(pattern: ".wav$", options: NSRegularExpressionOptions.allZeros, error: nil)
+      return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(name))) != nil
+    }
+    
+    let itemsCount = items.count
     toneCountLabel.text = "\(itemsCount)"
     if 0 < itemsCount {
       
@@ -543,13 +558,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         let _tones = isLeft ? ["02","01"] : ["01","02"]
         
         for (index, file) in enumerate(_tones) {
-          let filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
-          let fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
-          let audioFile = AVAudioFile(forReading: fileURL, error: nil)
-          let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+          var filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
+          var fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
+          var audioFile = AVAudioFile(forReading: fileURL, error: nil)
+          var audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-          
-          let player = AVAudioPlayerNode()
+
+          var player = AVAudioPlayerNode()
           engine.attachNode(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 0.0
@@ -557,6 +572,26 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
           
           players += [player]
+          
+          // set layeredPlayer
+          let layeredTones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
+          
+          if 0 < layeredTones!.count {
+            filePath = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/layered/\(file)", ofType: "wav")!
+            fileURL = NSURL(fileURLWithPath: filePath)!
+            audioFile = AVAudioFile(forReading: fileURL, error: nil)
+            audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+            audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+            
+            player = AVAudioPlayerNode()
+            engine.attachNode(player)
+            engine.connect(player, to: mixer, format: audioFile.processingFormat)
+            player.volume = 0.0
+            player.play()
+            player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+            
+            layeredPlayers += [player]
+          }
           
           if format == nil {
             format = audioFile.processingFormat
@@ -765,10 +800,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if 0 < _variation {
         players[0].volume = 0
         players[1].volume = vol
+        layeredPlayers[0].volume = 0
+        layeredPlayers[1].volume = vol*layeredPlayerVol
       }
       else {
         players[0].volume = vol
         players[1].volume = 0
+        layeredPlayers[0].volume = vol*layeredPlayerVol
+        layeredPlayers[1].volume = 0
       }
       
       // TODO Konashi通信
