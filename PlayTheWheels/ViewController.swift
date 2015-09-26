@@ -39,10 +39,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var colorView: UIView!
   @IBOutlet weak var hueSlider: UISlider!
+  @IBOutlet weak var hueLabel: UILabel!
   @IBOutlet weak var saturationSlider: UISlider!
+  @IBOutlet weak var saturationLabel: UILabel!
   @IBOutlet weak var colorView2: UIView!
   @IBOutlet weak var hueSlider2: UISlider!
+  @IBOutlet weak var hueLabel2: UILabel!
   @IBOutlet weak var saturationSlider2: UISlider!
+  @IBOutlet weak var saturationLabel2: UILabel!
   @IBOutlet weak var brightnessLabel: UILabel!
   @IBOutlet weak var divideSlider: UISlider!
   @IBOutlet weak var divideLabel: UILabel!
@@ -427,13 +431,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Color
   
   @IBAction func changeHue(sender: UISlider) {
-    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
+    setHue(sender.value)
+  }
+  func setHue(val: Float) {
+    hueLabel.text = "\(val)"
+    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
     updateInstrumentColor()
   }
+  
   @IBAction func changeSaturation(sender: UISlider) {
-    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
+    setSaturation(sender.value)
+  }
+  func setSaturation(val: Float) {
+    saturationLabel.text = "\(val)"
+    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
     updateInstrumentColor()
   }
+  
   @IBAction func tapBlack(sender: UIButton) {
     uart("i:000,000,000;\n")
     instrumentColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
@@ -441,13 +455,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   @IBAction func changeHue2(sender: UISlider) {
-    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_HUE)
+    setHue2(sender.value)
+  }
+  func setHue2(val: Float) {
+    hueLabel2.text = "\(val)"
+    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_HUE)
     updateEffectColor()
   }
+  
   @IBAction func changeSaturation2(sender: UISlider) {
-    UD.setObject(CGFloat(sender.value), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
+    setSaturation2(sender.value)
+  }
+  func setSaturation2(val: Float) {
+    saturationLabel2.text = "\(val)"
+    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
     updateEffectColor()
   }
+  
   @IBAction func tapBlack2(sender: UIButton) {
     uart("e:000,000,000;\n")
     effectColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
