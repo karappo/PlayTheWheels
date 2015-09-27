@@ -381,8 +381,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         if accuracy_min != nil {
           let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
-          let beacon_min: Float = 1.0
-          let beacon_max: Float = 0.7
+          let beacon_min: Float = 2.3
+          let beacon_max: Float = 0.8
           let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
           let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
           setDelayFeedback(feedback)
