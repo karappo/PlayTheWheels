@@ -361,7 +361,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if let _beacons = beacons as? [CLBeacon] {
         
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
-//        var nearestBeacon: String?
+        var nearestBeacon: String?
         for _beacon: CLBeacon in _beacons {
           let beaconKey = "\(_beacon.major):\(_beacon.minor)"
           if let beaconName = effectBeacons[beaconKey] as String! {
@@ -372,10 +372,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             if _switch.on {
               if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min {
                 accuracy_min = Float(_beacon.accuracy)
-//                nearestBeacon = beaconName
+                nearestBeacon = beaconName
               }
             }
-            _slider.setValue(Float(_beacon.accuracy), animated: true)
+            _slider.setValue(Float(-_beacon.accuracy), animated: true)
           }
         }
         
@@ -395,12 +395,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           }
           
           // for debug
-//          println(nearestBeacon)
+          println(nearestBeacon)
           print(NSString(format: "%.3f ", accuracy))
-          let percent = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100)
-          let arr = Array(count: Int(percent), repeatedValue: "*")
-          if 0<arr.count { println(join("", arr)) }
-          else { println() }
+          let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
+          let arr = Array(count: percent, repeatedValue: "*")
+          
+          if 0<arr.count {
+            if 100<=percent {
+              print(join("", arr))
+              println()
+            }
+            else {
+              println(join("", arr))
+            }
+            
+          }
+          else {
+            println()
+          }
         }
       }
   }
