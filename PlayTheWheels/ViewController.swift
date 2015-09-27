@@ -30,10 +30,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // # Beacon Section
   
-  @IBOutlet weak var beaconDelayLabel: UILabel!
-  @IBOutlet weak var beaconDelaySlider: UISlider!
-  @IBOutlet weak var beaconReverbLabel: UILabel!
-  @IBOutlet weak var beaconReverbSlider: UISlider!
+  @IBOutlet weak var beaconSliderBlueberry1: UISlider!
+  @IBOutlet weak var beaconSliderBlueberry2: UISlider!
+  @IBOutlet weak var beaconSliderIce1: UISlider!
+  @IBOutlet weak var beaconSliderIce2: UISlider!
+  @IBOutlet weak var beaconSliderMint1: UISlider!
+  @IBOutlet weak var beaconSliderMint2: UISlider!
+  @IBOutlet weak var beaconSwitchBlueberry1: UISwitch!
+  @IBOutlet weak var beaconSwitchBlueberry2: UISwitch!
+  @IBOutlet weak var beaconSwitchIce1: UISwitch!
+  @IBOutlet weak var beaconSwitchIce2: UISwitch!
+  @IBOutlet weak var beaconSwitchMint1: UISwitch!
+  @IBOutlet weak var beaconSwitchMint2: UISwitch!
+  
   
   // # Color Section
   
@@ -80,7 +89,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var eqGainSlider: UISlider!
   @IBOutlet weak var eqGainLabel: UILabel!
   // Delay
-  @IBOutlet weak var delaySwitch: UISwitch!
   @IBOutlet weak var delayDryWetSlider: UISlider!
   @IBOutlet weak var delayDelayTimeSlider: UISlider!
   @IBOutlet weak var delayFeedbackSlider: UISlider!
@@ -90,7 +98,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var delayFeedbackLabel: UILabel!
   @IBOutlet weak var delayLowPassCutOffLabel: UILabel!
   // Reverb
-  @IBOutlet weak var reverbSwitch: UISwitch!
   @IBOutlet weak var reverbDryWetSlider: UISlider!
   @IBOutlet weak var reverbDryWetLabel: UILabel!
   @IBOutlet weak var reverbPresetsBtn: UIButton!
@@ -99,11 +106,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let beaconManager = ESTBeaconManager()
   let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
   let effectBeacons = [
-    // major:minor
-    "9152:49340": "Distortion",
-    "38936:27676": "Delay",
-    "30062:7399": "Reverb"
+    // "major:minor":"key"
+    "9152:49340" :"blueberry1",
+    "21461:51571":"blueberry2",
+    "30062:7399" :"ice1",
+    "13066:17889":"ice2",
+    "38936:27676":"mint1",
+    "4274:29174" :"mint2"
   ]
+  var beaconUIs:[String: [AnyObject]]!
   
   let FM = NSFileManager.defaultManager()
   
@@ -190,6 +201,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // Estimote Beacon
     beaconManager.delegate = self
     beaconManager.requestAlwaysAuthorization()
+    beaconUIs = [
+      "blueberry1":[beaconSwitchBlueberry1, beaconSliderBlueberry1],
+      "blueberry2":[beaconSwitchBlueberry2, beaconSliderBlueberry2],
+      "ice1":[beaconSwitchIce1, beaconSliderIce1],
+      "ice2":[beaconSwitchIce2, beaconSliderIce2],
+      "mint1":[beaconSwitchMint1, beaconSliderMint1],
+      "mint2":[beaconSwitchMint2, beaconSliderMint2]
+    ]
     
     // playerPoints
     for i in 0..<SLIT_COUNT {
@@ -338,54 +357,50 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("--------------------------------")
   }
   // Beacon
-  func beaconManager(manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!,
-    inRegion region: CLBeaconRegion!) {
+  func beaconManager(manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
       if let _beacons = beacons as? [CLBeacon] {
-        var str: String = ""
+        
+        var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
+//        var nearestBeacon: String?
         for _beacon: CLBeacon in _beacons {
           let beaconKey = "\(_beacon.major):\(_beacon.minor)"
-          if let effectName = effectBeacons[beaconKey] as String! {
-            let accuracy = Float(Int(_beacon.accuracy * 100.0)) / 100.0 // 小数点第１位まで
-            str += "\(effectName): \(accuracy)\n"
+          if let beaconName = effectBeacons[beaconKey] as String! {
+            let beaconUI = self.beaconUIs[beaconName]
+            let _switch: UISwitch = beaconUI?[0] as! UISwitch
+            let _slider: UISlider = beaconUI?[1] as! UISlider
             
-            switch effectName {
-              case "Delay":
-                beaconDelayLabel.text = "\(accuracy)"
-                beaconDelaySlider.setValue(accuracy, animated: true)
-                if delaySwitch.on {
-                  let beacon_min: Float = 1.0
-                  let beacon_max: Float = 0.7
-                  let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
-                  let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
-                  setDelayFeedback(feedback)
-                  delayFeedbackSlider.setValue(feedback, animated: true)
-                  setDelayWetDry(drywet)
-                  delayDryWetSlider.setValue(drywet, animated: true)
-                  
-                  if playerType == PlayerType.LongShot {
-                    layeredPlayerVol = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
-                  }
-                  
-                  // for debug
-                  print(NSString(format: "%.3f ", accuracy))
-                  let percent = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100)
-                  let arr = Array(count: Int(percent), repeatedValue: "*")
-                  if 0<arr.count { println(join("", arr)) }
-                  else { println() }
-                  
-                }
-              case "Reverb":
-                beaconReverbLabel.text = "\(accuracy)"
-                beaconReverbSlider.setValue(accuracy, animated: true)
-                if reverbSwitch.on {
-                  let drywet   = map(Float(_beacon.accuracy), in_min:10, in_max:0, out_min:0, out_max:80)
-                  setReverbWetDry(drywet)
-                  reverbDryWetSlider.setValue(drywet, animated: true)
-                }
-              default :
-                break
+            if _switch.on {
+              if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min {
+                accuracy_min = Float(_beacon.accuracy)
+//                nearestBeacon = beaconName
+              }
             }
+            _slider.setValue(Float(_beacon.accuracy), animated: true)
           }
+        }
+        
+        if accuracy_min != nil {
+          let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
+          let beacon_min: Float = 1.0
+          let beacon_max: Float = 0.7
+          let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
+          let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
+          setDelayFeedback(feedback)
+          delayFeedbackSlider.setValue(feedback, animated: true)
+          setDelayWetDry(drywet)
+          delayDryWetSlider.setValue(drywet, animated: true)
+          
+          if playerType == PlayerType.LongShot {
+            layeredPlayerVol = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
+          }
+          
+          // for debug
+//          println(nearestBeacon)
+          print(NSString(format: "%.3f ", accuracy))
+          let percent = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100)
+          let arr = Array(count: Int(percent), repeatedValue: "*")
+          if 0<arr.count { println(join("", arr)) }
+          else { println() }
         }
       }
   }
