@@ -609,6 +609,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
+        uart("t:2;")
+        
         let _tones = isLeft ? ["02","01"] : ["01","02"]
         
         for (index, file) in enumerate(_tones) {
@@ -654,6 +656,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       else {
         setTonePlayerType(PlayerType.OneShot)
+        
+        uart("t:1;")
         
         for i in 1..<itemsCount+1 {
           let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
@@ -864,7 +868,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         layeredPlayers[1].volume = 0
       }
       
-      // TODO Konashi通信
+      // Konashi通信
+      let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.0, out_max:1.0)
+      uart("B:\(brightness);")
+      
     default:
       NSLog("Error")
     }
