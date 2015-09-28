@@ -383,16 +383,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
           let beacon_min: Float = 2.3
           let beacon_max: Float = 0.8
-          let drywet   = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
-          let feedback = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
+          let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
+          let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:90)
+          let float_val = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
           setDelayFeedback(feedback)
           delayFeedbackSlider.setValue(feedback, animated: true)
           setDelayWetDry(drywet)
           delayDryWetSlider.setValue(drywet, animated: true)
           
           if playerType == PlayerType.LongShot {
-            layeredPlayerVol = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
+            layeredPlayerVol = float_val
           }
+          
+          uart("E:\(float_val);")
           
           // for debug
           println(nearestBeacon)
