@@ -211,8 +211,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.190, "saturation":1.0]
 //    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
     // B
-    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.083, "saturation":1.0]
-    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.083, "saturation":1.0]
+    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.660, "saturation":1.0]
+    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.660, "saturation":1.0]
     // C
     defaults["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
     defaults["6E35C887-EB24-43F0-8267-887D4659BCB1"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
