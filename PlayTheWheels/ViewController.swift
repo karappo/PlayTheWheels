@@ -22,6 +22,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_LED_DIVIDE = "led_divide"
   let UD_KEY_LED_POSITION = "led_position"
   
+  var settings = NSMutableDictionary()
+  
   @IBOutlet weak var arrow: UIImageView!
   
   // # Konashi Section
@@ -196,6 +198,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // initialize
+    // ==========
+    
+    // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
+    // [注意] settings = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
+    settings["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"f01d0f", "color":["hue":0.218, "saturation":1.0]]
+    settings["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01c9e", "color":["hue":0.218, "saturation":1.0]]
+    settings["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"f01c3d", "color":["hue":0.422, "saturation":1.0]]
+    settings["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"f01cc9", "color":["hue":0.422, "saturation":1.0]]
+    settings["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"f01c12", "color":["hue":0.893, "saturation":0.966]]
+    settings["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"f01c40", "color":["hue":0.893, "saturation":0.966]]
+    settings["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"f01cf9", "color":["hue":0.459, "saturation":1.0]]
+    settings["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"f01bf3", "color":["hue":0.459, "saturation":1.0]]
+    settings["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"f01bf5", "color":["hue":0.083, "saturation":1.0]]
+    settings["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"f01c78", "color":["hue":0.083, "saturation":1.0]]
+    settings["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"f01d54", "color":["hue":0.325, "saturation":1.0]]
+    settings["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"f01d7a", "color":["hue":0.325, "saturation":1.0]]
+    
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
     // Estimote Beacon
@@ -213,6 +233,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // playerPoints
     for i in 0..<SLIT_COUNT {
       playerPoints += [360.0/Double(SLIT_COUNT)*Double(i)]
+    }
+    
+    // load settings
+    // =============
+    
+    let uuid = UIDevice.currentDevice().identifierForVendor.UUIDString
+    NSLog("uuid:\(uuid)")
+    
+    if let setting = settings[uuid] {
+      NSLog("\(setting)")
+      
     }
     
     // Sound
@@ -299,6 +330,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let konashiName = Konashi.peripheralName()
       
       self.UD.setObject(konashiName, forKey: self.UD_KEY_KONASHI)
+      
       
       // button
       self.konashiBtn.setTitle(konashiName, forState: UIControlState.Normal)
