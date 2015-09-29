@@ -601,13 +601,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let val = Int(sender.value)
     UD.setObject(val, forKey: UD_KEY_LED_DIVIDE)
     divideLabel.text = "\(val)"
-    uart("d:\(val);")
+    uart("t:0;d:\(val);")
   }
   @IBAction func changePosition(sender: UISlider) {
     let val = Int(sender.value)
     UD.setObject(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
-    uart("p:\(Float(val)/100);")
+    uart("t:0;p:\(Float(val)/100);")
   }
   
   
