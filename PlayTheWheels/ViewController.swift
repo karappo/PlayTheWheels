@@ -861,7 +861,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       // Konashi通信
-      let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.0, out_max:1.0)
+      let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.2, out_max:1.0)
       uart("B:\(brightness);")
       
     default:
