@@ -691,40 +691,32 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         uart("t:2;")
         
         let _tones = isLeft ? ["02","01"] : ["01","02"]
-        
         for (index, file) in enumerate(_tones) {
           var filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
           var fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
           var audioFile = AVAudioFile(forReading: fileURL, error: nil)
           var audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-
           var player = AVAudioPlayerNode()
           engine.attachNode(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 0.0
-          player.play()
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-          
           players += [player]
           
           // set layeredPlayer
           let layeredTones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
-          
           if 0 < layeredTones!.count {
             filePath = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/layered/\(file)", ofType: "wav")!
             fileURL = NSURL(fileURLWithPath: filePath)!
             audioFile = AVAudioFile(forReading: fileURL, error: nil)
             audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-            
             player = AVAudioPlayerNode()
             engine.attachNode(player)
             engine.connect(player, to: mixer, format: audioFile.processingFormat)
             player.volume = 0.0
-            player.play()
             player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-            
             layeredPlayers += [player]
           }
           
@@ -929,6 +921,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // 実際の車輪のスピードの範囲とうまくマッピングする
       // 実際にクルマイスに乗って試したところ前進で_variationは最大で5くらいだった
       let vol = 9.0 * min(abs(_variation)/5,1)
+      
+      for player in players {
+        if !player.playing {
+          player.play()
+        }
+      }
       
       if 0 < _variation {
         players[0].volume = 0
