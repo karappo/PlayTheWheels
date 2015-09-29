@@ -310,9 +310,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Color
-    
-    hueSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE), animated: true)
-    saturationSlider.setValue(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION), animated: true)
+    if let color = _default["color"] {
+      if let hue = color["hue"] {
+        setHue(hue)
+      }
+      if let saturation = color["saturation"] {
+        setSaturation(saturation)
+      }
+    }
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
     
