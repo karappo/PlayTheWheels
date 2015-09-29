@@ -30,6 +30,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var konashiBtn: UIButton!
   
+  var connectionCheckTimer: NSTimer!
+  
   // # Beacon Section
   
   @IBOutlet weak var beaconSliderBlueberry1: UISlider!
@@ -204,24 +206,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     // A
-    defaults["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"f01d0f", "hue":0.218, "saturation":1.0]
-    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01c9e", "hue":0.218, "saturation":1.0]
-//    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01cc5", "hue":0.218, "saturation":1.0] // for test
+    defaults["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.218, "saturation":1.0]
+    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.218, "saturation":1.0]
+//    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
     // B
-    defaults["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"f01c3d", "hue":0.422, "saturation":1.0]
-    defaults["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"f01cc9", "hue":0.422, "saturation":1.0]
+    defaults["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.422, "saturation":1.0]
+    defaults["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.422, "saturation":1.0]
     // C
-    defaults["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"f01c12", "hue":0.893, "saturation":0.966]
-    defaults["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"f01c40", "hue":0.893, "saturation":0.966]
+    defaults["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
+    defaults["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
     // D
-    defaults["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"f01cf9", "hue":0.459, "saturation":1.0]
-    defaults["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"f01bf3", "hue":0.459, "saturation":1.0]
+    defaults["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.459, "saturation":1.0]
+    defaults["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.459, "saturation":1.0]
     // E
-    defaults["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"f01bf5", "hue":0.083, "saturation":1.0]
-    defaults["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"f01c78", "hue":0.083, "saturation":1.0]
+    defaults["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.083, "saturation":1.0]
+    defaults["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.083, "saturation":1.0]
     // F
-    defaults["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"f01d54", "hue":0.325, "saturation":1.0]
-    defaults["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"f01d7a", "hue":0.325, "saturation":1.0]
+    defaults["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
+    defaults["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
     
     
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
@@ -337,6 +339,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
+      
+      // stop timer
+      if self.connectionCheckTimer.valid {
+        NSLog("[Konashi] Stop connection check")
+        self.connectionCheckTimer.invalidate()
+      }
+      
       self.logKonashiStatus()
       
       let konashiName = Konashi.peripheralName()
@@ -363,20 +372,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     if let default_konashi = _default["konashi"] as? String {
       NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-      if Konashi.findWithName(default_konashi) == KonashiResult.Success {
-        NSLog("[Konashi] Auto connect successed!")
-      }
-      else {
-        NSLog("[Konashi] Auto connect failed!")
+      if findKonashiWithName(default_konashi) != KonashiResult.Success {
+        
+        NSLog("[Konashi] Konashi.findWithName failed...")
         
         // UserDefaultsから前回接続したKonashiを読み、接続を試みる
         if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
           NSLog("[Konashi] Auto connecting to \(previously_connected_konashi) (previus connection) ...")
           if Konashi.findWithName(previously_connected_konashi) == KonashiResult.Success {
-            NSLog("[Konashi] Auto connect successed!")
+            NSLog("[Konashi] Konashi.findWithName success")
           }
           else {
-            NSLog("[Konashi] Auto connect failed!")
+            NSLog("[Konashi] Konashi.findWithName failed...")
           }
         }
       }
@@ -395,6 +402,29 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     }
+  }
+  
+  func findKonashiWithName(konashiName: String) -> KonashiResult {
+    let res = Konashi.findWithName(konashiName)
+    if res == KonashiResult.Success {
+      // 呼び出しが正しく行われただけで、接続されたわけではない
+      NSLog("[Konashi] Konashi.findWithName success")
+      if connectionCheckTimer == nil || connectionCheckTimer.valid != true {
+        NSLog("[Konashi] Start connection check")
+        // 接続出来たかどうかの監視を開始
+        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
+      }
+    }
+    else {
+      NSLog("[Konashi] Konashi.findWithName failed...")
+    }
+    return res
+  }
+  func checkConnection(){
+    NSLog("[Konashi] Retry connecting")
+    let userInfo = connectionCheckTimer.userInfo as! Dictionary<String, AnyObject>
+    let konashi = userInfo["konashi"] as! String
+    findKonashiWithName(konashi)
   }
   
   override func viewWillAppear(animated: Bool) {
