@@ -313,10 +313,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       self.updateInstrumentColor()
       self.updateEffectColor()
     }
-    Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
-    
+//    Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
 //      NSLog("[Konashi] UartRx \(data.description)")
-    }
+//    }
     
     // UserDefaultsから前回接続したKonashiを読み、接続を試みる
     if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
