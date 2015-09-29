@@ -204,30 +204,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     // A
-    var _color = ["hue":0.218, "saturation":1.0]
-    defaults["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"f01d0f", "color":_color]
-    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01c9e", "color":_color]
-//    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01cc5", "color":_color] // for test
+    defaults["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"f01d0f", "hue":0.218, "saturation":1.0]
+    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01c9e", "hue":0.218, "saturation":1.0]
+//    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"f01cc5", "hue":0.218, "saturation":1.0] // for test
     // B
-    _color = ["hue":0.422, "saturation":1.0]
-    defaults["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"f01c3d", "color":_color]
-    defaults["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"f01cc9", "color":_color]
+    defaults["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"f01c3d", "hue":0.422, "saturation":1.0]
+    defaults["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"f01cc9", "hue":0.422, "saturation":1.0]
     // C
-    _color = ["hue":0.893, "saturation":0.966]
-    defaults["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"f01c12", "color":_color]
-    defaults["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"f01c40", "color":_color]
+    defaults["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"f01c12", "hue":0.893, "saturation":0.966]
+    defaults["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"f01c40", "hue":0.893, "saturation":0.966]
     // D
-    _color = ["hue":0.459, "saturation":1.0]
-    defaults["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"f01cf9", "color":_color]
-    defaults["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"f01bf3", "color":_color]
+    defaults["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"f01cf9", "hue":0.459, "saturation":1.0]
+    defaults["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"f01bf3", "hue":0.459, "saturation":1.0]
     // E
-    _color = ["hue":0.083, "saturation":1.0]
-    defaults["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"f01bf5", "color":_color]
-    defaults["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"f01c78", "color":_color]
+    defaults["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"f01bf5", "hue":0.083, "saturation":1.0]
+    defaults["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"f01c78", "hue":0.083, "saturation":1.0]
     // F
-    _color = ["hue":0.325, "saturation":1.0]
-    defaults["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"f01d54", "color":_color]
-    defaults["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"f01d7a", "color":_color]
+    defaults["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"f01d54", "hue":0.325, "saturation":1.0]
+    defaults["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"f01d7a", "hue":0.325, "saturation":1.0]
     
     
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
@@ -310,13 +304,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Color
-    if let color = _default["color"] {
-      if let hue = color["hue"] {
-        setHue(hue)
-      }
-      if let saturation = color["saturation"] {
-        setSaturation(saturation)
-      }
+    // default値をセット
+    if let hue = _default["hue"] as? Float {
+      setHue(hue)
+    }
+    if let saturation = _default["saturation"] as? Float {
+      setSaturation(saturation)
     }
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
