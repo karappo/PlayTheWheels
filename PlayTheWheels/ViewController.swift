@@ -306,7 +306,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // Konashi setting
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
       Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
-      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO2, mode: KonashiPinMode.Output)
       
       // LED2を点灯
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
@@ -315,10 +314,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       self.updateEffectColor()
     }
     Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
-      
-      // LED3を消灯
-      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.Low)
-      
+    
 //      NSLog("[Konashi] UartRx \(data.description)")
     }
     
@@ -779,8 +775,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if Konashi.isConnected() {
       let command = "\(key)=\(value);"
       NSLog(command)
-      // LED3を点灯
-      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.High)
       let res = Konashi.uartWriteString(command)
       if res == KonashiResult.Success {
         NSLog("[Konashi] KonashiResultSuccess")
@@ -793,8 +787,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func uart(str: String){
     if Konashi.isConnected() {
       NSLog(str)
-      // LED3を点灯
-      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO2, value: KonashiLevel.High)
       let res = Konashi.uartWriteString(str)
       if res == KonashiResult.Success {
         NSLog("[Konashi] KonashiResultSuccess")
