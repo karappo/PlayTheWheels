@@ -29,6 +29,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // # Konashi Section
   
   @IBOutlet weak var konashiBtn: UIButton!
+  var konashiBtnDefaultLabel = "Find Konashi"
   
   var connectionCheckTimer: NSTimer!
   
@@ -206,25 +207,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     // A
-    defaults["8B909E35-A98C-458E-A329-8AE43E87C60D"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.218, "saturation":1.0]
-    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.218, "saturation":1.0]
-//    defaults["E19DE492-962A-429B-BF80-4732DCE2C0BA"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
+    defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.218, "saturation":1.0]
+    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.218, "saturation":1.0]
+//    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
     // B
-    defaults["D496A911-47DA-496C-9B9B-AD0B81AA2CAA"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.422, "saturation":1.0]
-    defaults["6EFCA105-773C-41D0-8C51-05AA7EF30640"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.422, "saturation":1.0]
+    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.422, "saturation":1.0]
+    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.422, "saturation":1.0]
     // C
-    defaults["534D2914-AB19-476C-BAE0-3392CC15DEE3"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
-    defaults["BD60190F-69D3-4384-8F20-D8EE895DFB83"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
+    defaults["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
+    defaults["6E35C887-EB24-43F0-8267-887D4659BCB1"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
     // D
-    defaults["1DC8BDF0-85DC-4655-8F7D-264CE076984B"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.459, "saturation":1.0]
-    defaults["8C21BD5C-CBC1-49FE-8FB4-588D3193A7E8"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.459, "saturation":1.0]
+    defaults["273D82FA-AD38-4F38-A2DC-EF9D415EB610"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.459, "saturation":1.0]
+    defaults["F1DC5770-9FBA-430A-A50F-23584B608B1E"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.459, "saturation":1.0]
     // E
-    defaults["FC07B62A-AEB9-44CD-9C3E-BB19DE54FE3B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.083, "saturation":1.0]
-    defaults["1E91E230-B4E8-4F4D-B3FE-53EF1A4DEF82"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.083, "saturation":1.0]
+    defaults["2A0501E2-45BD-4F4F-BECA-2C9F56BD6967"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.083, "saturation":1.0]
+    defaults["829FAFD0-6BF5-476D-B5B7-0303C7D5DDB0"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.083, "saturation":1.0]
     // F
-    defaults["18F301EF-3A42-4F75-875F-093B79937447"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
-    defaults["6727B8D2-B827-4BBF-BF9A-642D273CCA03"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
-    
+    defaults["709F04CF-DB72-463A-AD99-E769D2B1D6A9"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
+    defaults["20EDC31D-FA24-4CFE-8BD4-784D18727BEB"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
     
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
@@ -253,6 +253,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("uuid:\(uuid)")
     
     let _default: AnyObject = defaults[uuid]! // default value of indivisual device
+    
+    if let konashi = _default["konashi"] as? String {
+      konashiBtnDefaultLabel = "Find Konashi -> (\(konashi)))"
+    }
+    
     
     // Sound
     
@@ -333,9 +338,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     Konashi.shared().disconnectedHandler = {
       NSLog("[Konashi] Disonnected")
-      
+      // TODO Auto Connecting? あえて切断した場合もあるのでそれを考慮
       // button
-      self.konashiBtn.setTitle("Find Konashi", forState: UIControlState.Normal)
+      self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
