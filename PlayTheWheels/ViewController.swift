@@ -417,7 +417,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if connectionCheckTimer == nil || connectionCheckTimer.valid != true {
         NSLog("[Konashi] Start connection check")
         // 接続出来たかどうかの監視を開始
-        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
+//        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
       }
     }
     else {
