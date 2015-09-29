@@ -393,25 +393,26 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           
           uart("E:\(float_val);")
           
-          // for debug
-          println(nearestBeacon)
-          print(NSString(format: "%.3f ", accuracy))
-          let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
-          let arr = Array(count: percent, repeatedValue: "*")
-          
-          if 0<arr.count {
-            if 100<=percent {
-              print(join("", arr))
-              println()
-            }
-            else {
-              println(join("", arr))
-            }
-            
-          }
-          else {
-            println()
-          }
+//          // for debug --------
+//          println(nearestBeacon)
+//          print(NSString(format: "%.3f ", accuracy))
+//          let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
+//          let arr = Array(count: percent, repeatedValue: "*")
+//          
+//          if 0<arr.count {
+//            if 100<=percent {
+//              print(join("", arr))
+//              println()
+//            }
+//            else {
+//              println(join("", arr))
+//            }
+//            
+//          }
+//          else {
+//            println()
+//          }
+//          // / for debug --------
         }
       }
   }
