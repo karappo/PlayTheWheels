@@ -319,7 +319,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // UserDefaultsから前回接続したKonashiを読み、接続を試みる
     if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
-      NSLog("[Konashi] Auto connecting to \(previously_connected_konashi)...")
+      NSLog("[Konashi] Auto connecting to \(previously_connected_konashi) ...")
       if Konashi.findWithName(previously_connected_konashi) == KonashiResult.Success {
         NSLog("[Konashi] Auto connect successed!")
       }
@@ -777,7 +777,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog(command)
       let res = Konashi.uartWriteString(command)
       if res == KonashiResult.Success {
-        NSLog("[Konashi] KonashiResultSuccess")
+//        NSLog("[Konashi] KonashiResultSuccess")
       }
       else {
         NSLog("[Konashi] KonashiResultFailure")
@@ -786,7 +786,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   func uart(str: String){
     if Konashi.isConnected() {
-      NSLog(str)
+//      NSLog(str)
       let res = Konashi.uartWriteString(str)
       if res == KonashiResult.Success {
         NSLog("[Konashi] KonashiResultSuccess")
