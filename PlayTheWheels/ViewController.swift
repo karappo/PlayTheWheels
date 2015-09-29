@@ -207,21 +207,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     // A
-    defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.218, "saturation":1.0]
-    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.218, "saturation":1.0]
+    defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.190, "saturation":1.0]
+    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.190, "saturation":1.0]
 //    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
     // B
-    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.422, "saturation":1.0]
-    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.422, "saturation":1.0]
+    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.083, "saturation":1.0]
+    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.083, "saturation":1.0]
     // C
     defaults["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
     defaults["6E35C887-EB24-43F0-8267-887D4659BCB1"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
     // D
-    defaults["273D82FA-AD38-4F38-A2DC-EF9D415EB610"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.459, "saturation":1.0]
-    defaults["F1DC5770-9FBA-430A-A50F-23584B608B1E"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.459, "saturation":1.0]
+    defaults["273D82FA-AD38-4F38-A2DC-EF9D415EB610"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.0, "saturation":1.0]
+    defaults["F1DC5770-9FBA-430A-A50F-23584B608B1E"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.0, "saturation":1.0]
     // E
-    defaults["2A0501E2-45BD-4F4F-BECA-2C9F56BD6967"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.083, "saturation":1.0]
-    defaults["829FAFD0-6BF5-476D-B5B7-0303C7D5DDB0"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.083, "saturation":1.0]
+    defaults["2A0501E2-45BD-4F4F-BECA-2C9F56BD6967"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.720, "saturation":1.0]
+    defaults["829FAFD0-6BF5-476D-B5B7-0303C7D5DDB0"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.720, "saturation":1.0]
     // F
     defaults["709F04CF-DB72-463A-AD99-E769D2B1D6A9"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
     defaults["20EDC31D-FA24-4CFE-8BD4-784D18727BEB"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
