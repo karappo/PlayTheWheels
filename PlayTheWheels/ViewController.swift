@@ -136,8 +136,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // [注意] defaults = [...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     // A
     defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.190, "saturation":1.0]
+//    defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
     defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.190, "saturation":1.0]
-//    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01cc5", "hue":0.218, "saturation":1.0] // for test
+    
     // B
     defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.678, "saturation":1.0]
     defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.678, "saturation":1.0]
