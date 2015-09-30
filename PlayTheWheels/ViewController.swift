@@ -30,7 +30,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBOutlet weak var konashiBtn: UIButton!
   var konashiBtnDefaultLabel = "Find Konashi"
-  
+  var manualDisconnection: Bool = false // Disconnectされた際に手動で切断されたのかどうかを判定するためのフラグ
   var connectionCheckTimer: NSTimer!
   
   // # Beacon Section
@@ -251,20 +251,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     Konashi.shared().disconnectedHandler = {
       NSLog("[Konashi] Disonnected")
+      
       // button
       self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
       
-      // TODO Auto Connecting? あえて切断した場合もあるのでそれを考慮
-//      if let default_konashi = _default["konashi"] as? String {
-//        NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-//        
-//        if Konashi.findWithName(default_konashi) == KonashiResult.Success {
-//          NSLog("[Konashi] Konashi.findWithName success")
-//        }
-//        else {
-//          NSLog("[Konashi] Konashi.findWithName failed...")
-//        }
-//      }
+      // 勝手に切断された場合にリトライする
+      if self.manualDisconnection != true {
+        // UserDefaultsから前回接続したKonashiを読み、接続を試みる
+        if let previously_connected_konashi = self.UD.stringForKey(self.UD_KEY_KONASHI) {
+          NSLog("[Konashi] Retry connecting to \(previously_connected_konashi) (previus connection) ...")
+          self.findKonashiWithName(previously_connected_konashi)
+        }
+        self.manualDisconnection = false
+      }
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
@@ -301,21 +300,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     if let default_konashi = _default["konashi"] as? String {
       NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-      
-      if findKonashiWithName(default_konashi) == KonashiResult.Failure {
-        
-        NSLog("[Konashi] Konashi.findWithName failed...")
-        // UserDefaultsから前回接続したKonashiを読み、接続を試みる
-        if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
-          NSLog("[Konashi] Auto connecting to \(previously_connected_konashi) (previus connection) ...")
-          if Konashi.findWithName(previously_connected_konashi) == KonashiResult.Success {
-            NSLog("[Konashi] Konashi.findWithName success")
-          }
-          else {
-            NSLog("[Konashi] Konashi.findWithName failed...")
-          }
-        }
-      }
+      findKonashiWithName(default_konashi)
     }
   }
   
@@ -324,11 +309,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if res == KonashiResult.Success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
       NSLog("[Konashi] Konashi.findWithName called and success")
-//      if connectionCheckTimer == nil || connectionCheckTimer.valid != true {
-//        NSLog("[Konashi] Start connection check")
-//        // 接続出来たかどうかの監視を開始
-//        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
-//      }
+      if connectionCheckTimer == nil || connectionCheckTimer.valid == false {
+        NSLog("[Konashi] Start connection check")
+        // 接続出来たかどうかの監視を開始
+        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
+      }
+      else {
+        NSLog("[Konashi] Konashi.findWithName failed...")
+      }
     }
     else {
       NSLog("[Konashi] Konashi.findWithName called and failed...")
@@ -443,6 +431,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let otherAction = UIAlertAction(title: "Disconnect", style: .Default) {
         action in
           NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
+          self.manualDisconnection = true
           // LED2を消灯
           Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.Low)
           // 接続解除
