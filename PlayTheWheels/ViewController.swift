@@ -248,7 +248,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     logKonashiStatus()
     
     Konashi.shared().connectedHandler = {
-      NSLog("[Konashi] Connected")
+      NSLog("[Konashi] Connected!")
     }
     Konashi.shared().disconnectedHandler = {
       NSLog("[Konashi] Disonnected")
@@ -310,14 +310,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if res == KonashiResult.Success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
       NSLog("[Konashi] Konashi.findWithName called and success")
-      if connectionCheckTimer == nil || connectionCheckTimer.valid == false {
-        NSLog("[Konashi] Start connection check")
-        // 接続出来たかどうかの監視を開始
-        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
-      }
-      else {
-        NSLog("[Konashi] Konashi.findWithName failed...")
-      }
+//      if connectionCheckTimer == nil || connectionCheckTimer.valid == false {
+//        NSLog("[Konashi] Start connection check")
+//        // 接続出来たかどうかの監視を開始
+//        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
+//      }
     }
     else {
       NSLog("[Konashi] Konashi.findWithName called and failed...")
@@ -429,12 +426,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       let otherAction = UIAlertAction(title: "Disconnect", style: .Default) {
         action in
-          NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
-          self.manualDisconnection = true
+        
           // LED2を消灯
           Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.Low)
-          // 接続解除
-          Konashi.disconnect()
+        
+          // LEDが消灯するのに時間が必要なので遅延させる
+          NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "disconnectKonashi", userInfo: nil, repeats: false)
       }
       let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) {
         action in
@@ -451,7 +448,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     else {
       Konashi.find()
     }
-    
+  }
+  
+  func disconnectKonashi() {
+    NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
+    // 接続解除
+    self.manualDisconnection = true
+    Konashi.disconnect()
   }
   
   // Color
