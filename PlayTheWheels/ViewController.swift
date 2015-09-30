@@ -386,9 +386,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           setDelayWetDry(drywet)
           delayDryWetSlider.setValue(drywet, animated: true)
           
-          if playerType == PlayerType.LongShot {
-            layeredPlayerVol = float_val
-          }
+          layeredPlayerVol = float_val
           
           uart("E:\(float_val);")
           
@@ -616,6 +614,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // 左用の音かどうか判定（Lで終わっていたら左）
       var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil)
       let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
+      let _tones = isLeft ? ["02","01"] : ["01","02"]
       
       // switch player type
       
@@ -624,7 +623,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         uart("t:2;")
         
-        let _tones = isLeft ? ["02","01"] : ["01","02"]
         for (index, file) in enumerate(_tones) {
           var filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
           var fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
@@ -637,22 +635,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           player.volume = 0.0
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
           players += [player]
-          
-          // set layeredPlayer
-          let layeredTones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
-          if 0 < layeredTones!.count {
-            filePath = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/layered/\(file)", ofType: "wav")!
-            fileURL = NSURL(fileURLWithPath: filePath)!
-            audioFile = AVAudioFile(forReading: fileURL, error: nil)
-            audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-            audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-            player = AVAudioPlayerNode()
-            engine.attachNode(player)
-            engine.connect(player, to: mixer, format: audioFile.processingFormat)
-            player.volume = 0.0
-            player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-            layeredPlayers += [player]
-          }
           
           if format == nil {
             format = audioFile.processingFormat
@@ -682,6 +664,26 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           }
         }
       }
+      
+      // set layeredPlayer
+      for (index, file) in enumerate(_tones) {
+        let layeredTones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
+        if 0 < layeredTones!.count {
+          let filePath = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/layered/\(file)", ofType: "wav")!
+          let fileURL = NSURL(fileURLWithPath: filePath)!
+          let audioFile = AVAudioFile(forReading: fileURL, error: nil)
+          let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+          audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+          let player = AVAudioPlayerNode()
+          engine.attachNode(player)
+          engine.connect(player, to: mixer, format: audioFile.processingFormat)
+          player.volume = 0.0
+          player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+          layeredPlayers += [player]
+        }
+      }
+      
+      
     }
     return format
   }
@@ -742,6 +744,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
     
+    // 変化量
+    // 実際の車輪のスピードの範囲とうまくマッピングする
+    // 実際にクルマイスに乗って試したところ前進で_variationは最大で5くらいだった
+    let vol = 9.0 * min(abs(_variation)/5,1)
+    
     switch playerType {
     case PlayerType.OneShot:
       // OneShot
@@ -779,12 +786,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     case PlayerType.LongShot:
       // LongShot
-      // 変化量
-      // 実際の車輪のスピードの範囲とうまくマッピングする
-      // 実際にクルマイスに乗って試したところ前進で_variationは最大で5くらいだった
-      let vol = 9.0 * min(abs(_variation)/5,1)
       
       for player in players {
+        if !player.playing {
+          player.play()
+        }
+      }
+      for player in layeredPlayers {
         if !player.playing {
           player.play()
         }
@@ -793,14 +801,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if 0 < _variation {
         players[0].volume = 0
         players[1].volume = vol
-        layeredPlayers[0].volume = 0
-        layeredPlayers[1].volume = vol*layeredPlayerVol
       }
       else {
         players[0].volume = vol
         players[1].volume = 0
-        layeredPlayers[0].volume = vol*layeredPlayerVol
-        layeredPlayers[1].volume = 0
       }
       
       // Konashi通信
@@ -809,6 +813,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
     default:
       NSLog("Error")
+    }
+    
+    // layered players
+    if 0 < _variation {
+      layeredPlayers[0].volume = 0
+      layeredPlayers[1].volume = vol*layeredPlayerVol
+    }
+    else {
+      layeredPlayers[0].volume = vol*layeredPlayerVol
+      layeredPlayers[1].volume = 0
     }
     
     prevDeg = currentDeg
