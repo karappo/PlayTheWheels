@@ -255,7 +255,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let _default: AnyObject = defaults[uuid]! // default value of indivisual device
     
     if let konashi = _default["konashi"] as? String {
-      konashiBtnDefaultLabel = "Find Konashi -> (\(konashi)))"
+      konashiBtnDefaultLabel = "Find Konashi -> (\(konashi))"
     }
     
     
@@ -338,15 +338,26 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     Konashi.shared().disconnectedHandler = {
       NSLog("[Konashi] Disonnected")
-      // TODO Auto Connecting? あえて切断した場合もあるのでそれを考慮
       // button
       self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
+      
+      // TODO Auto Connecting? あえて切断した場合もあるのでそれを考慮
+//      if let default_konashi = _default["konashi"] as? String {
+//        NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
+//        
+//        if Konashi.findWithName(default_konashi) == KonashiResult.Success {
+//          NSLog("[Konashi] Konashi.findWithName success")
+//        }
+//        else {
+//          NSLog("[Konashi] Konashi.findWithName failed...")
+//        }
+//      }
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
       
       // stop timer
-      if self.connectionCheckTimer.valid {
+      if self.connectionCheckTimer != nil && self.connectionCheckTimer.valid {
         NSLog("[Konashi] Stop connection check")
         self.connectionCheckTimer.invalidate()
       }
@@ -377,10 +388,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     if let default_konashi = _default["konashi"] as? String {
       NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-      if findKonashiWithName(default_konashi) != KonashiResult.Success {
+      
+      if findKonashiWithName(default_konashi) == KonashiResult.Failure {
         
         NSLog("[Konashi] Konashi.findWithName failed...")
-        
         // UserDefaultsから前回接続したKonashiを読み、接続を試みる
         if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
           NSLog("[Konashi] Auto connecting to \(previously_connected_konashi) (previus connection) ...")
@@ -393,35 +404,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     }
-    // UserDefaultsから前回接続したKonashiを読み、接続を試みる
-    else {
-      NSLog("[Konashi] Default konashi is not found")
-      
-      if let previously_connected_konashi = UD.stringForKey(UD_KEY_KONASHI) {
-        NSLog("[Konashi] Auto connecting to \(previously_connected_konashi) (previus connection) ...")
-        if Konashi.findWithName(previously_connected_konashi) == KonashiResult.Success {
-          NSLog("[Konashi] Auto connect successed!")
-        }
-        else {
-          NSLog("[Konashi] Auto connect failed!")
-        }
-      }
-    }
   }
   
   func findKonashiWithName(konashiName: String) -> KonashiResult {
     let res = Konashi.findWithName(konashiName)
     if res == KonashiResult.Success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
-      NSLog("[Konashi] Konashi.findWithName success")
-      if connectionCheckTimer == nil || connectionCheckTimer.valid != true {
-        NSLog("[Konashi] Start connection check")
-        // 接続出来たかどうかの監視を開始
+      NSLog("[Konashi] Konashi.findWithName called and success")
+//      if connectionCheckTimer == nil || connectionCheckTimer.valid != true {
+//        NSLog("[Konashi] Start connection check")
+//        // 接続出来たかどうかの監視を開始
 //        connectionCheckTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "checkConnection", userInfo: ["konashi": konashiName], repeats: true)
-      }
+//      }
     }
     else {
-      NSLog("[Konashi] Konashi.findWithName failed...")
+      NSLog("[Konashi] Konashi.findWithName called and failed...")
     }
     return res
   }
@@ -881,27 +878,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // シリアル通信で送信
-  func uart(key: String, value: String){
-    if Konashi.isConnected() {
-      let command = "\(key)=\(value);"
-      NSLog(command)
-      let res = Konashi.uartWriteString(command)
-      if res == KonashiResult.Success {
-//        NSLog("[Konashi] KonashiResultSuccess")
-      }
-      else {
-        NSLog("[Konashi] KonashiResultFailure")
-      }
-    }
-  }
   func uart(str: String){
     if Konashi.isConnected() {
 //      NSLog(str)
-      let res = Konashi.uartWriteString(str)
-      if res == KonashiResult.Success {
-        NSLog("[Konashi] KonashiResultSuccess")
-      }
-      else {
+      if Konashi.uartWriteString(str) == KonashiResult.Failure {
         NSLog("[Konashi] KonashiResultFailure")
       }
     }
