@@ -745,6 +745,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func uart(str: String){
     if Konashi.isConnected() {
       // 連続して送信してしまわないように制限をかける
+      // TODO uart全部ではなく、”同じコマンドの”連続送信時間で制限をかけるようにしたい
       if 10 < ElapsedTimeCounter.instance.getMillisec() {
         if Konashi.uartWriteString(str) == KonashiResult.Failure {
           NSLog("[Konashi] KonashiResultFailure")
