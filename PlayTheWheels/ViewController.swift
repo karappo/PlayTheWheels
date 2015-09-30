@@ -183,7 +183,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let _default: AnyObject = defaults[uuid]! // default value of indivisual device
     
     if let konashi = _default["konashi"] as? String {
-      konashiBtnDefaultLabel = "Find Konashi -> (\(konashi))"
+      konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
+      konashiBtn.setTitle(konashiBtnDefaultLabel, forState: UIControlState.Normal)
     }
     
     
@@ -282,7 +283,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       
       // button
-      self.konashiBtn.setTitle(konashiName, forState: UIControlState.Normal)
+      self.konashiBtn.setTitle("[Connected] \(konashiName)", forState: UIControlState.Normal)
       
       // Konashi setting
       Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
