@@ -746,9 +746,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // シリアル通信で送信
   func uart(str: String){
     if Konashi.isConnected() {
-//      NSLog(str)
-      if Konashi.uartWriteString(str) == KonashiResult.Failure {
-        NSLog("[Konashi] KonashiResultFailure")
+      // 連続して送信してしまわないように制限をかける
+      if 10 < ElapsedTimeCounter.instance.getMillisec() {
+        if Konashi.uartWriteString(str) == KonashiResult.Failure {
+          NSLog("[Konashi] KonashiResultFailure")
+        }
       }
     }
   }
@@ -922,5 +924,33 @@ internal extension Array {
   func get (index: Int) -> Element? {
     let _index = relativeIndex(index)
     return _index < count ? self[_index] : nil
+  }
+}
+
+
+//
+// http://qiita.com/KeitaMoromizato/items/59cb25925642822c6ec9
+// 経過時間を調べる
+class ElapsedTimeCounter {
+  class var instance: ElapsedTimeCounter {
+    struct Static {
+      static let instance = ElapsedTimeCounter()
+    }
+    return Static.instance
+  }
+  
+  private var lastDate: NSDate?
+  
+  func getMillisec() -> Int? {
+    let now = NSDate()
+    if let date = lastDate {
+      let elapsed = now.timeIntervalSinceDate(date)
+      lastDate = now
+      
+      return Int(elapsed * 1000.0)
+    }
+    
+    lastDate = now
+    return nil
   }
 }
