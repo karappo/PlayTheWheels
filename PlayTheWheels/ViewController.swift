@@ -84,15 +84,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // # Effect Section
   
-  // EQ
-  @IBOutlet weak var eqBypassSwitch: UISwitch!
-  @IBOutlet weak var eqFilterTypeBtn: UIButton!
-  @IBOutlet weak var eqFrequencySlider: UISlider!
-  @IBOutlet weak var eqFrequencyLabel: UILabel!
-  @IBOutlet weak var eqBandwidthSlider: UISlider!
-  @IBOutlet weak var eqBandwidthLabel: UILabel!
-  @IBOutlet weak var eqGainSlider: UISlider!
-  @IBOutlet weak var eqGainLabel: UILabel!
   // Delay
   @IBOutlet weak var delayDryWetSlider: UISlider!
   @IBOutlet weak var delayDelayTimeSlider: UISlider!
@@ -102,10 +93,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var delayDelayTimeLabel: UILabel!
   @IBOutlet weak var delayFeedbackLabel: UILabel!
   @IBOutlet weak var delayLowPassCutOffLabel: UILabel!
-  // Reverb
-  @IBOutlet weak var reverbDryWetSlider: UISlider!
-  @IBOutlet weak var reverbDryWetLabel: UILabel!
-  @IBOutlet weak var reverbPresetsBtn: UIButton!
   
   // Beacon
   let beaconManager = ESTBeaconManager()
@@ -127,72 +114,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
   
   var engine: AVAudioEngine = AVAudioEngine()
-  var eq: AVAudioUnitEQ!
-  var epParams: AVAudioUnitEQFilterParameters!
   var delay: AVAudioUnitDelay!
-  var reverb: AVAudioUnitReverb!
   var mixer: AVAudioMixerNode!
   var players: Array<AVAudioPlayerNode> = []
   var layeredPlayers: Array<AVAudioPlayerNode> = []
   var layeredPlayerVol: Float = 0.0
   var audioFiles: Array<AVAudioFile> = []
   var current_index: Int = 0
-  let reverbPresetsStrings: Array<String> = [
-    "SmallRoom",
-    "MediumRoom",
-    "LargeRoom",
-    "MediumHall",
-    "LargeHall",
-    "Plate",
-    "MediumChamber",
-    "LargeChamber",
-    "Cathedral",
-    "LargeRoom2",
-    "MediumHall2",
-    "MediumHall3",
-    "LargeHall2"
-  ]
-  let reverbPresetsEnums: Array<AVAudioUnitReverbPreset> = [
-    AVAudioUnitReverbPreset.SmallRoom,
-    AVAudioUnitReverbPreset.MediumRoom,
-    AVAudioUnitReverbPreset.LargeRoom,
-    AVAudioUnitReverbPreset.MediumHall,
-    AVAudioUnitReverbPreset.LargeHall,
-    AVAudioUnitReverbPreset.Plate,
-    AVAudioUnitReverbPreset.MediumChamber,
-    AVAudioUnitReverbPreset.LargeChamber,
-    AVAudioUnitReverbPreset.Cathedral,
-    AVAudioUnitReverbPreset.LargeRoom2,
-    AVAudioUnitReverbPreset.MediumHall2,
-    AVAudioUnitReverbPreset.MediumHall3,
-    AVAudioUnitReverbPreset.LargeHall2
-  ]
-  let eqFilterTypesStrings: Array<String> = [
-    "Parametric",
-    "LowPass",
-    "HighPass",
-    "ResonantLowPass",
-    "ResonantHighPass",
-    "BandPass",
-    "BandStop",
-    "LowShelf",
-    "HighShelf",
-    "ResonantLowShelf",
-    "ResonantHighShelf"
-  ]
-  let eqFilterTypesEnums: Array<AVAudioUnitEQFilterType> = [
-    AVAudioUnitEQFilterType.Parametric,
-    AVAudioUnitEQFilterType.LowPass,
-    AVAudioUnitEQFilterType.HighPass,
-    AVAudioUnitEQFilterType.ResonantLowPass,
-    AVAudioUnitEQFilterType.ResonantHighPass,
-    AVAudioUnitEQFilterType.BandPass,
-    AVAudioUnitEQFilterType.BandStop,
-    AVAudioUnitEQFilterType.LowShelf,
-    AVAudioUnitEQFilterType.HighShelf,
-    AVAudioUnitEQFilterType.ResonantLowShelf,
-    AVAudioUnitEQFilterType.ResonantHighShelf
-  ]
 
   let SLIT_COUNT = 8 // 円周を何分割してplayerPointsにするか
   var prevDeg: Double = 0.0
@@ -261,31 +189,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // Sound
     
-    eq = AVAudioUnitEQ(numberOfBands: 1)
-    epParams = eq.bands.first as! AVAudioUnitEQFilterParameters
-    setEqFilterTypes(1)
-    setEqFrequency(659.255)
-    setEqBandwidth(0.05)
-    setEqGain(0.0)
-    epParams.bypass = eqBypassSwitch.on
-    
+    // Delay
     delay = AVAudioUnitDelay()
     setDelayWetDry(0) // 可変 0-80
     setDelayDelayTime(0.295) // 不変
     setDelayFeedback(0) // 可変 0-90
     setDelayLowPassCutOff(700) // 不変
     
-    reverb = AVAudioUnitReverb()
-    setReverbWetDry(0)
-    setReverbPresets(4)
-    
     setBrightnessMin(0.15)
     
     mixer = AVAudioMixerNode()
     
-    engine.attachNode(eq)
     engine.attachNode(delay)
-    engine.attachNode(reverb)
     engine.attachNode(mixer)
     
     // AudioPlayerの準備
@@ -293,10 +208,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let _toneDir: AnyObject = _default["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
     var format: AVAudioFormat = initPlayers(_toneDir as! String)
 
-    engine.connect(mixer, to: eq, format: format)
-    engine.connect(eq, to: delay, format: format)
-    engine.connect(delay, to: reverb, format: format)
-    engine.connect(reverb, to: engine.mainMixerNode, format: format)
+    engine.connect(mixer, to: delay, format: format)
+    engine.connect(delay, to: engine.mainMixerNode, format: format)
     engine.startAndReturnError(nil)
     
     // モーションセンサー
@@ -789,43 +702,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     tonePlayerTypeLabel.text = type.rawValue
   }
   
-  // EQ
-  @IBAction func changeEqBypass(sender: UISwitch) {
-    epParams.bypass = sender.on
-  }
-  @IBAction func tapFilterType(sender: UIButton) {
-    let initial: Int = find(self.eqFilterTypesStrings, eqFilterTypeBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("EQ FilterType", rows: eqFilterTypesStrings, initialSelection: initial, doneBlock: {
-      picker, value, index in
-      self.setEqFilterTypes(value)
-      return
-      }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
-  }
-  func setEqFilterTypes(index: Int) {
-    epParams.filterType = eqFilterTypesEnums[index]
-    eqFilterTypeBtn.setTitle(eqFilterTypesStrings[index], forState: UIControlState.Normal)
-  }
-  @IBAction func changeEqFrequency(sender: UISlider) {
-    setEqFrequency(sender.value)
-  }
-  func setEqFrequency(val: Float) {
-    epParams.frequency = val
-    eqFrequencyLabel.text = "\(val)"
-  }
-  @IBAction func changeEqBandwidth(sender: UISlider) {
-    setEqBandwidth(sender.value)
-  }
-  func setEqBandwidth(val: Float) {
-    epParams.bandwidth = val
-    eqBandwidthLabel.text = "\(val)"
-  }
-  @IBAction func changeEqGain(sender: UISlider) {
-    setEqGain(sender.value)
-  }
-  func setEqGain(val: Float) {
-    epParams.gain = val
-    eqGainLabel.text = "\(val)"
-  }
+  // Effect
+  // ======
   
   // Delay
   @IBAction func changeDelayWetDry(sender: UISlider) {
@@ -855,26 +733,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func setDelayLowPassCutOff(val: Float) {
     delay.lowPassCutoff = val
     delayLowPassCutOffLabel.text = "\(val)"
-  }
-  
-  // Reverb
-  @IBAction func changeReverbWetDry(sender: UISlider) {
-    setReverbWetDry(sender.value)
-  }
-  func setReverbWetDry(val: Float) {
-    reverb.wetDryMix = val
-    reverbDryWetLabel.text = "\(val)"
-  }
-  @IBAction func tapReverbPresets(sender: UIButton) {
-    ActionSheetStringPicker.showPickerWithTitle("Reverb presets", rows: reverbPresetsStrings, initialSelection: find(self.reverbPresetsStrings, reverbPresetsBtn.titleLabel!.text!)!, doneBlock: {
-      picker, value, index in
-        self.setReverbPresets(value)
-        return
-    }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
-  }
-  func setReverbPresets(index: Int) {
-    reverb.loadFactoryPreset(reverbPresetsEnums[index])
-    reverbPresetsBtn.setTitle(reverbPresetsStrings[index], forState: UIControlState.Normal)
   }
   
   // シリアル通信で送信
