@@ -385,7 +385,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         if accuracy_min != nil {
           let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
-          let beacon_min: Float = 2.3
+          let beacon_min: Float = 0.81
           let beacon_max: Float = 0.8
           let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:60)
           let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
@@ -400,7 +400,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           uart("E:\(float_val);")
           
 //          // for debug --------
-//          println(nearestBeacon)
+////          println(nearestBeacon)
 //          print(NSString(format: "%.3f ", accuracy))
 //          let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
 //          let arr = Array(count: percent, repeatedValue: "*")
