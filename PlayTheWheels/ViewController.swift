@@ -181,12 +181,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let uuid = UIDevice.currentDevice().identifierForVendor.UUIDString
     NSLog("uuid:\(uuid)")
     
-    let _default: AnyObject = defaults[uuid]! // default value of indivisual device
+    let _default: AnyObject? = defaults[uuid] // default value of indivisual device
     
-    if let konashi = _default["konashi"] as? String {
-      konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
-      konashiBtn.setTitle(konashiBtnDefaultLabel, forState: UIControlState.Normal)
+    if _default != nil {
+      if let konashi = _default!["konashi"] as? String {
+        konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
+        konashiBtn.setTitle(konashiBtnDefaultLabel, forState: UIControlState.Normal)
+      }
     }
+    
     
     
     // Sound
@@ -207,7 +210,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // AudioPlayerの準備
     // OneShot
-    let _toneDir: AnyObject = _default["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
+    var _toneDir: AnyObject = toneDirs.first!
+    if _default != nil {
+      _toneDir = _default!["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
+    }
+    
     var format: AVAudioFormat = initPlayers(_toneDir as! String)
 
     engine.connect(mixer, to: delay, format: format)
@@ -227,12 +234,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // Color
     // default値をセット
-    if let hue = _default["hue"] as? Float {
-      setHue(hue)
+    if _default != nil {
+      if let hue = _default!["hue"] as? Float {
+        setHue(hue)
+      }
+      if let saturation = _default!["saturation"] as? Float {
+        setSaturation(saturation)
+      }
     }
-    if let saturation = _default["saturation"] as? Float {
-      setSaturation(saturation)
-    }
+    
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
     
@@ -252,7 +262,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog("[Konashi] Connected!")
     }
     Konashi.shared().disconnectedHandler = {
-      NSLog("[Konashi] Disonnected")
+      NSLog("[Konashi] Disconnected")
       
       // button
       self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
@@ -300,9 +310,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 //      NSLog("[Konashi] UartRx \(data.description)")
 //    }
     
-    if let default_konashi = _default["konashi"] as? String {
-      NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-      findKonashiWithName(default_konashi)
+    if _default != nil {
+      if let default_konashi = _default!["konashi"] as? String {
+        NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
+        findKonashiWithName(default_konashi)
+      }
     }
   }
   
@@ -310,7 +322,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let res = Konashi.findWithName(konashiName)
     if res == KonashiResult.Success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
-      NSLog("[Konashi] Konashi.findWithName called and success")
+//      NSLog("[Konashi] Konashi.findWithName called and success")
 //      if connectionCheckTimer == nil || connectionCheckTimer.valid == false {
 //        NSLog("[Konashi] Start connection check")
 //        // 接続出来たかどうかの監視を開始
