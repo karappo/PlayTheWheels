@@ -25,6 +25,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var devices = NSMutableDictionary()
   var colors = NSMutableDictionary()
   
+  var commandLastCalls = NSMutableDictionary() // commandの最後に送信された時刻を記録
   
   @IBOutlet weak var arrow: UIImageView!
   
@@ -757,19 +758,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // シリアル通信で送信
   func uart(str: String){
     if Konashi.isConnected() {
-      // 連続して送信してしまわないように制限をかける
-      // TODO "コマンド毎"の連続送信時間で制限をかけるようにしたい
+      // コマンド毎の連続送信時間で制限をかける（Bコマンドなどが大量に送られるとKonashiとの接続が切れる）
       let cmd = (str as NSString).substringToIndex(1)
-      if (cmd == "B" || cmd == "e" || cmd == "i" || cmd == "b") && ElapsedTimeCounter.instance.getMillisec() < 10 {
-        println("ignore command (not send to Konashi) \(str)")
+      if let lastCall = commandLastCalls[cmd] as? NSDate {
+        let elapsed = Float(NSDate().timeIntervalSinceDate(lastCall))
+        if 0.01 < elapsed {
+          if Konashi.uartWriteString(str) == KonashiResult.Success {
+            commandLastCalls[cmd] = NSDate()
+          }
+        }
       }
       else {
-        if Konashi.uartWriteString(str) == KonashiResult.Failure {
-          NSLog("[Konashi] uartWriteString error")
+        if Konashi.uartWriteString(str) == KonashiResult.Success {
+          commandLastCalls[cmd] = NSDate()
         }
       }
     }
   }
+  
   
   func updateRotation(radian: Double) {
     
