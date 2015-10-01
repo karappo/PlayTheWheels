@@ -66,6 +66,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var saturationSlider2: UISlider!
   @IBOutlet weak var saturationLabel2: UILabel!
   @IBOutlet weak var brightnessLabel: UILabel!
+  @IBOutlet weak var brightnessSlider: UISlider!
   @IBOutlet weak var divideSlider: UISlider!
   @IBOutlet weak var divideLabel: UILabel!
   @IBOutlet weak var positionSlider: UISlider!
@@ -302,6 +303,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       self.sendPlayerType()
       self.updateInstrumentColor()
       self.updateEffectColor()
+      self.setBrightnessMin(self.brightnessSlider.value)
     }
 //    Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
 //      NSLog("[Konashi] UartRx \(data.description)")

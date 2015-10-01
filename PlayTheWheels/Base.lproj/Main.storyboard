@@ -241,7 +241,7 @@
                                             <action selector="changeSaturation2:" destination="vXZ-lx-hvc" eventType="valueChanged" id="jvk-Ax-Hcb"/>
                                         </connections>
                                     </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.14999999999999999" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="KGn-fR-pmC" userLabel="Saturation Slider">
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.10000000000000001" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="KGn-fR-pmC" userLabel="Saturation Slider">
                                         <rect key="frame" x="205" y="575" width="196" height="31"/>
                                         <connections>
                                             <action selector="changeBrightnessMin:" destination="vXZ-lx-hvc" eventType="valueChanged" id="LJ1-j4-8eB"/>
@@ -719,6 +719,7 @@
                         <outlet property="beaconSwitchMint1" destination="nsN-JM-1nA" id="6ef-t1-p3E"/>
                         <outlet property="beaconSwitchMint2" destination="m1e-Dy-Qbf" id="6pG-uS-zRr"/>
                         <outlet property="brightnessLabel" destination="Exj-al-a76" id="GkM-pw-p1i"/>
+                        <outlet property="brightnessSlider" destination="KGn-fR-pmC" id="XOX-aH-TsI"/>
                         <outlet property="colorView" destination="QDB-As-UOu" id="09f-bp-dFR"/>
                         <outlet property="colorView2" destination="f9r-tM-8wA" id="fci-AI-So1"/>
                         <outlet property="delayDelayTimeLabel" destination="pkk-M4-2nK" id="cAU-8v-Pn9"/>
