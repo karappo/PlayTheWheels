@@ -240,8 +240,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // Color
     loadInstrumentColor(toneDir as! NSString)
     
-    hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
-    saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
+    hueSlider2.setValue(0.66, animated: true)
+    saturationSlider2.setValue(1.0, animated: true)
     
     divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
     changeDivide(divideSlider)
@@ -249,8 +249,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     positionSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_POSITION)), animated: true)
     changePosition(positionSlider)
     
-    updateInstrumentColor()
-    updateEffectColor()
+    sendInstrumentColor()
+    sendEffectColor()
     
     // Konashi関係
     logKonashiStatus()
@@ -301,8 +301,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
       
       self.sendPlayerType()
-      self.updateInstrumentColor()
-      self.updateEffectColor()
+      self.sendInstrumentColor()
+      self.sendEffectColor()
       self.setBrightnessMin(self.brightnessSlider.value)
     }
 //    Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
@@ -495,29 +495,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Color
   
   @IBAction func changeHue(sender: UISlider) {
-    updateHue(sender.value)
+    setHue(sender.value)
   }
-  private func updateHue(val: Float) {
+  private func setHue(val: Float) {
     hueLabel.text = "\(val)"
-    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
-    updateInstrumentColor()
-  }
-  func setHue(val: Float) {
     hueSlider.setValue(val, animated: true)
-    updateHue(val)
+    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
+    sendInstrumentColor()
   }
   
   @IBAction func changeSaturation(sender: UISlider) {
-    updateSaturation(sender.value)
+    setSaturation(sender.value)
   }
-  private func updateSaturation(val: Float) {
+  private func setSaturation(val: Float) {
     saturationLabel.text = "\(val)"
-    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
-    updateInstrumentColor()
-  }
-  func setSaturation(val: Float) {
     saturationSlider.setValue(val, animated: true)
-    updateSaturation(val)
+    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
+    sendInstrumentColor()
   }
   
   @IBAction func tapBlack(sender: UIButton) {
@@ -529,27 +523,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBAction func changeHue2(sender: UISlider) {
     setHue2(sender.value)
   }
-  func updateHue2(val: Float) {
-    hueLabel2.text = "\(val)"
-    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_HUE)
-    updateEffectColor()
-  }
   func setHue2(val: Float) {
+    hueLabel2.text = "\(val)"
     hueSlider2.setValue(val, animated: true)
-    updateHue2(val)
+    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_HUE)
+    sendEffectColor()
   }
   
   @IBAction func changeSaturation2(sender: UISlider) {
-    updateSaturation2(sender.value)
-  }
-  func updateSaturation2(val: Float) {
-    saturationLabel2.text = "\(val)"
-    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
-    updateEffectColor()
+    setSaturation2(sender.value)
   }
   func setSaturation2(val: Float) {
+    saturationLabel2.text = "\(val)"
     saturationSlider2.setValue(val, animated: true)
-    updateSaturation2(val)
+    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
+    sendEffectColor()
   }
   
   @IBAction func tapBlack2(sender: UIButton) {
@@ -580,7 +568,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   
-  func updateInstrumentColor() {
+  func sendInstrumentColor() {
     let hue = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE))
     let saturation = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION))
     instrumentColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
@@ -591,7 +579,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
     uart("i:\(r).\(g).\(b);")
   }
-  func updateEffectColor() {
+  func sendEffectColor() {
     let hue = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE))
     let saturation = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION))
     effectColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
