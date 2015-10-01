@@ -251,6 +251,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     sendInstrumentColor()
     sendEffectColor()
+    setBrightnessMin(self.brightnessSlider.value)
     
     // Konashi関係
     logKonashiStatus()
@@ -569,8 +570,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   
   func sendInstrumentColor() {
-    let hue = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_HUE))
-    let saturation = CGFloat(UD.floatForKey(UD_KEY_INSTRUMENT_COLOR_SATURATION))
+    let hue = CGFloat(hueSlider.value)
+    let saturation = CGFloat(saturationSlider.value)
     instrumentColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
     
@@ -580,8 +581,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("i:\(r).\(g).\(b);")
   }
   func sendEffectColor() {
-    let hue = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE))
-    let saturation = CGFloat(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION))
+    let hue = CGFloat(hueSlider2.value)
+    let saturation = CGFloat(saturationSlider2.value)
     effectColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
 
