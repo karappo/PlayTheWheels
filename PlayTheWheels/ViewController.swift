@@ -22,7 +22,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_LED_DIVIDE = "led_divide"
   let UD_KEY_LED_POSITION = "led_position"
   
-  var defaults = NSMutableDictionary()
+  var devices = NSMutableDictionary()
+  var colors = NSMutableDictionary()
+  
   
   @IBOutlet weak var arrow: UIImageView!
   
@@ -136,24 +138,25 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
-    // A
-    defaults["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f", "hue":0.190, "saturation":1.0]
-    defaults["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e", "hue":0.190, "saturation":1.0]
-    // B
-    defaults["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d", "hue":0.678, "saturation":1.0]
-    defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.678, "saturation":1.0]
-    // C
-    defaults["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
-    defaults["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
-    // D
-    defaults["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.0, "saturation":1.0]
-    defaults["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.0, "saturation":1.0]
-    // E
-    defaults["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.720, "saturation":1.0]
-    defaults["3DA5A6AB-8CF6-4666-93DA-2D2526F774D5"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.720, "saturation":1.0]
-    // F
-    defaults["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
-    defaults["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
+    devices["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
+    devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"]
+    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"]
+    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"]
+    devices["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12"]
+    devices["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40"]
+    devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
+    devices["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
+    devices["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
+    devices["3DA5A6AB-8CF6-4666-93DA-2D2526F774D5"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
+    devices["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54"]
+    devices["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a"]
+    
+    colors["A"] = ["hue":0.190, "saturation":1.0]
+    colors["B"] = ["hue":0.678, "saturation":1.0]
+    colors["C"] = ["hue":0.893, "saturation":0.966]
+    colors["D"] = ["hue":0.0,   "saturation":1.0]
+    colors["E"] = ["hue":0.720, "saturation":1.0]
+    colors["F"] = ["hue":0.325, "saturation":1.0]
     
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
@@ -182,10 +185,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
-    let _default: AnyObject? = defaults[uuid] // default value of indivisual device
+    let device: AnyObject? = devices[uuid] // default value of indivisual device
     
-    if _default != nil {
-      if let konashi = _default!["konashi"] as? String {
+    if device != nil {
+      if let konashi = device!["konashi"] as? String {
         konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
         konashiBtn.setTitle(konashiBtnDefaultLabel, forState: UIControlState.Normal)
       }
@@ -211,12 +214,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // AudioPlayerの準備
     // OneShot
-    var _toneDir: AnyObject = toneDirs.first!
-    if _default != nil {
-      _toneDir = _default!["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
+    var toneDir: AnyObject = toneDirs.first!
+    if device != nil {
+      toneDir = device!["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
     }
     
-    var format: AVAudioFormat = initPlayers(_toneDir as! String)
+    var format: AVAudioFormat = initPlayers(toneDir as! String)
 
     engine.connect(mixer, to: delay, format: format)
     engine.connect(delay, to: engine.mainMixerNode, format: format)
@@ -234,12 +237,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Color
-    // default値をセット
-    if _default != nil {
-      if let hue = _default!["hue"] as? Float {
+    
+    let toneDirStr = toneDir as! NSString
+    let alphabet = toneDirStr.substringToIndex(1)
+    if let color: AnyObject = colors[alphabet] {
+      if let hue = color["hue"] as? Float {
         setHue(hue)
       }
-      if let saturation = _default!["saturation"] as? Float {
+      if let saturation = color["saturation"] as? Float {
         setSaturation(saturation)
       }
     }
@@ -311,8 +316,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 //      NSLog("[Konashi] UartRx \(data.description)")
 //    }
     
-    if _default != nil {
-      if let default_konashi = _default!["konashi"] as? String {
+    if device != nil {
+      if let default_konashi = device!["konashi"] as? String {
         NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
         findKonashiWithName(default_konashi)
       }
