@@ -237,17 +237,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Color
-    
-    let toneDirStr = toneDir as! NSString
-    let alphabet = toneDirStr.substringToIndex(1)
-    if let color: AnyObject = colors[alphabet] {
-      if let hue = color["hue"] as? Float {
-        setHue(hue)
-      }
-      if let saturation = color["saturation"] as? Float {
-        setSaturation(saturation)
-      }
-    }
+    loadInstrumentColor(toneDir as! NSString)
     
     hueSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_HUE), animated: true)
     saturationSlider2.setValue(UD.floatForKey(UD_KEY_EFFECT_COLOR_SATURATION), animated: true)
@@ -347,6 +337,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     findKonashiWithName(konashi)
   }
   
+  // toneDirから該当する色を読み込む
+  func loadInstrumentColor(toneDirStr: NSString) {
+    let alphabet = toneDirStr.substringToIndex(1)
+    if let color: AnyObject = colors[alphabet] {
+      if let hue = color["hue"] as? Float {
+        setHue(hue)
+      }
+      if let saturation = color["saturation"] as? Float {
+        setSaturation(saturation)
+      }
+    }
+  }
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     beaconManager.startRangingBeaconsInRegion(beaconRegion)
@@ -705,9 +707,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           layeredPlayers += [player]
         }
       }
-      
-      
     }
+    
+    // Color
+    loadInstrumentColor(toneDir as NSString)
+    
     return format
   }
   
