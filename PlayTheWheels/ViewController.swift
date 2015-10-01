@@ -263,15 +263,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // button
       self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
       
-      // 勝手に切断された場合にリトライする
-      if self.manualDisconnection == false {
-        // UserDefaultsから前回接続したKonashiを読み、接続を試みる
-        if let previously_connected_konashi = self.UD.stringForKey(self.UD_KEY_KONASHI) {
-          NSLog("[Konashi] Retry connecting to \(previously_connected_konashi) (previus connection) ...")
-          self.findKonashiWithName(previously_connected_konashi)
-        }
-      }
-      self.manualDisconnection = false
+//      // 勝手に切断された場合にリトライする
+//      if self.manualDisconnection == false {
+//        // UserDefaultsから前回接続したKonashiを読み、接続を試みる
+//        if let previously_connected_konashi = self.UD.stringForKey(self.UD_KEY_KONASHI) {
+//          NSLog("[Konashi] Retry connecting to \(previously_connected_konashi) (previus connection) ...")
+//          self.findKonashiWithName(previously_connected_konashi)
+//        }
+//      }
+//      self.manualDisconnection = false
     }
     Konashi.shared().readyHandler = {
       NSLog("[Konashi] Ready...")
