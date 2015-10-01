@@ -144,16 +144,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     defaults["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9", "hue":0.678, "saturation":1.0]
     // C
     defaults["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12", "hue":0.893, "saturation":0.966]
-    defaults["B82645CB-C5FF-4F43-9748-972C9898AAA9"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
+    defaults["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40", "hue":0.893, "saturation":0.966]
     // D
-    defaults["F9E71BAE-C361-4321-8143-DC51530DEAA6"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.0, "saturation":1.0]
-    defaults["CDBCED95-9BE3-4B64-AFFB-91A154BE54CA"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.0, "saturation":1.0]
+    defaults["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9", "hue":0.0, "saturation":1.0]
+    defaults["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3", "hue":0.0, "saturation":1.0]
     // E
-    defaults["93DF3E5F-F16C-4CD6-A569-352F9D0C2EAC"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.720, "saturation":1.0]
-    defaults["5C084510-6C2C-4FD0-B717-41B7B8AC48BD"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.720, "saturation":1.0]
+    defaults["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5", "hue":0.720, "saturation":1.0]
+    defaults["3DA5A6AB-8CF6-4666-93DA-2D2526F774D5"] = ["tone":"E-R", "konashi":"konashi2-f01c78", "hue":0.720, "saturation":1.0]
     // F
-    defaults["F7913919-28E4-4D25-89C8-87CD59E9570A"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
-    defaults["D7FB18F5-5CBB-4B4A-BD98-F6190BA1FEA7"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
+    defaults["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54", "hue":0.325, "saturation":1.0]
+    defaults["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a", "hue":0.325, "saturation":1.0]
     
     toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
