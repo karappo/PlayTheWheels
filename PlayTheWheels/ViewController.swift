@@ -34,7 +34,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var konashiBtnDefaultLabel = "Find Konashi"
   var manualDisconnection: Bool = false // Disconnectされた際に手動で切断されたのかどうかを判定するためのフラグ
   var connectionCheckTimer: NSTimer!
-  
+  var lastSendedCommand: NSString!
   @IBOutlet weak var uuidLabel: UILabel!
   
   // # Beacon Section
@@ -299,6 +299,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // LED2を点灯
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
       
+      self.sendPlayerType()
       self.updateInstrumentColor()
       self.updateEffectColor()
     }
@@ -335,6 +336,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let userInfo = connectionCheckTimer.userInfo as! Dictionary<String, AnyObject>
     let konashi = userInfo["konashi"] as! String
     findKonashiWithName(konashi)
+  }
+  
+  func sendPlayerType() {
+    switch playerType {
+    case PlayerType.OneShot:
+      uart("t:1;")
+    case PlayerType.LongShot:
+      uart("t:2;")
+    default:
+      NSLog("Error")
+    }
   }
   
   // toneDirから該当する色を読み込む
@@ -646,8 +658,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
-        uart("t:2;")
-        
         for (index, file) in enumerate(_tones) {
           var filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
           var fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
@@ -668,8 +678,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       else {
         setTonePlayerType(PlayerType.OneShot)
-        
-        uart("t:1;")
         
         for i in 1..<itemsCount+1 {
           let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
@@ -708,6 +716,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
     }
+    
+    sendPlayerType()
     
     // Color
     loadInstrumentColor(toneDir as NSString)
@@ -757,10 +767,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func uart(str: String){
     if Konashi.isConnected() {
       // 連続して送信してしまわないように制限をかける
-      // TODO uart全部ではなく、”同じコマンドの”連続送信時間で制限をかけるようにしたい
-      if 10 < ElapsedTimeCounter.instance.getMillisec() {
-        if Konashi.uartWriteString(str) == KonashiResult.Failure {
-          NSLog("[Konashi] KonashiResultFailure")
+      // TODO uart全部ではなく、”コマンド毎”の連続送信時間で制限をかけるようにしたい
+      let command = (str as NSString).substringToIndex(1)
+      if command != lastSendedCommand || 10 < ElapsedTimeCounter.instance.getMillisec() {
+        if Konashi.uartWriteString(str) == KonashiResult.Success {
+          lastSendedCommand = command
         }
       }
     }
