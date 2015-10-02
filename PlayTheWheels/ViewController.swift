@@ -303,8 +303,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
       
       self.sendPlayerType()
-      self.sendInstrumentColor()
       self.sendEffectColor()
+      self.sendInstrumentColor()
       self.setBrightnessMin(self.brightnessSlider.value)
     }
 //    Konashi.shared().uartRxCompleteHandler = {(data: NSData!) -> Void in
