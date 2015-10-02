@@ -142,8 +142,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     devices["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
     devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"]
-    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01cc5"]
-    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
+    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"]
+    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"]
     devices["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12"]
     devices["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40"]
     devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
