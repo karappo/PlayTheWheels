@@ -1,5 +1,7 @@
 # PlayTheWheels App for iOS
 
+This project operate with Arduino Project [ptw-wheel](https://github.com/karappo/ptw-wheel).
+
 ## Requirements
 
 - Ruby
