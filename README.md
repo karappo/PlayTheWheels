@@ -28,3 +28,11 @@ rbenv exec bundle install --path=vendor/bundle --binstubs=vendor/bin
 rbenv exec bundle exec pod install
 
 ```
+
+## License
+
+Copyright (c) 2015 Karappo Inc.
+
+All source code except [these sound files](fileshttps://github.com/karappo/PlayTheWheels/tree/master/PlayTheWheels/assets/tones) are released under the MIT license
+
+https://raw.githubusercontent.com/karappo/PlayTheWheels/master/LICENSE.txt
