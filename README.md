@@ -33,6 +33,6 @@ rbenv exec bundle exec pod install
 
 Copyright (c) 2015 Karappo Inc.
 
-All source code except [these sound files](fileshttps://github.com/karappo/PlayTheWheels/tree/master/PlayTheWheels/assets/tones) are released under the MIT license
+All source code except [these sound files](https://github.com/karappo/PlayTheWheels/tree/master/PlayTheWheels/assets/tones) are released under the MIT license
 
 https://raw.githubusercontent.com/karappo/PlayTheWheels/master/LICENSE.txt
