@@ -6,7 +6,7 @@ Main iOS app which detect rotation, make sounds and control LED via [ptw-wheel](
 - Ruby
 - [cocoapods](https://cocoapods.org/)
 
-## Recomends
+## Recommends
 
 - [rbenv](https://cocoapods.org/)
 - [bundler](https://cocoapods.org/)
