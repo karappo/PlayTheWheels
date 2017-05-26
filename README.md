@@ -29,7 +29,7 @@ rbenv exec bundle exec pod install
 
 ```
 
-## License
+## Licenses
 
 All source code by [Karappo Inc.](http://karappo.net) (except [these sound files](https://github.com/karappo/PlayTheWheels/tree/master/PlayTheWheels/assets/tones)) are released under the [MIT license](https://raw.githubusercontent.com/karappo/PlayTheWheels/master/LICENSE.txt).
 
