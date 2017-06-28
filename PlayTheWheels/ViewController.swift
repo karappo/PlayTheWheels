@@ -13,7 +13,7 @@ import CoreMotion
 class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // UserDefaults
-  let UD = NSUserDefaults.standardUserDefaults()
+  let UD = UserDefaults.standard
   let UD_KEY_KONASHI = "konashi"
   let UD_KEY_INSTRUMENT_COLOR_HUE = "instrument_color_hue"
   let UD_KEY_INSTRUMENT_COLOR_SATURATION = "instrument_color_saturation"
@@ -34,7 +34,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   @IBOutlet weak var konashiBtn: UIButton!
   var konashiBtnDefaultLabel = "Find Konashi"
   var manualDisconnection: Bool = false // Disconnectされた際に手動で切断されたのかどうかを判定するためのフラグ
-  var connectionCheckTimer: NSTimer!
+  var connectionCheckTimer: Timer!
   var lastSendedCommand: NSString!
   @IBOutlet weak var uuidLabel: UILabel!
   
@@ -102,7 +102,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Beacon
   let beaconManager = ESTBeaconManager()
-  let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
+  let beaconRegion = CLBeaconRegion(proximityUUID: UUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
   let effectBeacons = [
     // "major:minor":"key"
     "9152:49340" :"blueberry1",
@@ -114,7 +114,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   ]
   var beaconUIs:[String: [AnyObject]]!
   
-  let FM = NSFileManager.defaultManager()
+  let FM = FileManager.default
   
   let MM: CMMotionManager = CMMotionManager()
   let MM_UPDATE_INTERVAL = 0.01 // 更新周期 100Hz
@@ -160,7 +160,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     colors["E"] = ["hue":0.070, "saturation":1.0]
     colors["F"] = ["hue":0.190, "saturation":1.0]
     
-    toneDirs = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
+    toneDirs = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
     
     // Estimote Beacon
     beaconManager.delegate = self
@@ -183,7 +183,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // load settings
     // =============
     
-    let uuid = UIDevice.currentDevice().identifierForVendor.UUIDString
+    let uuid = UIDevice.currentDevice.identifierForVendor.UUIDString
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
@@ -192,7 +192,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if device != nil {
       if let konashi = device!["konashi"] as? String {
         konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
-        konashiBtn.setTitle(konashiBtnDefaultLabel, forState: UIControlState.Normal)
+        konashiBtn.setTitle(konashiBtnDefaultLabel, for: UIControlState())
       }
     }
     
@@ -211,12 +211,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     mixer = AVAudioMixerNode()
     
-    engine.attachNode(delay)
-    engine.attachNode(mixer)
+    engine.attach(delay)
+    engine.attach(mixer)
     
     // AudioPlayerの準備
     // OneShot
-    var toneDir: AnyObject = toneDirs.first!
+    var toneDir: AnyObject = toneDirs.first! as AnyObject
     if device != nil {
       toneDir = device!["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
     }
@@ -228,14 +228,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     engine.startAndReturnError(nil)
     
     // モーションセンサー
-    if MM.deviceMotionAvailable {
+    if MM.isDeviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
-      MM.startDeviceMotionUpdatesToQueue(NSOperationQueue.mainQueue()) {
+      MM.startDeviceMotionUpdatesToQueue(OperationQueue.main) {
         [weak self] (data: CMDeviceMotion!, error: NSError!) in
         
         let rotation = atan2(data.gravity.x, data.gravity.y) - M_PI
         self?.updateRotation(rotation)
-      }
+      } as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler
     }
     
     // Color
@@ -244,10 +244,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     hueSlider2.setValue(0.66, animated: true)
     saturationSlider2.setValue(1.0, animated: true)
     
-    divideSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_DIVIDE)), animated: true)
+    divideSlider.setValue(Float(UD.integer(forKey: UD_KEY_LED_DIVIDE)), animated: true)
     changeDivide(divideSlider)
     
-    positionSlider.setValue(Float(UD.integerForKey(UD_KEY_LED_POSITION)), animated: true)
+    positionSlider.setValue(Float(UD.integer(forKey: UD_KEY_LED_POSITION)), animated: true)
     changePosition(positionSlider)
     
     sendInstrumentColor()
@@ -319,7 +319,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
   }
   
-  func findKonashiWithName(konashiName: String) -> KonashiResult {
+  func findKonashiWithName(_ konashiName: String) -> KonashiResult {
     let res = Konashi.findWithName(konashiName)
     if res == KonashiResult.Success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
@@ -354,8 +354,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // toneDirから該当する色を読み込む
-  func loadInstrumentColor(toneDirStr: NSString) {
-    let alphabet = toneDirStr.substringToIndex(1)
+  func loadInstrumentColor(_ toneDirStr: NSString) {
+    let alphabet = toneDirStr.substring(to: 1)
     if let color: AnyObject = colors[alphabet] {
       if let hue = color["hue"] as? Float {
         setHue(hue)
@@ -365,12 +365,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
     }
   }
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     beaconManager.startRangingBeaconsInRegion(beaconRegion)
   }
   
-  override func viewDidDisappear(animated: Bool) {
+  override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     beaconManager.stopRangingBeaconsInRegion(beaconRegion)
   }
@@ -387,7 +387,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("--------------------------------")
   }
   // Beacon
-  func beaconManager(manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
+  func beaconManager(_ manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
       if let _beacons = beacons as? [CLBeacon] {
         
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
@@ -429,7 +429,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 //          println(nearestBeacon)
           print(NSString(format: "%.3f ", accuracy))
           let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
-          let arr = Array(count: percent, repeatedValue: "*")
+          let arr = Array(repeating: "*", count: percent)
           
           if 0<arr.count {
             if 100<=percent {
@@ -450,25 +450,25 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // in_min～in_max内のxをout_min〜out_max内の値に変換して返す
-  private func map(x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Float{
+  fileprivate func map(_ x: Float, in_min: Float, in_max: Float, out_min: Float, out_max: Float) -> Float{
     // restrict 'x' in 'in' range
     let x_in_range = in_min < in_max ? max(min(x, in_max), in_min) : max(min(x, in_min), in_max)
     return (x_in_range - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   }
   
   
-  @IBAction func tapFind(sender: UIButton) {
+  @IBAction func tapFind(_ sender: UIButton) {
     if Konashi.isConnected() {
       var alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .Alert)
       
-      let otherAction = UIAlertAction(title: "Disconnect", style: .Default) {
+      let otherAction = UIAlertAction(title: "Disconnect", style: .default) {
         action in
         
           // LED2を消灯
           Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.Low)
         
           // LEDが消灯するのに時間が必要なので遅延させる
-          NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "disconnectKonashi", userInfo: nil, repeats: false)
+          Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ViewController.disconnectKonashi), userInfo: nil, repeats: false)
       }
       let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) {
         action in
@@ -496,75 +496,75 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Color
   
-  @IBAction func changeHue(sender: UISlider) {
+  @IBAction func changeHue(_ sender: UISlider) {
     setHue(sender.value)
   }
-  private func setHue(val: Float) {
+  fileprivate func setHue(_ val: Float) {
     hueLabel.text = "\(val)"
     hueSlider.setValue(val, animated: true)
-    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
+    UD.set(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_HUE)
     sendInstrumentColor()
   }
   
-  @IBAction func changeSaturation(sender: UISlider) {
+  @IBAction func changeSaturation(_ sender: UISlider) {
     setSaturation(sender.value)
   }
-  private func setSaturation(val: Float) {
+  fileprivate func setSaturation(_ val: Float) {
     saturationLabel.text = "\(val)"
     saturationSlider.setValue(val, animated: true)
-    UD.setObject(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
+    UD.set(CGFloat(val), forKey: UD_KEY_INSTRUMENT_COLOR_SATURATION)
     sendInstrumentColor()
   }
   
-  @IBAction func tapBlack(sender: UIButton) {
+  @IBAction func tapBlack(_ sender: UIButton) {
     uart("i:000,000,000;\n")
     instrumentColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
   }
   
-  @IBAction func changeHue2(sender: UISlider) {
+  @IBAction func changeHue2(_ sender: UISlider) {
     setHue2(sender.value)
   }
-  func setHue2(val: Float) {
+  func setHue2(_ val: Float) {
     hueLabel2.text = "\(val)"
     hueSlider2.setValue(val, animated: true)
-    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_HUE)
+    UD.set(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_HUE)
     sendEffectColor()
   }
   
-  @IBAction func changeSaturation2(sender: UISlider) {
+  @IBAction func changeSaturation2(_ sender: UISlider) {
     setSaturation2(sender.value)
   }
-  func setSaturation2(val: Float) {
+  func setSaturation2(_ val: Float) {
     saturationLabel2.text = "\(val)"
     saturationSlider2.setValue(val, animated: true)
-    UD.setObject(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
+    UD.set(CGFloat(val), forKey: UD_KEY_EFFECT_COLOR_SATURATION)
     sendEffectColor()
   }
   
-  @IBAction func tapBlack2(sender: UIButton) {
+  @IBAction func tapBlack2(_ sender: UIButton) {
     uart("e:000,000,000;\n")
     effectColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
   }
   
-  @IBAction func changeBrightnessMin(sender: UISlider) {
+  @IBAction func changeBrightnessMin(_ sender: UISlider) {
     setBrightnessMin(sender.value)
   }
-  func setBrightnessMin(val: Float) {
+  func setBrightnessMin(_ val: Float) {
     brightnessLabel.text = "\(val)"
     uart("b:\(val);")
   }
   
-  @IBAction func changeDivide(sender: UISlider) {
+  @IBAction func changeDivide(_ sender: UISlider) {
     let val = Int(sender.value)
-    UD.setObject(val, forKey: UD_KEY_LED_DIVIDE)
+    UD.set(val, forKey: UD_KEY_LED_DIVIDE)
     divideLabel.text = "\(val)"
     uart("t:0;d:\(val);")
   }
-  @IBAction func changePosition(sender: UISlider) {
+  @IBAction func changePosition(_ sender: UISlider) {
     let val = Int(sender.value)
-    UD.setObject(val, forKey: UD_KEY_LED_POSITION)
+    UD.set(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
     uart("t:0;p:\(Float(val)/100);")
   }
@@ -576,7 +576,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     instrumentColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
     
-    let r = NSString(format: "%03d", Int(instrumentColor.getRed()))
+    let r = NSString(format: "%03d", Int(instrumentColor.getRed(<#UnsafeMutablePointer<CGFloat>?#>, green: <#UnsafeMutablePointer<CGFloat>?#>, blue: <#UnsafeMutablePointer<CGFloat>?#>, alpha: <#UnsafeMutablePointer<CGFloat>?#>)))
     let g = NSString(format: "%03d", Int(instrumentColor.getGreen()))
     let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
     uart("i:\(r).\(g).\(b);")
@@ -587,7 +587,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     effectColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
 
-    let r = NSString(format: "%03d", Int(effectColor.getRed()))
+    let r = NSString(format: "%03d", Int(effectColor.getRed(<#UnsafeMutablePointer<CGFloat>?#>, green: <#UnsafeMutablePointer<CGFloat>?#>, blue: <#UnsafeMutablePointer<CGFloat>?#>, alpha: <#UnsafeMutablePointer<CGFloat>?#>)))
     let g = NSString(format: "%03d", Int(effectColor.getGreen()))
     let b = NSString(format: "%03d", Int(effectColor.getBlue()))
     uart("e:\(r).\(g).\(b);")
@@ -595,7 +595,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Tone
   
-  @IBAction func tapToneName(sender: UIButton) {
+  @IBAction func tapToneName(_ sender: UIButton) {
     let initial: Int = find(toneDirs, toneNameBtn.titleLabel!.text!)!
     ActionSheetStringPicker.showPickerWithTitle("Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
@@ -607,28 +607,28 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // AVAudioPlayerNode の生成やAudioFileの設定
   // その他のノードの初期化のために、最初のAudioFileのAVAudioFormatを返す
-  func initPlayers(toneDir: String) -> AVAudioFormat!{
+  func initPlayers(_ toneDir: String) -> AVAudioFormat!{
     
-    toneNameBtn.setTitle(toneDir, forState: UIControlState.Normal)
+    toneNameBtn.setTitle(toneDir, for: UIControlState())
     
     var format: AVAudioFormat! = nil
     if 1<audioFiles.count {
-      audioFiles.removeAll(keepCapacity: false)
+      audioFiles.removeAll(keepingCapacity: false)
     }
     
     // cleanup players
     for player in players {
-      if player.playing {
+      if player.isPlaying {
         player.stop()
       }
       engine.disconnectNodeInput(player)
     }
-    players.removeAll(keepCapacity: false)
+    players.removeAll(keepingCapacity: false)
     
     
     // ------------
     
-    var items = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil) as! [String]
+    var items = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil) as! [String]
     
     // wavファイル以外は無視
     items = items.filter { (name: String) -> Bool in
@@ -641,8 +641,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if 0 < itemsCount {
       
       // 左用の音かどうか判定（Lで終わっていたら左）
-      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpressionOptions.allZeros, error: nil)
-      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
+      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpression.Options.allZeros, error: nil)
+      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSRegularExpression.MatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
       let _tones = isLeft ? ["02","01"] : ["01","02"]
       
       // switch player type
@@ -651,13 +651,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         setTonePlayerType(PlayerType.LongShot)
         
         for (index, file) in enumerate(_tones) {
-          var filePath: String = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(file)", ofType: "wav")!
-          var fileURL: NSURL = NSURL(fileURLWithPath: filePath)!
+          var filePath: String = Bundle.main.path(forResource: "tones/\(toneDir)/\(file)", ofType: "wav")!
+          var fileURL: URL = URL(fileURLWithPath: filePath)!
           var audioFile = AVAudioFile(forReading: fileURL, error: nil)
           var audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
           var player = AVAudioPlayerNode()
-          engine.attachNode(player)
+          engine.attach(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 0.0
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
@@ -692,15 +692,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       // set layeredPlayer
       for (index, file) in enumerate(_tones) {
-        let layeredTones = FM.contentsOfDirectoryAtPath("\(NSBundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
+        let layeredTones = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
         if 0 < layeredTones!.count {
-          let filePath = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/layered/\(file)", ofType: "wav")!
-          let fileURL = NSURL(fileURLWithPath: filePath)!
+          let filePath = Bundle.main.path(forResource: "tones/\(toneDir)/layered/\(file)", ofType: "wav")!
+          let fileURL = URL(fileURLWithPath: filePath)!
           let audioFile = AVAudioFile(forReading: fileURL, error: nil)
           let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
           let player = AVAudioPlayerNode()
-          engine.attachNode(player)
+          engine.attach(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 0.0
           player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
@@ -717,7 +717,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     return format
   }
   
-  func setTonePlayerType(type: PlayerType) {
+  func setTonePlayerType(_ type: PlayerType) {
     playerType = type
     tonePlayerTypeLabel.text = type.rawValue
   }
@@ -726,64 +726,64 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // ======
   
   // Delay
-  @IBAction func changeDelayWetDry(sender: UISlider) {
+  @IBAction func changeDelayWetDry(_ sender: UISlider) {
     setDelayWetDry(sender.value)
   }
-  func setDelayWetDry(val: Float) {
+  func setDelayWetDry(_ val: Float) {
     delay.wetDryMix = val
     delayDryWetLabel.text = "\(val)"
   }
-  @IBAction func changeDelayDelayTime(sender: UISlider) {
+  @IBAction func changeDelayDelayTime(_ sender: UISlider) {
     setDelayDelayTime(sender.value)
   }
-  func setDelayDelayTime(val: Float) {
-    delay.delayTime = NSTimeInterval(val)
+  func setDelayDelayTime(_ val: Float) {
+    delay.delayTime = TimeInterval(val)
     delayDelayTimeLabel.text = "\(val)"
   }
-  @IBAction func changeDelayFeedback(sender: UISlider) {
+  @IBAction func changeDelayFeedback(_ sender: UISlider) {
     setDelayFeedback(sender.value)
   }
-  func setDelayFeedback(val: Float) {
+  func setDelayFeedback(_ val: Float) {
     delay.feedback = val
     delayFeedbackLabel.text = "\(val)"
   }
-  @IBAction func changeDelayLowPassCutOff(sender: UISlider) {
+  @IBAction func changeDelayLowPassCutOff(_ sender: UISlider) {
     setDelayLowPassCutOff(sender.value)
   }
-  func setDelayLowPassCutOff(val: Float) {
+  func setDelayLowPassCutOff(_ val: Float) {
     delay.lowPassCutoff = val
     delayLowPassCutOffLabel.text = "\(val)"
   }
   
   // シリアル通信で送信
-  func uart(str: String){
+  func uart(_ str: String){
     if Konashi.isConnected() {
       // コマンド毎の連続送信時間で制限をかける（Bコマンドなどが大量に送られるとKonashiとの接続が切れる）
-      let cmd = (str as NSString).substringToIndex(1)
-      if let lastCall = commandLastCalls[cmd] as? NSDate {
-        let elapsed = Float(NSDate().timeIntervalSinceDate(lastCall))
+      let cmd = (str as NSString).substring(to: 1)
+      if let lastCall = commandLastCalls[cmd] as? Date {
+        let elapsed = Float(Date().timeIntervalSince(lastCall))
         if 0.01 < elapsed {
           if Konashi.uartWriteString(str) == KonashiResult.Success {
-            commandLastCalls[cmd] = NSDate()
+            commandLastCalls[cmd] = Date()
           }
         }
       }
       else {
         if Konashi.uartWriteString(str) == KonashiResult.Success {
-          commandLastCalls[cmd] = NSDate()
+          commandLastCalls[cmd] = Date()
         }
       }
     }
   }
   
   
-  func updateRotation(radian: Double) {
+  func updateRotation(_ radian: Double) {
     
     let currentDeg = radiansToDegrees(radian)
 //    let variation = Float(prevDeg - current_deg)
     let _variation = variation(prevDeg, current: currentDeg)
     
-    arrow.transform = CGAffineTransformMakeRotation(CGFloat(radian))
+    arrow.transform = CGAffineTransform(rotationAngle: CGFloat(radian))
     
     // 変化量
     // 実際の車輪のスピードの範囲とうまくマッピングする
@@ -811,12 +811,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           // Sound
           let audioFile: AVAudioFile = audioFiles[index] as AVAudioFile
           let player: AVAudioPlayerNode = players[index] as AVAudioPlayerNode
-          if player.playing {
+          if player.isPlaying {
             player.stop()
           }
           
           // playerにオーディオファイルを設定　※ 再生直前にセットしないと再生されない？
-          player.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+          player.scheduleFile(audioFile, at: nil, completionHandler: nil)
           
           // 再生開始
           player.play()
@@ -829,12 +829,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // LongShot
       
       for player in players {
-        if !player.playing {
+        if !player.isPlaying {
           player.play()
         }
       }
       for player in layeredPlayers {
-        if !player.playing {
+        if !player.isPlaying {
           player.play()
         }
       }
@@ -869,12 +869,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     prevDeg = currentDeg
   }
   
-  func radiansToDegrees(value: Double) -> Double {
+  func radiansToDegrees(_ value: Double) -> Double {
     return value * 180.0 / M_PI + 360.0
   }
   
   // 0 <= value < 360 の範囲に値を収める
-  private func restrict(value: Double) -> Double {
+  fileprivate func restrict(_ value: Double) -> Double {
     var deg = value
     if deg < 0.0 {
       deg += 360
@@ -886,7 +886,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // 引数で与えた角度の中に含まれるスリットのindexを配列にして返す
-  private func slitIndexInRange(prev: Double, current: Double) -> Array<Int> {
+  fileprivate func slitIndexInRange(_ prev: Double, current: Double) -> Array<Int> {
     if prev == current {
       return []
     }
@@ -915,7 +915,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // 変化量を計算（359°->2°などに変化した時に正しく回転方向を算出）
   // [left wheel]  forward: plus, back: minus
   // [right wheel] forward: minus, back: plus
-  private func variation(prev: Double, current: Double) -> Float {
+  fileprivate func variation(_ prev: Double, current: Double) -> Float {
     let diff = abs(prev - current)
     
     if 180 < diff {
@@ -933,7 +933,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 internal extension Array {
   
   //  If the index is out of bounds it's assumed relative
-  func relativeIndex (index: Int) -> Int {
+  func relativeIndex (_ index: Int) -> Int {
     var _index = (index % count)
     
     if _index < 0 {
@@ -943,7 +943,7 @@ internal extension Array {
     return _index
   }
   
-  func get (index: Int) -> Element? {
+  func get (_ index: Int) -> Element? {
     let _index = relativeIndex(index)
     return _index < count ? self[_index] : nil
   }
@@ -961,12 +961,12 @@ class ElapsedTimeCounter {
     return Static.instance
   }
   
-  private var lastDate: NSDate?
+  fileprivate var lastDate: Date?
   
   func getMillisec() -> Int? {
-    let now = NSDate()
+    let now = Date()
     if let date = lastDate {
-      let elapsed = now.timeIntervalSinceDate(date)
+      let elapsed = now.timeIntervalSince(date)
       lastDate = now
       
       return Int(elapsed * 1000.0)

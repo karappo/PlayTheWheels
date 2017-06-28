@@ -202,9 +202,11 @@
 					E7509F581B7C4DDA001C54E8 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 472W38UNCE;
+						LastSwiftMigration = 0830;
 					};
 					E7509F6D1B7C4DDB001C54E8 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0830;
 						TestTargetID = E7509F581B7C4DDA001C54E8;
 					};
 				};
@@ -415,6 +417,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -430,6 +433,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -448,6 +452,7 @@
 				INFOPLIST_FILE = PlayTheWheelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayTheWheels.app/PlayTheWheels";
 			};
 			name = Debug;
@@ -463,6 +468,7 @@
 				INFOPLIST_FILE = PlayTheWheelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayTheWheels.app/PlayTheWheels";
 			};
 			name = Release;
