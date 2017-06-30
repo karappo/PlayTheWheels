@@ -9,10 +9,10 @@ target 'PlayTheWheels' do
 
   target 'PlayTheWheelsTests' do
     inherit! :search_paths
-    pod 'konashi-ios-sdk', '~> 4.0.0'
+    pod 'konashi-ios-sdk'
     pod 'Colorkit'
     pod 'EstimoteSDK'
-    pod 'ActionSheetPicker-3.0', '~> 1.7.1'
+    pod 'ActionSheetPicker-3.0'
   end
 
 end
