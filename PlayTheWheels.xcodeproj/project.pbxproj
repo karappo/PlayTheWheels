@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6FCD7F108AC5B7163B81E88A /* Pods_PlayTheWheelsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DBE115B077A07C948FD72DA /* Pods_PlayTheWheelsTests.framework */; };
-		85FD8EAECB36F52E4582D535 /* Pods_PlayTheWheels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B99053277FA2B44D5D63B460 /* Pods_PlayTheWheels.framework */; };
+		8B089F054C88EF6B5B8102AE /* libPods-PlayTheWheels.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */; };
 		E7509F5F1B7C4DDA001C54E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F5E1B7C4DDA001C54E8 /* AppDelegate.swift */; };
 		E7509F611B7C4DDA001C54E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F601B7C4DDA001C54E8 /* ViewController.swift */; };
 		E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7509F621B7C4DDB001C54E8 /* Main.storyboard */; };
@@ -32,9 +31,6 @@
 		2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheels.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels.release.xcconfig"; sourceTree = "<group>"; };
 		4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheels.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels.debug.xcconfig"; sourceTree = "<group>"; };
 		4DBE115B077A07C948FD72DA /* Pods_PlayTheWheelsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayTheWheelsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F1EC9C1585FE81B2592E41E /* Pods-PlayTheWheelsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheelsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheelsTests/Pods-PlayTheWheelsTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B99053277FA2B44D5D63B460 /* Pods_PlayTheWheels.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayTheWheels.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8407D68C850FCC8E4328A80 /* Pods-PlayTheWheelsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheelsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheelsTests/Pods-PlayTheWheelsTests.release.xcconfig"; sourceTree = "<group>"; };
 		E74BD6421F09F6D200F7DBCE /* Pods_PlayTheWheelsTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_PlayTheWheelsTests.framework; path = "Pods/../build/Debug-iphoneos/Pods_PlayTheWheelsTests.framework"; sourceTree = "<group>"; };
 		E7509F591B7C4DDA001C54E8 /* PlayTheWheels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayTheWheels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7509F5D1B7C4DDA001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,6 +44,7 @@
 		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
 		E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
 		E7CB6BB11B8D746500E01C91 /* tones */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tones; path = PlayTheWheels/assets/tones; sourceTree = "<group>"; };
+		E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PlayTheWheels.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85FD8EAECB36F52E4582D535 /* Pods_PlayTheWheels.framework in Frameworks */,
+				8B089F054C88EF6B5B8102AE /* libPods-PlayTheWheels.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FCD7F108AC5B7163B81E88A /* Pods_PlayTheWheelsTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,8 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				E74BD6421F09F6D200F7DBCE /* Pods_PlayTheWheelsTests.framework */,
-				B99053277FA2B44D5D63B460 /* Pods_PlayTheWheels.framework */,
 				4DBE115B077A07C948FD72DA /* Pods_PlayTheWheelsTests.framework */,
+				E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -85,8 +81,6 @@
 			children = (
 				4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */,
 				2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */,
-				9F1EC9C1585FE81B2592E41E /* Pods-PlayTheWheelsTests.debug.xcconfig */,
-				D8407D68C850FCC8E4328A80 /* Pods-PlayTheWheelsTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -198,12 +192,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7509F7B1B7C4DDB001C54E8 /* Build configuration list for PBXNativeTarget "PlayTheWheelsTests" */;
 			buildPhases = (
-				0815510199D270FDD8513C65 /* [CP] Check Pods Manifest.lock */,
 				E7509F6A1B7C4DDB001C54E8 /* Sources */,
 				E7509F6B1B7C4DDB001C54E8 /* Frameworks */,
 				E7509F6C1B7C4DDB001C54E8 /* Resources */,
-				85E65F579083156431E3BAC5 /* [CP] Embed Pods Frameworks */,
-				9BF0D757F57153D26534DBA2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -277,51 +268,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0815510199D270FDD8513C65 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		85E65F579083156431E3BAC5 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PlayTheWheelsTests/Pods-PlayTheWheelsTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9BF0D757F57153D26534DBA2 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PlayTheWheelsTests/Pods-PlayTheWheelsTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A0C0DC17562C6F88D7F361D7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,7 +490,6 @@
 		};
 		E7509F7C1B7C4DDB001C54E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F1EC9C1585FE81B2592E41E /* Pods-PlayTheWheelsTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -566,7 +511,6 @@
 		};
 		E7509F7D1B7C4DDB001C54E8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D8407D68C850FCC8E4328A80 /* Pods-PlayTheWheelsTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

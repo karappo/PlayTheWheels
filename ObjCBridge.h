@@ -3,5 +3,5 @@
 //
 #import "Konashi.h"
 #import "Colorkit.h"
-#import "EstimoteSDK.h"
+#import <EstimoteSDK/EstimoteSDK.h>
 #import "ActionSheetPicker.h"
