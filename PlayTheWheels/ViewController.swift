@@ -576,7 +576,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     instrumentColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
     
-    let r = NSString(format: "%03d", Int(instrumentColor.getRed(<#UnsafeMutablePointer<CGFloat>?#>, green: <#UnsafeMutablePointer<CGFloat>?#>, blue: <#UnsafeMutablePointer<CGFloat>?#>, alpha: <#UnsafeMutablePointer<CGFloat>?#>)))
+    let r = NSString(format: "%03d", Int(instrumentColor.getRed()))
     let g = NSString(format: "%03d", Int(instrumentColor.getGreen()))
     let b = NSString(format: "%03d", Int(instrumentColor.getBlue()))
     uart("i:\(r).\(g).\(b);")
@@ -587,7 +587,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     effectColor = UIColor(hue: hue, saturation: saturation, brightness: 1.0, alpha: 1.0)
     colorView2.backgroundColor = effectColor
 
-    let r = NSString(format: "%03d", Int(effectColor.getRed(<#UnsafeMutablePointer<CGFloat>?#>, green: <#UnsafeMutablePointer<CGFloat>?#>, blue: <#UnsafeMutablePointer<CGFloat>?#>, alpha: <#UnsafeMutablePointer<CGFloat>?#>)))
+    let r = NSString(format: "%03d", Int(effectColor.getRed()))
     let g = NSString(format: "%03d", Int(effectColor.getGreen()))
     let b = NSString(format: "%03d", Int(effectColor.getBlue()))
     uart("e:\(r).\(g).\(b);")
