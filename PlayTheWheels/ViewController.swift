@@ -102,7 +102,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Beacon
   let beaconManager = ESTBeaconManager()
-  let beaconRegion = CLBeaconRegion(proximityUUID: UUID(UUIDString: "B8A63B91-CB83-4701-8093-62084BFA40B4"), identifier: "ranged region")
+  let beaconRegion = CLBeaconRegion(proximityUUID: UUID(uuidString: "B8A63B91-CB83-4701-8093-62084BFA40B4")!, identifier: "ranged region")
   let effectBeacons = [
     // "major:minor":"key"
     "9152:49340" :"blueberry1",
@@ -183,11 +183,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // load settings
     // =============
     
-    let uuid = UIDevice.currentDevice.identifierForVendor.UUIDString
+    let uuid = UIDevice.current.identifierForVendor!.uuidString
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
-    let device: AnyObject? = devices[uuid] // default value of indivisual device
+    let device: AnyObject? = devices[uuid] as AnyObject // default value of indivisual device
     
     if device != nil {
       if let konashi = device!["konashi"] as? String {
@@ -264,7 +264,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog("[Konashi] Disconnected")
       
       // button
-      self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, forState: UIControlState.Normal)
+      self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, for: [])
       
 //      // 勝手に切断された場合にリトライする
 //      if self.manualDisconnection == false {
@@ -280,7 +280,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       NSLog("[Konashi] Ready...")
       
       // stop timer
-      if self.connectionCheckTimer != nil && self.connectionCheckTimer.valid {
+      if self.connectionCheckTimer != nil && self.connectionCheckTimer.isValid {
         NSLog("[Konashi] Stop connection check")
         self.connectionCheckTimer.invalidate()
       }
@@ -289,18 +289,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       let konashiName = Konashi.peripheralName()
       
-      self.UD.setObject(konashiName, forKey: self.UD_KEY_KONASHI)
+      self.UD.set(konashiName, forKey: self.UD_KEY_KONASHI)
       
       
       // button
-      self.konashiBtn.setTitle("[Connected] \(konashiName)", forState: UIControlState.Normal)
+      self.konashiBtn.setTitle("[Connected] \(konashiName)", for: [])
       
       // Konashi setting
-      Konashi.uartMode(KonashiUartMode.Enable, baudrate: KonashiUartBaudrate.Rate9K6)
-      Konashi.pinMode(KonashiDigitalIOPin.DigitalIO1, mode: KonashiPinMode.Output)
+      Konashi.uartMode(KonashiUartMode.enable, baudrate: KonashiUartBaudrate.rate9K6)
+      Konashi.pinMode(KonashiDigitalIOPin.digitalIO1, mode: KonashiPinMode.output)
       
       // LED2を点灯
-      Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.High)
+      Konashi.digitalWrite(KonashiDigitalIOPin.digitalIO1, value: KonashiLevel.high)
       
       self.sendPlayerType()
       self.sendEffectColor()
@@ -320,8 +320,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   func findKonashiWithName(_ konashiName: String) -> KonashiResult {
-    let res = Konashi.findWithName(konashiName)
-    if res == KonashiResult.Success {
+    let res = Konashi.find(withName: konashiName)
+    if res == KonashiResult.success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
 //      NSLog("[Konashi] Konashi.findWithName called and success")
 //      if connectionCheckTimer == nil || connectionCheckTimer.valid == false {
@@ -367,12 +367,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    beaconManager.startRangingBeaconsInRegion(beaconRegion)
+    beaconManager.startRangingBeacons(in: beaconRegion)
   }
   
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
-    beaconManager.stopRangingBeaconsInRegion(beaconRegion)
+    beaconManager.stopRangingBeacons(in: beaconRegion)
   }
 
   override func didReceiveMemoryWarning() {
@@ -399,7 +399,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let _switch: UISwitch = beaconUI?[0] as! UISwitch
             let _slider: UISlider = beaconUI?[1] as! UISlider
             
-            if _switch.on {
+            if _switch.isOn {
               if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min {
                 accuracy_min = Float(_beacon.accuracy)
                 nearestBeacon = beaconName
@@ -433,16 +433,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           
           if 0<arr.count {
             if 100<=percent {
-              print(join("", arr))
-              println()
+              print(arr.joined(separator: ""))
+              print()
             }
             else {
-              println(join("", arr))
+              print(arr.joined(separator: ""))
             }
             
           }
           else {
-            println()
+            print()
           }
           // / for debug --------
         }
@@ -459,18 +459,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapFind(_ sender: UIButton) {
     if Konashi.isConnected() {
-      var alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .Alert)
+      var alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .alert)
       
       let otherAction = UIAlertAction(title: "Disconnect", style: .default) {
         action in
         
           // LED2を消灯
-          Konashi.digitalWrite(KonashiDigitalIOPin.DigitalIO1, value: KonashiLevel.Low)
+          Konashi.digitalWrite(KonashiDigitalIOPin.digitalIO1, value: KonashiLevel.low)
         
           // LEDが消灯するのに時間が必要なので遅延させる
           Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ViewController.disconnectKonashi), userInfo: nil, repeats: false)
       }
-      let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) {
+      let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {
         action in
           NSLog("[Konashi] Cancel disconnecting \(Konashi.peripheralName())")
       }
@@ -479,7 +479,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       alertController.addAction(otherAction)
       alertController.addAction(cancelAction)
       
-      presentViewController(alertController, animated: true, completion: nil)
+      present(alertController, animated: true, completion: nil)
 
     }
     else {
@@ -596,7 +596,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // Tone
   
   @IBAction func tapToneName(_ sender: UIButton) {
-    let initial: Int = find(toneDirs, toneNameBtn.titleLabel!.text!)!
+    let initial: Int = toneDirs.index(of: toneNameBtn.titleLabel!.text!)!
     ActionSheetStringPicker.showPickerWithTitle("Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
         let key: String = "\(index)"
@@ -642,7 +642,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       // 左用の音かどうか判定（Lで終わっていたら左）
       var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpression.Options.allZeros, error: nil)
-      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSRegularExpression.MatchingOptions.allZeros, range: NSMakeRange(0, count(toneDir))) != nil
+      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSRegularExpression.MatchingOptions.allZeros, range: NSMakeRange(0, toneDir.count)) != nil
       let _tones = isLeft ? ["02","01"] : ["01","02"]
       
       // switch player type
@@ -650,7 +650,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
-        for (index, file) in enumerate(_tones) {
+        for (index, file) in _tones.enumerated() {
           var filePath: String = Bundle.main.path(forResource: "tones/\(toneDir)/\(file)", ofType: "wav")!
           var fileURL: URL = URL(fileURLWithPath: filePath)!
           var audioFile = AVAudioFile(forReading: fileURL, error: nil)
@@ -691,7 +691,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       // set layeredPlayer
-      for (index, file) in enumerate(_tones) {
+      for (index, file) in _tones.enumerated() {
         let layeredTones = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
         if 0 < layeredTones!.count {
           let filePath = Bundle.main.path(forResource: "tones/\(toneDir)/layered/\(file)", ofType: "wav")!
@@ -763,13 +763,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if let lastCall = commandLastCalls[cmd] as? Date {
         let elapsed = Float(Date().timeIntervalSince(lastCall))
         if 0.01 < elapsed {
-          if Konashi.uartWriteString(str) == KonashiResult.Success {
+          if Konashi.uartWrite(str) == KonashiResult.success {
             commandLastCalls[cmd] = Date()
           }
         }
       }
       else {
-        if Konashi.uartWriteString(str) == KonashiResult.Success {
+        if Konashi.uartWrite(str) == KonashiResult.success {
           commandLastCalls[cmd] = Date()
         }
       }
@@ -870,7 +870,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   func radiansToDegrees(_ value: Double) -> Double {
-    return value * 180.0 / M_PI + 360.0
+    return value * 180.0 / .pi + 360.0
   }
   
   // 0 <= value < 360 の範囲に値を収める
