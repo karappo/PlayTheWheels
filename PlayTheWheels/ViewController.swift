@@ -194,7 +194,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
-    let device: NSMutableDictionary = devices[uuid] as! NSMutableDictionary // default value of indivisual device
+    let device: NSMutableDictionary
+    if devices[uuid] != nil {
+      device = devices[uuid] as! NSMutableDictionary
+    }
+    else {
+      NSLog("Not found device configuration")
+      device = devices[devices.allKeys.first!] as! NSMutableDictionary
+    }
     
     if let konashi = device.value(forKey: "konashi") as? String {
       konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
