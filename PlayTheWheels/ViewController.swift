@@ -179,7 +179,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // AudioPlayerの準備
     // OneShot
     var toneDir: String = toneDirs.first!
-    toneDir = (device.value(forKey: "tone") as! String) ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
+    toneDir = device.value(forKey: "tone") as! String
     
     let format: AVAudioFormat = initPlayers(toneDir as String)
 
@@ -250,13 +250,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       self.logKonashiStatus()
       
-      let konashiName = Konashi.peripheralName()
+      let konashiName: String = Konashi.peripheralName()
       
       self.UD.set(konashiName, forKey: self.UD_KEY_KONASHI)
       
       
       // button
-      self.konashiBtn.setTitle("[Connected] \(konashiName)", for: [])
+      self.konashiBtn.setTitle("[Connected] \(konashiName))", for: [])
       
       // Konashi setting
       Konashi.uartMode(KonashiUartMode.enable, baudrate: KonashiUartBaudrate.rate9K6)
@@ -359,8 +359,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       uart("t:1;")
     case PlayerType.LongShot:
       uart("t:2;")
-    default:
-      NSLog("Error")
     }
   }
   
@@ -393,12 +391,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("[Konashi] module: \(Konashi.peripheralName())")
     NSLog("--------------------------------")
   }
+  
   // Beacon
   func beaconManager(_ manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
       if let _beacons = beacons as? [CLBeacon] {
         
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
-        var nearestBeacon: String?
+        // var nearestBeacon: String?
         for _beacon: CLBeacon in _beacons {
           let beaconKey = "\(_beacon.major):\(_beacon.minor)"
           if let beaconName = effectBeacons[beaconKey] as String! {
@@ -409,7 +408,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             if _switch.isOn {
               if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min! {
                 accuracy_min = Float(_beacon.accuracy)
-                nearestBeacon = beaconName
+                // nearestBeacon = beaconName
               }
             }
             _slider.setValue(Float(-_beacon.accuracy), animated: true)
@@ -466,7 +465,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapFind(_ sender: UIButton) {
     if Konashi.isConnected() {
-      var alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .alert)
+      let alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .alert)
       
       let otherAction = UIAlertAction(title: "Disconnect", style: .default) {
         action in
@@ -606,7 +605,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let initial: Int = toneDirs.index(of: toneNameBtn.titleLabel!.text!)!
     ActionSheetStringPicker.show(withTitle: "Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
-      let key: String = "\(index)"
+      let key: String = index as! String
       self.initPlayers(key)
       return
     }, cancel: { ActionStringCancelBlock in return }, origin: sender)
@@ -614,6 +613,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // AVAudioPlayerNode の生成やAudioFileの設定
   // その他のノードの初期化のために、最初のAudioFileのAVAudioFormatを返す
+  @discardableResult
   func initPlayers(_ toneDir: String) -> AVAudioFormat!{
     
     toneNameBtn.setTitle(toneDir, for: UIControlState())
@@ -654,7 +654,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if 0 < itemsCount {
       
       // 左用の音かどうか判定（Lで終わっていたら左）
-      var regex = try! NSRegularExpression(pattern: "L$", options: [])
+      let regex = try! NSRegularExpression(pattern: "L$", options: [])
       let isLeft: Bool = regex.firstMatch(in: toneDir, options: [], range: NSMakeRange(0, toneDir.utf8.count)) != nil
       let _tones = isLeft ? ["02","01"] : ["01","02"]
       
@@ -663,9 +663,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       if itemsCount == 2 {
         setTonePlayerType(PlayerType.LongShot)
         
-        for (index, file) in _tones.enumerated() {
-          var filePath: String = Bundle.main.path(forResource: "tones/\(toneDir)/\(file)", ofType: "wav")!
-          var fileURL: URL = URL(fileURLWithPath: filePath)
+        for (_, file) in _tones.enumerated() {
+          let filePath: String = Bundle.main.path(forResource: "tones/\(toneDir)/\(file)", ofType: "wav")!
+          let fileURL: URL = URL(fileURLWithPath: filePath)
           do {
             let audioFile = try AVAudioFile(forReading: fileURL)
             let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
@@ -719,7 +719,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       // set layeredPlayer
-      for (index, file) in _tones.enumerated() {
+      for (_, file) in _tones.enumerated() {
         var layeredTones: [String] = [];
         do {
           layeredTones = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones/\(toneDir)/layered")
@@ -897,9 +897,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // Konashi通信
       let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.2, out_max:1.0)
       uart("B:\(brightness);")
-      
-    default:
-      NSLog("Error")
     }
     
     // layered players
