@@ -166,7 +166,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     catch {
         // do nothing
-        print("Cannot load toneDirs !")
+        NSLog("Cannot load toneDirs !")
     }
     
     // Estimote Beacon
@@ -232,7 +232,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       try engine.start()
     }
     catch {
-      print("AVAudioEngine start error")
+      NSLog("AVAudioEngine start error")
     }
     
     // モーションセンサー
@@ -425,23 +425,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           uart("E:\(float_val);")
           
           // for debug --------
-//          println(nearestBeacon)
-          print(NSString(format: "%.3f ", accuracy))
+//          NSLog(nearestBeacon)
+          NSLog(NSString(format: "%.3f ", accuracy) as String)
           let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
           let arr = Array(repeating: "*", count: percent)
           
           if 0<arr.count {
             if 100<=percent {
-              print(arr.joined(separator: ""))
-              print()
+              NSLog(arr.joined(separator: ""))
+              NSLog("")
             }
             else {
-              print(arr.joined(separator: ""))
+              NSLog(arr.joined(separator: ""))
             }
             
           }
           else {
-            print()
+            NSLog("")
           }
           // / for debug --------
         }
@@ -632,7 +632,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       items = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones/\(toneDir)")
     }
     catch {
-      print("Cannot load items !")
+      NSLog("Cannot load items !")
     }
     
     // wavファイル以外は無視
@@ -675,11 +675,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
               }
             }
             catch {
-              print("Cannot AVAudioFile read")
+              NSLog("Cannot AVAudioFile read")
             }
           }
           catch {
-            print("Cannot load audioFile !")
+            NSLog("Cannot load audioFile !")
           }
         }
       }
@@ -705,7 +705,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
           }
           catch {
-            print("Cannot init AVAudioFile")
+            NSLog("Cannot init AVAudioFile")
           }
         }
       }
@@ -718,7 +718,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
         catch {
           // do nothing
-          print("Cannot load layeredTones !")
+          NSLog("Cannot load layeredTones !")
         }
         
         if 0 < layeredTones.count {
@@ -737,11 +737,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
               layeredPlayers += [player]
             }
             catch {
-              print("Cannot AVAudioFile read")
+              NSLog("Cannot AVAudioFile read")
             }
           }
           catch{
-            print("Cannot init AVAudioFile")
+            NSLog("Cannot init AVAudioFile")
           }
         }
       }
