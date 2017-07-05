@@ -237,7 +237,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         let rotation = atan2(data.gravity.x, data.gravity.y) - M_PI
         self?.updateRotation(rotation)
-      } as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler as! CMDeviceMotionHandler
+      }
     }
     
     // Color
