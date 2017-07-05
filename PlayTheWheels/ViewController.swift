@@ -319,7 +319,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
   }
   
-  func findKonashiWithName(_ konashiName: String) -> KonashiResult {
+  func findKonashiWithName(_ konashiName: String) {
     let res = Konashi.find(withName: konashiName)
     if res == KonashiResult.success {
       // 呼び出しが正しく行われただけで、接続されたわけではない
@@ -333,7 +333,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     else {
       NSLog("[Konashi] Konashi.findWithName called and failed...")
     }
-    return res
   }
   func checkConnection(){
     NSLog("[Konashi] Retry connecting")
