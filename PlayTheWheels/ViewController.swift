@@ -237,11 +237,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // モーションセンサー
     if MM.isDeviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
-      MM.startDeviceMotionUpdatesToQueue(OperationQueue.main) {
-        [weak self] (data: CMDeviceMotion!, error: NSError!) in
-        
-        let rotation = atan2(data.gravity.x, data.gravity.y) - M_PI
-        self?.updateRotation(rotation)
+      MM.startDeviceMotionUpdates(to: OperationQueue()) { deviceMotion, error in
+        let rotation = atan2(deviceMotion!.gravity.x, deviceMotion!.gravity.y) - .pi
+        self.updateRotation(rotation)
       }
     }
     
@@ -633,19 +631,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       items = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones/\(toneDir)")
     }
     catch {
-      // do nothing
       print("Cannot load items !")
     }
     
     // wavファイル以外は無視
     items = items.filter { (name: String) -> Bool in
-      do {
-        let regex = try NSRegularExpression(pattern: ".wav$", options: [], error: nil)
-        return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, name.count)) != nil
-      }
-      catch {
-        print("NSRegularExpression init failed")
-      }
+      let regex = try! NSRegularExpression(pattern: ".wav$", options: [])
+      return regex.firstMatch(in: name, options: [], range: NSMakeRange(0, name.utf8.count)) != nil
     }
     
     let itemsCount = items.count
@@ -653,8 +645,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if 0 < itemsCount {
       
       // 左用の音かどうか判定（Lで終わっていたら左）
-      var regex = NSRegularExpression(pattern: "L$", options: [], error: nil)
-      let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSRegularExpression.MatchingOptions.allZeros, range: NSMakeRange(0, toneDir.count)) != nil
+      var regex = try! NSRegularExpression(pattern: "L$", options: [])
+      let isLeft: Bool = regex.firstMatch(in: toneDir, options: [], range: NSMakeRange(0, toneDir.utf8.count)) != nil
       let _tones = isLeft ? ["02","01"] : ["01","02"]
       
       // switch player type
