@@ -227,7 +227,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 
     engine.connect(mixer, to: delay, format: format)
     engine.connect(delay, to: engine.mainMixerNode, format: format)
-    engine.startAndReturnError(nil)
+    do {
+      try engine.start()
+    }
+    catch {
+      print("AVAudioEngine start error")
+    }
     
     // モーションセンサー
     if MM.isDeviceMotionAvailable {
@@ -686,18 +691,23 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         for i in 1..<itemsCount+1 {
           let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
           let url = Bundle.main.path(forResource: "tones/\(toneDir)/\(num)", ofType: "wav")!
-          let audioFile = AVAudioFile(forReading: URL(fileURLWithPath: url))
-          audioFiles += [audioFile]
-          
-          let player = AVAudioPlayerNode()
-          engine.attach(player)
-          engine.connect(player, to: mixer, format: audioFile.processingFormat)
-          player.volume = 9.0
-          
-          players += [player]
-          
-          if format == nil {
-            format = audioFile.processingFormat
+          do {
+            let audioFile = try AVAudioFile(forReading: URL(fileURLWithPath: url))
+            audioFiles += [audioFile]
+            
+            let player = AVAudioPlayerNode()
+            engine.attach(player)
+            engine.connect(player, to: mixer, format: audioFile.processingFormat)
+            player.volume = 9.0
+            
+            players += [player]
+            
+            if format == nil {
+              format = audioFile.processingFormat
+            }
+          }
+          catch {
+            print("Cannot init AVAudioFile")
           }
         }
       }
@@ -716,15 +726,20 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         if 0 < layeredTones.count {
           let filePath = Bundle.main.path(forResource: "tones/\(toneDir)/layered/\(file)", ofType: "wav")!
           let fileURL = URL(fileURLWithPath: filePath)
-          let audioFile = AVAudioFile(forReading: fileURL)
-          let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-          audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
-          let player = AVAudioPlayerNode()
-          engine.attach(player)
-          engine.connect(player, to: mixer, format: audioFile.processingFormat)
-          player.volume = 0.0
-          player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
-          layeredPlayers += [player]
+          do {
+            let audioFile = try AVAudioFile(forReading: fileURL)
+            let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+            audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
+            let player = AVAudioPlayerNode()
+            engine.attach(player)
+            engine.connect(player, to: mixer, format: audioFile.processingFormat)
+            player.volume = 0.0
+            player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+            layeredPlayers += [player]
+          }
+          catch{
+            print("Cannot init AVAudioFile")
+          }
         }
       }
     }
