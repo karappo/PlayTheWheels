@@ -160,7 +160,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     colors["E"] = ["hue":0.070, "saturation":1.0]
     colors["F"] = ["hue":0.190, "saturation":1.0]
     
-    toneDirs = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones", error: nil) as! [String]
+    do {
+      toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
+    }
+    catch {
+        // do nothing
+        print("Cannot load toneDirs !")
+    }
     
     // Estimote Beacon
     beaconManager.delegate = self
@@ -617,12 +623,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // ------------
     
-    var items = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones/\(toneDir)", error: nil) as! [String]
+    var items: [String] = [];
+    do {
+      items = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones/\(toneDir)")
+    }
+    catch {
+      // do nothing
+      print("Cannot load items !")
+    }
     
     // wavファイル以外は無視
     items = items.filter { (name: String) -> Bool in
-      var regex = NSRegularExpression(pattern: ".wav$", options: NSRegularExpressionOptions.allZeros, error: nil)
-      return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, count(name))) != nil
+      var regex = NSRegularExpression(pattern: ".wav$", options: NSRegularExpression.Options.allZeros, error: nil)
+      return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, name.count)) != nil
     }
     
     let itemsCount = items.count
@@ -681,11 +694,19 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       // set layeredPlayer
       for (index, file) in _tones.enumerated() {
-        let layeredTones = FM.contentsOfDirectoryAtPath("\(Bundle.mainBundle().resourcePath!)/tones/\(toneDir)/layered", error: nil)
-        if 0 < layeredTones!.count {
+        var layeredTones: [String] = [];
+        do {
+          layeredTones = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones/\(toneDir)/layered")
+        }
+        catch {
+          // do nothing
+          print("Cannot load layeredTones !")
+        }
+        
+        if 0 < layeredTones.count {
           let filePath = Bundle.main.path(forResource: "tones/\(toneDir)/layered/\(file)", ofType: "wav")!
-          let fileURL = URL(fileURLWithPath: filePath)!
-          let audioFile = AVAudioFile(forReading: fileURL, error: nil)
+          let fileURL = URL(fileURLWithPath: filePath)
+          let audioFile = AVAudioFile(forWriting: fileURL, settings: nil)
           let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
           audioFile.readIntoBuffer(audioFileBuffer, error: nil)
           let player = AVAudioPlayerNode()
