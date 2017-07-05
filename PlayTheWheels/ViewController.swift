@@ -135,57 +135,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // initialize
-    // ==========
-    
-    // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
-    // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
-    
-    devices["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
-    devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
-    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
-    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
-    devices["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
-    devices["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
-    devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
-    devices["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
-    devices["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
-    devices["FD44A541-97F1-42AB-845B-CABB42A6599D"] = ["tone":"E-R", "konashi":"konashi2-f01c78"] as NSMutableDictionary
-    devices["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54"] as NSMutableDictionary
-    devices["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a"] as NSMutableDictionary
-    
-    colors["A"] = ["hue":0.412, "saturation":1.0]
-    colors["B"] = ["hue":0.678, "saturation":1.0]
-    colors["C"] = ["hue":0.893, "saturation":0.966]
-    colors["D"] = ["hue":0.0,   "saturation":1.0]
-    colors["E"] = ["hue":0.070, "saturation":1.0]
-    colors["F"] = ["hue":0.190, "saturation":1.0]
-    
-    do {
-      toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
-    }
-    catch {
-        // do nothing
-        NSLog("Cannot load toneDirs !")
-    }
-    
-    // Estimote Beacon
-    beaconManager.delegate = self
-    beaconManager.requestAlwaysAuthorization()
-    beaconUIs = [
-      "blueberry1":[beaconSwitchBlueberry1, beaconSliderBlueberry1],
-      "blueberry2":[beaconSwitchBlueberry2, beaconSliderBlueberry2],
-      "ice1":[beaconSwitchIce1, beaconSliderIce1],
-      "ice2":[beaconSwitchIce2, beaconSliderIce2],
-      "mint1":[beaconSwitchMint1, beaconSliderMint1],
-      "mint2":[beaconSwitchMint2, beaconSliderMint2]
-    ]
-    
-    // playerPoints
-    for i in 0..<SLIT_COUNT {
-      playerPoints += [360.0/Double(SLIT_COUNT)*Double(i)]
-    }
-    
+    initialize()
     
     // load settings
     // =============
@@ -327,6 +277,57 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if let default_konashi = device.value(forKey: "konashi") as? String {
       NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
       findKonashiWithName(default_konashi)
+    }
+  }
+  
+  func initialize() {
+    
+    // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
+    // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
+    
+    devices["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
+    devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
+    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
+    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
+    devices["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
+    devices["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
+    devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
+    devices["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
+    devices["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
+    devices["FD44A541-97F1-42AB-845B-CABB42A6599D"] = ["tone":"E-R", "konashi":"konashi2-f01c78"] as NSMutableDictionary
+    devices["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54"] as NSMutableDictionary
+    devices["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a"] as NSMutableDictionary
+    
+    colors["A"] = ["hue":0.412, "saturation":1.0]
+    colors["B"] = ["hue":0.678, "saturation":1.0]
+    colors["C"] = ["hue":0.893, "saturation":0.966]
+    colors["D"] = ["hue":0.0,   "saturation":1.0]
+    colors["E"] = ["hue":0.070, "saturation":1.0]
+    colors["F"] = ["hue":0.190, "saturation":1.0]
+    
+    do {
+      toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
+    }
+    catch {
+      // do nothing
+      NSLog("Cannot load toneDirs !")
+    }
+    
+    // Estimote Beacon
+    beaconManager.delegate = self
+    beaconManager.requestAlwaysAuthorization()
+    beaconUIs = [
+      "blueberry1":[beaconSwitchBlueberry1, beaconSliderBlueberry1],
+      "blueberry2":[beaconSwitchBlueberry2, beaconSliderBlueberry2],
+      "ice1":[beaconSwitchIce1, beaconSliderIce1],
+      "ice2":[beaconSwitchIce2, beaconSliderIce2],
+      "mint1":[beaconSwitchMint1, beaconSliderMint1],
+      "mint2":[beaconSwitchMint2, beaconSliderMint2]
+    ]
+    
+    // playerPoints
+    for i in 0..<SLIT_COUNT {
+      playerPoints += [360.0/Double(SLIT_COUNT)*Double(i)]
     }
   }
   
