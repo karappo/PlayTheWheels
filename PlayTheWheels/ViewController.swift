@@ -224,7 +224,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     var toneDir: String = toneDirs.first!
     toneDir = (device.value(forKey: "tone") as! String) ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
     
-    var format: AVAudioFormat = initPlayers(toneDir as! String)
+    let format: AVAudioFormat = initPlayers(toneDir as String)
 
     engine.connect(mixer, to: delay, format: format)
     engine.connect(delay, to: engine.mainMixerNode, format: format)
@@ -245,7 +245,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Color
-    loadInstrumentColor(toneDir as! NSString)
+    loadInstrumentColor(toneDir as NSString)
     
     hueSlider2.setValue(0.66, animated: true)
     saturationSlider2.setValue(1.0, animated: true)
