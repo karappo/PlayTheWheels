@@ -395,7 +395,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let _slider: UISlider = beaconUI?[1] as! UISlider
             
             if _switch.isOn {
-              if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min {
+              if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min! {
                 accuracy_min = Float(_beacon.accuracy)
                 nearestBeacon = beaconName
               }
@@ -592,12 +592,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   @IBAction func tapToneName(_ sender: UIButton) {
     let initial: Int = toneDirs.index(of: toneNameBtn.titleLabel!.text!)!
-    ActionSheetStringPicker.showPickerWithTitle("Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
+    ActionSheetStringPicker.show(withTitle: "Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
       picker, value, index in
-        let key: String = "\(index)"
-        self.initPlayers(key)
-        return
-    }, cancelBlock: { ActionStringCancelBlock in return }, origin: sender)
+      let key: String = "\(index)"
+      self.initPlayers(key)
+      return
+    }, cancel: { ActionStringCancelBlock in return }, origin: sender)
   }
   
   // AVAudioPlayerNode の生成やAudioFileの設定
@@ -654,19 +654,24 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         for (index, file) in _tones.enumerated() {
           var filePath: String = Bundle.main.path(forResource: "tones/\(toneDir)/\(file)", ofType: "wav")!
-          var fileURL: URL = URL(fileURLWithPath: filePath)!
-          var audioFile = AVAudioFile(forReading: fileURL, error: nil)
-          var audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-          audioFile.readIntoBuffer(audioFileBuffer, error: nil)
-          var player = AVAudioPlayerNode()
-          engine.attach(player)
-          engine.connect(player, to: mixer, format: audioFile.processingFormat)
-          player.volume = 0.0
-          player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
-          players += [player]
-          
-          if format == nil {
-            format = audioFile.processingFormat
+          var fileURL: URL = URL(fileURLWithPath: filePath)
+          do {
+            let audioFile = try AVAudioFile(forReading: fileURL)
+            let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+            audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
+            let player = AVAudioPlayerNode()
+            engine.attach(player)
+            engine.connect(player, to: mixer, format: audioFile.processingFormat)
+            player.volume = 0.0
+            player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+            players += [player]
+            
+            if format == nil {
+              format = audioFile.processingFormat
+            }
+          }
+          catch {
+            print("Cannot load audioFile !")
           }
         }
       }
@@ -675,12 +680,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         for i in 1..<itemsCount+1 {
           let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
-          let url = NSBundle.mainBundle().pathForResource("tones/\(toneDir)/\(num)", ofType: "wav")!
-          let audioFile = AVAudioFile(forReading: NSURL(fileURLWithPath: url), error: nil)
+          let url = Bundle.main.path(forResource: "tones/\(toneDir)/\(num)", ofType: "wav")!
+          let audioFile = AVAudioFile(forWriting: URL(fileURLWithPath: url), settings: nil)
           audioFiles += [audioFile]
           
           let player = AVAudioPlayerNode()
-          engine.attachNode(player)
+          engine.attach(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 9.0
           
