@@ -634,8 +634,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // wavファイル以外は無視
     items = items.filter { (name: String) -> Bool in
-      var regex = NSRegularExpression(pattern: ".wav$", options: NSRegularExpression.Options.allZeros, error: nil)
-      return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, name.count)) != nil
+      do {
+        let regex = try NSRegularExpression(pattern: ".wav$", options: [], error: nil)
+        return regex?.firstMatchInString(name, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, name.count)) != nil
+      }
+      catch {
+        print("NSRegularExpression init failed")
+      }
     }
     
     let itemsCount = items.count
@@ -643,7 +648,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if 0 < itemsCount {
       
       // 左用の音かどうか判定（Lで終わっていたら左）
-      var regex = NSRegularExpression(pattern: "L$", options: NSRegularExpression.Options.allZeros, error: nil)
+      var regex = NSRegularExpression(pattern: "L$", options: [], error: nil)
       let isLeft: Bool = regex?.firstMatchInString(toneDir, options: NSRegularExpression.MatchingOptions.allZeros, range: NSMakeRange(0, toneDir.count)) != nil
       let _tones = isLeft ? ["02","01"] : ["01","02"]
       
@@ -681,7 +686,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         for i in 1..<itemsCount+1 {
           let num = NSString(format: "%02d", isLeft ? itemsCount+1 - i : i) // 左車輪の音だったら反転し、２桁で0埋め
           let url = Bundle.main.path(forResource: "tones/\(toneDir)/\(num)", ofType: "wav")!
-          let audioFile = AVAudioFile(forWriting: URL(fileURLWithPath: url), settings: nil)
+          let audioFile = AVAudioFile(forReading: URL(fileURLWithPath: url))
           audioFiles += [audioFile]
           
           let player = AVAudioPlayerNode()
@@ -711,14 +716,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         if 0 < layeredTones.count {
           let filePath = Bundle.main.path(forResource: "tones/\(toneDir)/layered/\(file)", ofType: "wav")!
           let fileURL = URL(fileURLWithPath: filePath)
-          let audioFile = AVAudioFile(forWriting: fileURL, settings: nil)
-          let audioFileBuffer = AVAudioPCMBuffer(PCMFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-          audioFile.readIntoBuffer(audioFileBuffer, error: nil)
+          let audioFile = AVAudioFile(forReading: fileURL)
+          let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
+          audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
           let player = AVAudioPlayerNode()
           engine.attach(player)
           engine.connect(player, to: mixer, format: audioFile.processingFormat)
           player.volume = 0.0
-          player.scheduleBuffer(audioFileBuffer, atTime: nil, options:.Loops, completionHandler: nil)
+          player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
           layeredPlayers += [player]
         }
       }
