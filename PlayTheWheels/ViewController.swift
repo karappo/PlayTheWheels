@@ -187,13 +187,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
-    let device: AnyObject? = devices[uuid] as AnyObject // default value of indivisual device
+    let device: NSMutableArray = devices[uuid] as! NSMutableArray// default value of indivisual device
     
-    if device != nil {
-      if let konashi = device!["konashi"] as? String {
-        konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
-        konashiBtn.setTitle(konashiBtnDefaultLabel, for: UIControlState())
-      }
+    if let konashi = device.value(forKey: "konashi") as? String {
+      konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
+      konashiBtn.setTitle(konashiBtnDefaultLabel, for: UIControlState())
     }
     
     
@@ -216,10 +214,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // AudioPlayerの準備
     // OneShot
-    var toneDir: AnyObject = toneDirs.first! as AnyObject
-    if device != nil {
-      toneDir = device!["tone"] ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
-    }
+    var toneDir: String = toneDirs.first!
+    toneDir = (device.value(forKey: "tone") as! String) ?? toneDirs.first! // 先に_default["tone"]のを代入試み、なかったらtoneDirs.first
     
     var format: AVAudioFormat = initPlayers(toneDir as! String)
 
@@ -311,11 +307,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 //      NSLog("[Konashi] UartRx \(data.description)")
 //    }
     
-    if device != nil {
-      if let default_konashi = device!["konashi"] as? String {
-        NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
-        findKonashiWithName(default_konashi)
-      }
+    if let default_konashi = device.value(forKey: "konashi") as? String {
+      NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
+      findKonashiWithName(default_konashi)
     }
   }
   
@@ -355,13 +349,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // toneDirから該当する色を読み込む
   func loadInstrumentColor(_ toneDirStr: NSString) {
     let alphabet = toneDirStr.substring(to: 1)
-    if let color: AnyObject = colors[alphabet] {
-      if let hue = color["hue"] as? Float {
-        setHue(hue)
-      }
-      if let saturation = color["saturation"] as? Float {
-        setSaturation(saturation)
-      }
+    if let color: NSMutableArray = colors.value(forKey: alphabet) as? NSMutableArray {
+      setHue(color.value(forKey: "hue") as! Float)
+      setSaturation(color.value(forKey: "saturation") as! Float)
     }
   }
   override func viewWillAppear(_ animated: Bool) {
