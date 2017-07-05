@@ -668,16 +668,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           do {
             let audioFile = try AVAudioFile(forReading: fileURL)
             let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-            audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
-            let player = AVAudioPlayerNode()
-            engine.attach(player)
-            engine.connect(player, to: mixer, format: audioFile.processingFormat)
-            player.volume = 0.0
-            player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
-            players += [player]
-            
-            if format == nil {
-              format = audioFile.processingFormat
+            do {
+              try audioFile.read(into: audioFileBuffer)
+              let player = AVAudioPlayerNode()
+              engine.attach(player)
+              engine.connect(player, to: mixer, format: audioFile.processingFormat)
+              player.volume = 0.0
+              player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+              players += [player]
+              
+              if format == nil {
+                format = audioFile.processingFormat
+              }
+            }
+            catch {
+              print("Cannot AVAudioFile read")
             }
           }
           catch {
@@ -729,13 +734,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           do {
             let audioFile = try AVAudioFile(forReading: fileURL)
             let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
-            audioFile.readIntoBuffer(audioFileBuffer, frameCount: nil)
-            let player = AVAudioPlayerNode()
-            engine.attach(player)
-            engine.connect(player, to: mixer, format: audioFile.processingFormat)
-            player.volume = 0.0
-            player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
-            layeredPlayers += [player]
+            do {
+              try audioFile.read(into: audioFileBuffer)
+              let player = AVAudioPlayerNode()
+              engine.attach(player)
+              engine.connect(player, to: mixer, format: audioFile.processingFormat)
+              player.volume = 0.0
+              player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+              layeredPlayers += [player]
+            }
+            catch {
+              print("Cannot AVAudioFile read")
+            }
           }
           catch{
             print("Cannot init AVAudioFile")
