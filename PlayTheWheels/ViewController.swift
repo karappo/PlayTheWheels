@@ -886,13 +886,15 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         }
       }
       
-      if 0 < _variation {
-        players[0].volume = 0
-        players[1].volume = vol
-      }
-      else {
-        players[0].volume = vol
-        players[1].volume = 0
+      if(players.count == 2) {
+        if 0 < _variation {
+          players[0].volume = 0
+          players[1].volume = vol
+        }
+        else {
+          players[0].volume = vol
+          players[1].volume = 0
+        }
       }
       
       // Konashi通信
