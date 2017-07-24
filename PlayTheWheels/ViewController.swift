@@ -307,6 +307,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     do {
       toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
+      toneDirs.remove(at: toneDirs.index(of: "README.md")!)
     }
     catch {
       // do nothing
