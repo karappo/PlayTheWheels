@@ -289,8 +289,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
     devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
     devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
-    devices["7E04FA65-3F4A-41DF-8B95-E7C7AA04B40A"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
-    devices["2EE83A45-E6D1-4237-A053-1476530207E3"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
+    devices["FBE9FF6C-5265-461E-AE7E-81EB184F4005"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
+    devices["EAEFA4DC-8D92-4CBD-B092-BE8C8A639DF6"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
     devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
     devices["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
     devices["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
