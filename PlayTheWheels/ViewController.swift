@@ -256,7 +256,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       
       
       // button
-      self.konashiBtn.setTitle("[Connected] \(konashiName))", for: [])
+      self.konashiBtn.setTitle("[Connected] \(konashiName)", for: [])
       
       // Konashi setting
       Konashi.uartMode(KonashiUartMode.enable, baudrate: KonashiUartBaudrate.rate9K6)
