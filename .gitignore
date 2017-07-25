@@ -23,6 +23,9 @@ vendor
 # CocoaPod
 Pods/*
 
+# DeployGate
+*.app.dSYM.zip
+
 # others
 *.swp
 !.gitkeep
