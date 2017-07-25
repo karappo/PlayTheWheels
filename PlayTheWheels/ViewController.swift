@@ -827,15 +827,14 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func updateRotation(_ radian: Double) {
     
     let currentDeg = radiansToDegrees(radian)
-//    let variation = Float(prevDeg - current_deg)
-    let _variation = variation(prevDeg, current: currentDeg)
+    let variation = getVariation(prevDeg, current: currentDeg)
     
     arrow.transform = CGAffineTransform(rotationAngle: CGFloat(radian))
     
     // 変化量
     // 実際の車輪のスピードの範囲とうまくマッピングする
-    // 実際にクルマイスに乗って試したところ前進で_variationは最大で5くらいだった
-    let vol = 9.0 * min(abs(_variation)/5,1)
+    // 実際にクルマイスに乗って試したところ前進でvariationは最大で5くらいだった
+    let vol = 9.0 * min(abs(variation)/5,1)
     
     switch playerType {
     case PlayerType.OneShot:
@@ -850,7 +849,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         for i in current_index..<current_index+passed_slit.count {
           passed_players += [audioIndexes.get(i)!]
         }
-        let _idx = current_index + passed_slit.count*(0<_variation ? 1 : -1)
+        let _idx = current_index + passed_slit.count*(0<variation ? 1 : -1)
         current_index = audioFiles.relativeIndex(_idx)
         
         
@@ -887,7 +886,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       if(players.count == 2) {
-        if 0 < _variation {
+        if 0 < variation {
           players[0].volume = 0
           players[1].volume = vol
         }
@@ -903,7 +902,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // layered players
-    if 0 < _variation {
+    if 0 < variation {
       layeredPlayers[0].volume = 0
       layeredPlayers[1].volume = vol*layeredPlayerVol
     }
@@ -961,7 +960,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // 変化量を計算（359°->2°などに変化した時に正しく回転方向を算出）
   // [left wheel]  forward: plus, back: minus
   // [right wheel] forward: minus, back: plus
-  fileprivate func variation(_ prev: Double, current: Double) -> Float {
+  fileprivate func getVariation(_ prev: Double, current: Double) -> Float {
     let diff = abs(prev - current)
     
     if 180 < diff {
