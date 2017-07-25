@@ -394,7 +394,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // Beacon
-  func beaconManager(_ manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
+  private func beaconManager(_ manager: AnyObject!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
       if let _beacons = beacons as? [CLBeacon] {
         
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
