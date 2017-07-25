@@ -10,6 +10,8 @@ import UIKit
 import AVFoundation
 import CoreMotion
 
+let DEBUG = false
+
 class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // UserDefaults
@@ -433,23 +435,25 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           uart("E:\(float_val);")
           
           // for debug --------
-//          NSLog(nearestBeacon)
-          NSLog(NSString(format: "%.3f ", accuracy) as String)
-          let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
-          let arr = Array(repeating: "*", count: percent)
-          
-          if 0<arr.count {
-            if 100<=percent {
-              NSLog(arr.joined(separator: ""))
-              NSLog("")
+          if(DEBUG) {
+            // NSLog(nearestBeacon)
+            NSLog(NSString(format: "%.3f ", accuracy) as String)
+            let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
+            let arr = Array(repeating: "*", count: percent)
+            
+            if 0<arr.count {
+                if 100<=percent {
+                    NSLog(arr.joined(separator: ""))
+                    NSLog("")
+                }
+                else {
+                    NSLog(arr.joined(separator: ""))
+                }
+                
             }
             else {
-              NSLog(arr.joined(separator: ""))
+                NSLog("")
             }
-            
-          }
-          else {
-            NSLog("")
           }
           // / for debug --------
         }
