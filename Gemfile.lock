@@ -42,6 +42,7 @@ GEM
       netrc (= 0.7.8)
     cocoapods-try (1.1.0)
     colored2 (3.1.2)
+    dg (0.6.10)
     escape (0.0.4)
     fourflusher (2.0.1)
     fuzzy_match (2.0.4)
@@ -67,6 +68,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods
+  dg
 
 BUNDLED WITH
    1.14.6
