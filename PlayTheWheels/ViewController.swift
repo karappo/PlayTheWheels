@@ -287,18 +287,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     
-    devices["DAE4E972-9F4D-4EDB-B511-019B0214944F"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
-    devices["137FF2D6-7F9D-4729-A001-A0F070BB1E3C"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
-    devices["B43C8AB7-78EB-4E38-A95E-AA709DD11958"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
-    devices["159360AB-EC18-4331-87E7-157E309AA974"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
-    devices["FBE9FF6C-5265-461E-AE7E-81EB184F4005"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
-    devices["EAEFA4DC-8D92-4CBD-B092-BE8C8A639DF6"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
-    devices["9BC12444-044F-4272-81B8-583431124105"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
-    devices["3C3E8B86-4F97-4962-90A4-1D0CCC6EF6DD"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
-    devices["8FB88F20-8DDF-4589-A14B-B49CF6E9993B"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
-    devices["FD44A541-97F1-42AB-845B-CABB42A6599D"] = ["tone":"E-R", "konashi":"konashi2-f01c78"] as NSMutableDictionary
-    devices["C1AF90DE-4B33-422D-B382-A4CFC1AD5555"] = ["tone":"F-L", "konashi":"konashi2-f01d54"] as NSMutableDictionary
-    devices["E7D0E520-80F6-4270-9FB4-57B2E8D15A99"] = ["tone":"F-R", "konashi":"konashi2-f01d7a"] as NSMutableDictionary
+    devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
+    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
+    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
+    devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
+    devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
+    devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
+    devices["3385AAF7-648E-419F-9065-7721BF801A5D"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
+    devices["92C5D75D-41B3-4CBB-902E-4EDFE108CFA4"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
+    devices["C6CDC907-1C68-4CC5-8BDE-1D77DC24C5D9"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
+    devices["217C0F21-0D07-4208-AA18-642B41AE776B"] = ["tone":"E-R", "konashi":"konashi2-f01c78"] as NSMutableDictionary
+    devices["3E2B4AF5-2EAB-421B-B71A-7A795D0422A7"] = ["tone":"A-L", "konashi":"konashi2-f01d54"] as NSMutableDictionary
+    devices["16462C30-3AB7-4872-88B6-651A42ADD56A"] = ["tone":"A-R", "konashi":"konashi2-f01d7a"] as NSMutableDictionary
     
     colors["A"] = ["hue":0.412, "saturation":1.0]
     colors["B"] = ["hue":0.678, "saturation":1.0]
