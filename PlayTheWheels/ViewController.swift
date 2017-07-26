@@ -289,7 +289,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
     devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
-    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"B-L", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
+    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"B-L", "konashi":"konashi2-f01cc5"] as NSMutableDictionary
     devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"B-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
     devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"C-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
     devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"C-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
