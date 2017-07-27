@@ -841,8 +841,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let vol = 9.0 * min(abs(variation)/5,1)
     
     switch playerType {
+
     case PlayerType.OneShot:
-      // OneShot
+
       let passed_slit = slitIndexInRange(currentDeg)
       
       if 0 < passed_slit.count {
@@ -875,8 +876,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           uart("s:;")
         }
       }
+      
     case PlayerType.LongShot:
-      // LongShot
       
       for player in players {
         if !player.isPlaying {
