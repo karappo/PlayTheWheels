@@ -197,10 +197,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // モーションセンサー
     if MM.isDeviceMotionAvailable {
       MM.deviceMotionUpdateInterval = MM_UPDATE_INTERVAL
-      MM.startDeviceMotionUpdates(to: OperationQueue()) { deviceMotion, error in
-        let rotation = atan2(deviceMotion!.gravity.x, deviceMotion!.gravity.y) - .pi
+      MM.startDeviceMotionUpdates(to: OperationQueue(), withHandler:{ deviceManager, error in
+        let rotation = atan2(deviceManager!.gravity.x, deviceManager!.gravity.y) - .pi
         self.updateRotation(rotation)
-      }
+      })
     }
     
     // Color
