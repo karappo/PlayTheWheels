@@ -842,68 +842,68 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     switch playerType {
 
-    case PlayerType.OneShot:
+      case PlayerType.OneShot:
 
-      let passed_slit = slitIndexInRange(currentDeg)
-      
-      if 0 < passed_slit.count {
+        let passed_slit = slitIndexInRange(currentDeg)
         
-        let audioIndexes = Array(0..<audioFiles.count)
-        var passed_players: Array<Int> = []
-        
-        for i in current_index..<current_index+passed_slit.count {
-          passed_players += [audioIndexes.get(i)!]
-        }
-        let _idx = current_index + passed_slit.count*(0<variation ? 1 : -1)
-        current_index = audioFiles.relativeIndex(_idx)
-        
-        
-        for index in passed_players {
-          // Sound
-          let audioFile: AVAudioFile = audioFiles[index] as AVAudioFile
-          let player: AVAudioPlayerNode = players[index] as AVAudioPlayerNode
-          if player.isPlaying {
-            player.stop()
+        if 0 < passed_slit.count {
+          
+          let audioIndexes = Array(0..<audioFiles.count)
+          var passed_players: Array<Int> = []
+          
+          for i in current_index..<current_index+passed_slit.count {
+            passed_players += [audioIndexes.get(i)!]
           }
+          let _idx = current_index + passed_slit.count*(0<variation ? 1 : -1)
+          current_index = audioFiles.relativeIndex(_idx)
           
-          // playerにオーディオファイルを設定　※ 再生直前にセットしないと再生されない？
-          player.scheduleFile(audioFile, at: nil, completionHandler: nil)
           
-          // 再生開始
-          player.play()
-          
-          // Konashi通信
-          uart("s:;")
+          for index in passed_players {
+            // Sound
+            let audioFile: AVAudioFile = audioFiles[index] as AVAudioFile
+            let player: AVAudioPlayerNode = players[index] as AVAudioPlayerNode
+            if player.isPlaying {
+              player.stop()
+            }
+            
+            // playerにオーディオファイルを設定　※ 再生直前にセットしないと再生されない？
+            player.scheduleFile(audioFile, at: nil, completionHandler: nil)
+            
+            // 再生開始
+            player.play()
+            
+            // Konashi通信
+            uart("s:;")
+          }
         }
-      }
-      
-    case PlayerType.LongShot:
-      
-      for player in players {
-        if !player.isPlaying {
-          player.play()
+        
+      case PlayerType.LongShot:
+        
+        for player in players {
+          if !player.isPlaying {
+            player.play()
+          }
         }
-      }
-      for player in layeredPlayers {
-        if !player.isPlaying {
-          player.play()
+        for player in layeredPlayers {
+          if !player.isPlaying {
+            player.play()
+          }
         }
-      }
-      
-      if(players.count == 2) {
-        if 0 < variation {
-          players[0].volume = 0
-          players[1].volume = vol
+        
+        if(players.count == 2) {
+          if 0 < variation {
+            players[0].volume = 0
+            players[1].volume = vol
+          }
+          else {
+            players[0].volume = vol
+            players[1].volume = 0
+          }
         }
-        else {
-          players[0].volume = vol
-          players[1].volume = 0
-        }
-      }
-      
-      // Konashi通信
-      let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.2, out_max:1.0)
-      uart("B:\(brightness);")
+        
+        // Konashi通信
+        let brightness = map(vol, in_min:0.0, in_max:9.0, out_min:0.2, out_max:1.0)
+        uart("B:\(brightness);")
     }
     
     // layered players
