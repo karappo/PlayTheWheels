@@ -831,7 +831,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   func updateRotation(_ radian: Double) {
     
     let currentDeg = radiansToDegrees(radian)
-    let variation = getVariation(prevDeg, current: currentDeg)
+    let variation = getVariation(currentDeg)
     
     arrow.transform = CGAffineTransform(rotationAngle: CGFloat(radian))
     
@@ -843,7 +843,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     switch playerType {
     case PlayerType.OneShot:
       // OneShot
-      let passed_slit = slitIndexInRange(prevDeg, current: currentDeg)
+      let passed_slit = slitIndexInRange(currentDeg)
       
       if 0 < passed_slit.count {
         
@@ -935,12 +935,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // 引数で与えた角度の中に含まれるスリットのindexを配列にして返す
-  fileprivate func slitIndexInRange(_ prev: Double, current: Double) -> Array<Int> {
-    if prev == current {
+  private func slitIndexInRange(_ current: Double) -> Array<Int> {
+    if prevDeg == current {
       return []
     }
     
-    let _prev = restrict(prev)
+    let _prev = restrict(prevDeg)
     let _current = restrict(current)
     let _min = min(_prev, _current)
     let _max = max(_prev, _current)
@@ -964,18 +964,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // 変化量を計算（359°->2°などに変化した時に正しく回転方向を算出）
   // [left wheel]  forward: plus, back: minus
   // [right wheel] forward: minus, back: plus
-  fileprivate func getVariation(_ prev: Double, current: Double) -> Float {
-    let diff = abs(prev - current)
+  private func getVariation(_ current: Double) -> Float {
+    let diff = abs(prevDeg - current)
     
     if 180 < diff {
-      if 180 < prev {
-        return Float((360 - prev) + current)
+      if 180 < prevDeg {
+        return Float((360 - prevDeg) + current)
       }
       else {
-        return Float((360.0 - current) + prev)
+        return Float((360.0 - current) + prevDeg)
       }
     }
-    return Float(prev - current)
+    return Float(prevDeg - current)
   }
 }
 
