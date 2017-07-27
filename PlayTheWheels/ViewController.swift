@@ -936,13 +936,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // 引数で与えた角度の中に含まれるスリットのindexを配列にして返す
-  private func slitIndexInRange(_ current: Double) -> Array<Int> {
-    if prevDeg == current {
+  private func slitIndexInRange(_ currentDeg: Double) -> Array<Int> {
+    if prevDeg == currentDeg {
       return []
     }
     
     let _prev = restrict(prevDeg)
-    let _current = restrict(current)
+    let _current = restrict(currentDeg)
     let _min = min(_prev, _current)
     let _max = max(_prev, _current)
     var result: Array<Int> = [] // range内にあるslit
@@ -965,18 +965,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // 変化量を計算（359°->2°などに変化した時に正しく回転方向を算出）
   // [left wheel]  forward: plus, back: minus
   // [right wheel] forward: minus, back: plus
-  private func getVariation(_ current: Double) -> Float {
-    let diff = abs(prevDeg - current)
+  private func getVariation(_ currentDeg: Double) -> Float {
+    let diff = abs(prevDeg - currentDeg)
     
     if 180 < diff {
       if 180 < prevDeg {
-        return Float((360 - prevDeg) + current)
+        return Float((360 - prevDeg) + currentDeg)
       }
       else {
-        return Float((360.0 - current) + prevDeg)
+        return Float((360.0 - currentDeg) + prevDeg)
       }
     }
-    return Float(prevDeg - current)
+    return Float(prevDeg - currentDeg)
   }
 }
 
