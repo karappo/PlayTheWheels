@@ -24,6 +24,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   let UD_KEY_LED_DIVIDE = "led_divide"
   let UD_KEY_LED_POSITION = "led_position"
   
+  var updateRotationFlag = false
+  
   var devices = NSMutableDictionary()
   var colors = NSMutableDictionary()
   
@@ -829,6 +831,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   
   func updateRotation(_ radian: Double) {
+    if(updateRotationFlag) {
+      return
+    }
+    
+    updateRotationFlag = true
     
     let currentDeg = radiansToDegrees(radian)
     let variation = getVariation(currentDeg)
@@ -917,6 +924,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     prevDeg = currentDeg
+    updateRotationFlag = false
   }
   
   func radiansToDegrees(_ value: Double) -> Double {
