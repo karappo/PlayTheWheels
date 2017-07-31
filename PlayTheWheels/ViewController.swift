@@ -297,11 +297,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     devices["16462C30-3AB7-4872-88B6-651A42ADD56A"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"]
     
     colors["A"] = ["hue":0.412, "saturation":1.0]
-    colors["B"] = ["hue":0.678, "saturation":1.0]
+    colors["B"] = ["hue":0.190, "saturation":1.0]
     colors["C"] = ["hue":0.893, "saturation":0.966]
     colors["D"] = ["hue":0.0,   "saturation":1.0]
     colors["E"] = ["hue":0.070, "saturation":1.0]
-    colors["F"] = ["hue":0.190, "saturation":1.0]
+    colors["F"] = ["hue":0.678, "saturation":1.0]
     
     do {
       toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
