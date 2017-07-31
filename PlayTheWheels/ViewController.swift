@@ -27,7 +27,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var updateRotationFlag = false
   
   var devices = NSMutableDictionary()
-  var colors = NSMutableDictionary()
+  var colors = [String: [String: Float]]()
+  
   
   var commandLastCalls = NSMutableDictionary() // commandの最後に送信された時刻を記録
   
@@ -370,9 +371,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   // toneDirから該当する色を読み込む
   func loadInstrumentColor(_ toneDirStr: NSString) {
     let alphabet = toneDirStr.substring(to: 1)
-    if let color: NSMutableArray = colors.value(forKey: alphabet) as? NSMutableArray {
-      setHue(color.value(forKey: "hue") as! Float)
-      setSaturation(color.value(forKey: "saturation") as! Float)
+    if let color: [String: Float] = colors[alphabet] {
+      setHue(color["hue"]!)
+      setSaturation(color["saturation"]!)
     }
   }
   override func viewWillAppear(_ animated: Bool) {
