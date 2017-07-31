@@ -26,7 +26,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   var updateRotationFlag = false
   
-  var devices = NSMutableDictionary()
+  var devices = [String: [String: String]]()
   var colors = [String: [String: Float]]()
   
   
@@ -149,16 +149,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     NSLog("uuid:\(uuid)")
     uuidLabel.text = "uuid:\(uuid)"
     
-    let device: NSMutableDictionary
-    if devices[uuid] != nil {
-      device = devices[uuid] as! NSMutableDictionary
-    }
-    else {
-      NSLog("Not found device configuration")
-      device = devices[devices.allKeys.first!] as! NSMutableDictionary
-    }
+    let device = devices[uuid]
     
-    if let konashi = device.value(forKey: "konashi") as? String {
+    if let konashi = device?["konashi"] {
       konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
       konashiBtn.setTitle(konashiBtnDefaultLabel, for: UIControlState())
     }
@@ -184,7 +177,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // AudioPlayerの準備
     // OneShot
     var toneDir: String = toneDirs.first!
-    toneDir = device.value(forKey: "tone") as! String
+    toneDir = (device?["tone"])!
     
     let format: AVAudioFormat = initPlayers(toneDir as String)
 
@@ -279,7 +272,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
 //      NSLog("[Konashi] UartRx \(data.description)")
 //    }
     
-    if let default_konashi = device.value(forKey: "konashi") as? String {
+    if let default_konashi = device?["konashi"] {
       NSLog("[Konashi] Auto connecting to \(default_konashi) (default) ...")
       findKonashiWithName(default_konashi)
     }
@@ -290,18 +283,18 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     
-    devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"] as NSMutableDictionary
-    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"] as NSMutableDictionary
-    devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"B-L", "konashi":"konashi2-f01c12"] as NSMutableDictionary
-    devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"B-R", "konashi":"konashi2-f01c40"] as NSMutableDictionary
-    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"] as NSMutableDictionary
-    devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"] as NSMutableDictionary
-    devices["3385AAF7-648E-419F-9065-7721BF801A5D"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"] as NSMutableDictionary
-    devices["92C5D75D-41B3-4CBB-902E-4EDFE108CFA4"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"] as NSMutableDictionary
-    devices["C6CDC907-1C68-4CC5-8BDE-1D77DC24C5D9"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"] as NSMutableDictionary
-    devices["217C0F21-0D07-4208-AA18-642B41AE776B"] = ["tone":"E-R", "konashi":"konashi2-f01c78"] as NSMutableDictionary
-    devices["3E2B4AF5-2EAB-421B-B71A-7A795D0422A7"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"] as NSMutableDictionary
-    devices["16462C30-3AB7-4872-88B6-651A42ADD56A"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"] as NSMutableDictionary
+    devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
+    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"]
+    devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
+    devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"B-R", "konashi":"konashi2-f01c40"]
+    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
+    devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"]
+    devices["3385AAF7-648E-419F-9065-7721BF801A5D"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
+    devices["92C5D75D-41B3-4CBB-902E-4EDFE108CFA4"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
+    devices["C6CDC907-1C68-4CC5-8BDE-1D77DC24C5D9"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
+    devices["217C0F21-0D07-4208-AA18-642B41AE776B"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
+    devices["3E2B4AF5-2EAB-421B-B71A-7A795D0422A7"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
+    devices["16462C30-3AB7-4872-88B6-651A42ADD56A"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"]
     
     colors["A"] = ["hue":0.412, "saturation":1.0]
     colors["B"] = ["hue":0.678, "saturation":1.0]
