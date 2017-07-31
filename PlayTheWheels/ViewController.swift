@@ -30,7 +30,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   var colors = [String: [String: Float]]()
   
   
-  var commandLastCalls = NSMutableDictionary() // commandの最後に送信された時刻を記録
+  var commandLastCalls = [String: Date]() // commandの最後に送信された時刻を記録
   
   @IBOutlet weak var arrow: UIImageView!
   
@@ -807,7 +807,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     if Konashi.isConnected() {
       // コマンド毎の連続送信時間で制限をかける（Bコマンドなどが大量に送られるとKonashiとの接続が切れる）
       let cmd = (str as NSString).substring(to: 1)
-      if let lastCall = commandLastCalls[cmd] as? Date {
+      if let lastCall = commandLastCalls[cmd] {
         let elapsed = Float(Date().timeIntervalSince(lastCall))
         if 0.01 < elapsed {
           if Konashi.uartWrite(str) == KonashiResult.success {
