@@ -809,7 +809,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       let cmd = (str as NSString).substring(to: 1)
       if let lastCall = commandLastCalls[cmd] {
         let elapsed = Float(Date().timeIntervalSince(lastCall))
-        if 0.01 < elapsed {
+        if 0.05 < elapsed {
           if Konashi.uartWrite(str) == KonashiResult.success {
             commandLastCalls[cmd] = Date()
           }
