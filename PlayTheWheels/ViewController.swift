@@ -531,6 +531,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     uart("i:000,000,000;\n")
     instrumentColor = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.0, alpha: 1.0)
     colorView.backgroundColor = instrumentColor
+    sendInstrumentColor()
   }
   
   @IBAction func changeHue2(_ sender: UISlider) {
@@ -564,23 +565,30 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   func setBrightnessMin(_ val: Float) {
     brightnessLabel.text = "\(val)"
-    uart("b:\(val);")
+    sendBrightness()
   }
   
   @IBAction func changeDivide(_ sender: UISlider) {
     let val = Int(sender.value)
     UD.set(val, forKey: UD_KEY_LED_DIVIDE)
     divideLabel.text = "\(val)"
-    uart("t:0;d:\(val);")
+    sendDivide()
   }
   @IBAction func changePosition(_ sender: UISlider) {
     let val = Int(sender.value)
     UD.set(val, forKey: UD_KEY_LED_POSITION)
     positionLabel.text = "\(val)"
-    uart("t:0;p:\(Float(val)/100);")
+    sendPosition()
   }
   
+  @IBAction func sendColorSettings(_ sender: UIButton) {
+    sendInstrumentColor()
+    sendEffectColor()
+    sendDivide()
+    sendPosition()
+  }
   
+  // Send to Konashi
   func sendInstrumentColor() {
     let hue = CGFloat(hueSlider.value)
     let saturation = CGFloat(saturationSlider.value)
@@ -603,6 +611,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     let b = NSString(format: "%03d", Int(effectColor.getBlue()))
     uart("e:\(r).\(g).\(b);")
   }
+  func sendDivide() {
+    uart("t:0;d:\(UD.integer(forKey: UD_KEY_LED_DIVIDE));")
+  }
+  func sendPosition() {
+    uart("t:0;p:\(Float(UD.integer(forKey: UD_KEY_LED_POSITION))/100);")
+  }
+  func sendBrightness() {
+    uart("b:\(self.brightnessSlider.value);")
+  }
+  
   
   // Tone
   
