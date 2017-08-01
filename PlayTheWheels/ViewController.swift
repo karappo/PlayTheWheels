@@ -808,7 +808,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // コマンド毎の連続送信時間で制限をかける（Bコマンドなどが大量に送られるとKonashiとの接続が切れる）
       let cmd = (str as NSString).substring(to: 1)
       if let lastCall = commandLastCalls[cmd] {
-        if 0.05 < Float(Date().timeIntervalSince(lastCall)) {
+        if 0.1 < Float(Date().timeIntervalSince(lastCall)) {
           if Konashi.uartWrite(str) == KonashiResult.success {
             commandLastCalls[cmd] = Date()
           }
