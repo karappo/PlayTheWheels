@@ -177,7 +177,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // AudioPlayerの準備
     // OneShot
     var toneDir: String = toneDirs.first!
-    toneDir = (device?["tone"])!
+    if let tone = device?["tone"] {
+      toneDir = tone
+    }
+    
     
     let format: AVAudioFormat = initPlayers(toneDir as String)
 
