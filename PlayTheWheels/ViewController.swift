@@ -399,7 +399,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   }
   
   // Beacon
-  func beaconManager(_ manager: Any!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
       if let _beacons = beacons as? [CLBeacon] {
         
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
@@ -417,6 +416,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                   accuracy_min = Float(accuracy)
                   // nearestBeacon = beaconName
                 }
+  @nonobjc func beaconManager(_ manager: Any!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
               }
               NSLog("_beacon.accuracy:\(accuracy)")
               _slider.setValue(Float(-accuracy), animated: true)
