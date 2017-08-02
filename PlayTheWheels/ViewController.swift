@@ -31,6 +31,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   
   var beaconLastUpdate = Date() // beaconManagerの更新があまり頻繁にならないように
+  var beaconAccuracies = [Float]()
+  
   var commandLastCalls = [String: Date]() // commandの最後に送信された時刻を記録
   
   @IBOutlet weak var arrow: UIImageView!
@@ -401,15 +403,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
   
   // Beacon
   func beaconManager(_ manager: Any!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
-    
-    // beaconの値が結構あてにならないし、ここの処理のせいでLEDがチカチカするのでここで間引く
-    let now = Date()
-    if 0.5 < Float(now.timeIntervalSince(beaconLastUpdate)) {
-      beaconLastUpdate = now
-    }
-    else {
-      return
-    }
   
     if let _beacons = beacons as? [CLBeacon] {
       
@@ -435,6 +428,22 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       }
       
       if accuracy_min != nil {
+        
+        // beaconの値が結構あてにならないし、ここの処理のせいでLEDがチカチカするのでここで間引く
+        let now = Date()
+        NSLog("beaconAccuracies:\(beaconAccuracies)")
+        if 3 < Float(now.timeIntervalSince(beaconLastUpdate)) {
+          beaconLastUpdate = now
+          if 0 < beaconAccuracies.count {
+            accuracy_min = beaconAccuracies.reduce(0, +) / Float(beaconAccuracies.count)
+            beaconAccuracies = [Float]()
+          }
+        }
+        else {
+          beaconAccuracies.append(accuracy_min!)
+          return
+        }
+        
         let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
         let beacon_min: Float = 1.3
         let beacon_max: Float = 0.8
