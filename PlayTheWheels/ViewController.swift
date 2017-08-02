@@ -410,14 +410,17 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let beaconUI = self.beaconUIs[beaconName]
             let _switch: UISwitch = beaconUI?[0] as! UISwitch
             let _slider: UISlider = beaconUI?[1] as! UISlider
-            
-            if _switch.isOn {
-              if accuracy_min == nil || Float(_beacon.accuracy) < accuracy_min! {
-                accuracy_min = Float(_beacon.accuracy)
-                // nearestBeacon = beaconName
+            let accuracy = _beacon.accuracy
+            if 0 < accuracy {
+              if _switch.isOn {
+                if accuracy_min == nil || Float(accuracy) < accuracy_min! {
+                  accuracy_min = Float(accuracy)
+                  // nearestBeacon = beaconName
+                }
               }
+              NSLog("_beacon.accuracy:\(accuracy)")
+              _slider.setValue(Float(-accuracy), animated: true)
             }
-            _slider.setValue(Float(-_beacon.accuracy), animated: true)
           }
         }
         
