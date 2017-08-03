@@ -431,7 +431,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         // beaconの値が結構あてにならないし、ここの処理のせいでLEDがチカチカするのでここで間引く
         let now = Date()
-        NSLog("beaconAccuracies:\(beaconAccuracies)")
         if 3 < Float(now.timeIntervalSince(beaconLastUpdate)) {
           beaconLastUpdate = now
           if 0 < beaconAccuracies.count {
