@@ -436,7 +436,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
           beaconLastUpdate = now
           if 0 < beaconAccuracies.count {
             accuracy_min = beaconAccuracies.reduce(0, +) / Float(beaconAccuracies.count)
-            beaconAccuracies = [Float]()
+            beaconAccuracies.removeAll()
           }
         }
         else {
