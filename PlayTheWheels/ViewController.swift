@@ -293,7 +293,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"]
     devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
     devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"B-R", "konashi":"konashi2-f01c40"]
-    devices["AA277D5A-4847-438C-ADC7-758A9E26B7CC"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
+    devices["F6946F2C-8AB6-4E13-A3C3-9325BA2E5148"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
     devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"]
     devices["3385AAF7-648E-419F-9065-7721BF801A5D"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
     devices["92C5D75D-41B3-4CBB-902E-4EDFE108CFA4"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
