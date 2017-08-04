@@ -290,7 +290,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     
     devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
-    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01c9e"]
+    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01b54"]
     devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
     devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
     devices["F6946F2C-8AB6-4E13-A3C3-9325BA2E5148"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
