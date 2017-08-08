@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D69C650EFA166BD6E8C355C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EDACDC8310B9A42F5CC645F /* libPods.a */; };
+		8B089F054C88EF6B5B8102AE /* libPods-PlayTheWheels.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */; };
 		E7509F5F1B7C4DDA001C54E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F5E1B7C4DDA001C54E8 /* AppDelegate.swift */; };
 		E7509F611B7C4DDA001C54E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7509F601B7C4DDA001C54E8 /* ViewController.swift */; };
 		E7509F641B7C4DDB001C54E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7509F621B7C4DDB001C54E8 /* Main.storyboard */; };
@@ -28,8 +28,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		60400C0ABC6E35860F674F24 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		7EDACDC8310B9A42F5CC645F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheels.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels.release.xcconfig"; sourceTree = "<group>"; };
+		4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayTheWheels.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels.debug.xcconfig"; sourceTree = "<group>"; };
+		4DBE115B077A07C948FD72DA /* Pods_PlayTheWheelsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayTheWheelsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E74BD6421F09F6D200F7DBCE /* Pods_PlayTheWheelsTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_PlayTheWheelsTests.framework; path = "Pods/../build/Debug-iphoneos/Pods_PlayTheWheelsTests.framework"; sourceTree = "<group>"; };
 		E7509F591B7C4DDA001C54E8 /* PlayTheWheels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlayTheWheels.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7509F5D1B7C4DDA001C54E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7509F5E1B7C4DDA001C54E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,7 +44,7 @@
 		E79CAC4C1B85EF9F00BA3D41 /* arrow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = arrow.jpg; path = PlayTheWheels/assets/arrow.jpg; sourceTree = "<group>"; };
 		E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCBridge.h; sourceTree = "<group>"; };
 		E7CB6BB11B8D746500E01C91 /* tones */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tones; path = PlayTheWheels/assets/tones; sourceTree = "<group>"; };
-		F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PlayTheWheels.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D69C650EFA166BD6E8C355C /* libPods.a in Frameworks */,
+				8B089F054C88EF6B5B8102AE /* libPods-PlayTheWheels.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,12 +66,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7FB59610D0D0C8318B4CED32 /* Frameworks */ = {
+		458D3AF7B59B33601EB83A73 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7EDACDC8310B9A42F5CC645F /* libPods.a */,
+				E74BD6421F09F6D200F7DBCE /* Pods_PlayTheWheelsTests.framework */,
+				4DBE115B077A07C948FD72DA /* Pods_PlayTheWheelsTests.framework */,
+				E813652286BEAF084297AD48 /* libPods-PlayTheWheels.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BAFAB113BCD2CADF2134FC5B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */,
+				2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		E7509F501B7C4DDA001C54E8 = {
@@ -78,9 +91,9 @@
 				E7509F5B1B7C4DDA001C54E8 /* PlayTheWheels */,
 				E7509F711B7C4DDB001C54E8 /* PlayTheWheelsTests */,
 				E7509F5A1B7C4DDA001C54E8 /* Products */,
-				EE27FB85BE4204BEA68EF57C /* Pods */,
-				7FB59610D0D0C8318B4CED32 /* Frameworks */,
 				E7A6EEA41B7C561900A8BD2A /* ObjCBridge.h */,
+				BAFAB113BCD2CADF2134FC5B /* Pods */,
+				458D3AF7B59B33601EB83A73 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,27 +154,30 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		EE27FB85BE4204BEA68EF57C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				60400C0ABC6E35860F674F24 /* Pods.debug.xcconfig */,
-				F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E794CA5F1F0648D7003CE0E3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		E7509F581B7C4DDA001C54E8 /* PlayTheWheels */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7509F781B7C4DDB001C54E8 /* Build configuration list for PBXNativeTarget "PlayTheWheels" */;
 			buildPhases = (
-				48DD80B56401F9E0433695E5 /* Check Pods Manifest.lock */,
+				BAE5F654B464E5146A5663CA /* [CP] Check Pods Manifest.lock */,
 				E7509F551B7C4DDA001C54E8 /* Sources */,
 				E7509F561B7C4DDA001C54E8 /* Frameworks */,
 				E7509F571B7C4DDA001C54E8 /* Resources */,
-				22BA68DAA62BCC0DE62F2687 /* Copy Pods Resources */,
+				DD260EDE0FD931EAADD89BD7 /* [CP] Embed Pods Frameworks */,
+				A0C0DC17562C6F88D7F361D7 /* [CP] Copy Pods Resources */,
+				E794CA5F1F0648D7003CE0E3 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -196,15 +212,17 @@
 		E7509F511B7C4DDA001C54E8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Karappo Inc.";
 				TargetAttributes = {
 					E7509F581B7C4DDA001C54E8 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 472W38UNCE;
+						LastSwiftMigration = 0830;
 					};
 					E7509F6D1B7C4DDB001C54E8 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0830;
 						TestTargetID = E7509F581B7C4DDA001C54E8;
 					};
 				};
@@ -250,34 +268,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		22BA68DAA62BCC0DE62F2687 /* Copy Pods Resources */ = {
+		A0C0DC17562C6F88D7F361D7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		48DD80B56401F9E0433695E5 /* Check Pods Manifest.lock */ = {
+		BAE5F654B464E5146A5663CA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DD260EDE0FD931EAADD89BD7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PlayTheWheels/Pods-PlayTheWheels-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -335,14 +368,17 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -358,11 +394,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -379,8 +416,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -396,40 +435,58 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		E7509F791B7C4DDB001C54E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60400C0ABC6E35860F674F24 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 472W38UNCE;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = PlayTheWheels/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		E7509F7A1B7C4DDB001C54E8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F902CBD5ADFC4E16881ADD6E /* Pods.release.xcconfig */;
+			baseConfigurationReference = 2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 472W38UNCE;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = PlayTheWheels/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -447,7 +504,9 @@
 				);
 				INFOPLIST_FILE = PlayTheWheelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.karappo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayTheWheels.app/PlayTheWheels";
 			};
 			name = Debug;
@@ -462,7 +521,9 @@
 				);
 				INFOPLIST_FILE = PlayTheWheelsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.karappo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PlayTheWheels.app/PlayTheWheels";
 			};
 			name = Release;

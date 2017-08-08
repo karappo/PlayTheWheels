@@ -14,8 +14,8 @@ Main iOS app which detect rotation, make sounds and control LED via [ptw-wheel](
 ## Install libraries
 
 ```sh
-# install ruby with rbenv
-rbenv install 2.1.2
+# check ruby local version and install it with rbenv
+cat .ruby-version | xargs rbenv install
 rbenv rehash
 
 # install bundler
