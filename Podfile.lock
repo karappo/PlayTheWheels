@@ -1,8 +1,8 @@
 PODS:
-  - ActionSheetPicker-3.0 (2.2.0)
+  - ActionSheetPicker-3.0 (2.3.0)
   - Colorkit (0.1.0)
-  - EstimoteSDK (4.16.2)
-  - konashi-ios-sdk (4.1.0)
+  - EstimoteSDK (4.27.0)
+  - konashi-ios-sdk (5.0.1)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
@@ -10,12 +10,19 @@ DEPENDENCIES:
   - EstimoteSDK
   - konashi-ios-sdk
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - ActionSheetPicker-3.0
+    - Colorkit
+    - EstimoteSDK
+    - konashi-ios-sdk
+
 SPEC CHECKSUMS:
-  ActionSheetPicker-3.0: d11a4c12c6aaf704b8a3f56d179198c99f3e41e6
+  ActionSheetPicker-3.0: eef157d75e151f255c5333d26656c7fbfe905a51
   Colorkit: 796f40223fbbec3fc9c24d32608202ef82bfb90a
-  EstimoteSDK: 17d0778be064419dd905f41981f831052f4c19ee
-  konashi-ios-sdk: dd545f091380e8adf58114bf270f24f79d8b96cc
+  EstimoteSDK: 61935c7fbcb9fe93b97b0360351aef66fb1c338d
+  konashi-ios-sdk: 959ad0dd7f481b19bebbf996c5afe8ad52c3c3c4
 
 PODFILE CHECKSUM: d120ec7005bc702f0ec8bf1b31d93caadda23cdb
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.5.3
