@@ -522,7 +522,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
   }
   
-  func disconnectKonashi() {
+  @objc func disconnectKonashi() {
     NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
     // 接続解除
     self.manualDisconnection = true
@@ -717,12 +717,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let audioFile = try AVAudioFile(forReading: fileURL)
             let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             do {
-              try audioFile.read(into: audioFileBuffer)
+              try audioFile.read(into: audioFileBuffer!)
               let player = AVAudioPlayerNode()
               engine.attach(player)
               engine.connect(player, to: mixer, format: audioFile.processingFormat)
               player.volume = 0.0
-              player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+              player.scheduleBuffer(audioFileBuffer!, at: nil, options:.loops, completionHandler: nil)
               players += [player]
               
               if format == nil {
@@ -783,12 +783,12 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             let audioFile = try AVAudioFile(forReading: fileURL)
             let audioFileBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
             do {
-              try audioFile.read(into: audioFileBuffer)
+              try audioFile.read(into: audioFileBuffer!)
               let player = AVAudioPlayerNode()
               engine.attach(player)
               engine.connect(player, to: mixer, format: audioFile.processingFormat)
               player.volume = 0.0
-              player.scheduleBuffer(audioFileBuffer, at: nil, options:.loops, completionHandler: nil)
+              player.scheduleBuffer(audioFileBuffer!, at: nil, options:.loops, completionHandler: nil)
               layeredPlayers += [player]
             }
             catch {
