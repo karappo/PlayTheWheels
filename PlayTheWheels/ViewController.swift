@@ -323,6 +323,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         // Estimote Beacon
         beaconManager.delegate = self
+        beaconManager.requestWhenInUseAuthorization()
         beaconManager.requestAlwaysAuthorization()
         beaconUIs = [
             "blueberry1":[beaconSwitchBlueberry1, beaconSliderBlueberry1],
