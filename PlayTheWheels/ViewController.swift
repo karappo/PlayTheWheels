@@ -409,7 +409,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
       // var nearestBeacon: String?
       for _beacon: CLBeacon in _beacons {
         let beaconKey = "\(_beacon.major):\(_beacon.minor)"
-        if let beaconName = effectBeacons[beaconKey] as String! {
+        if let beaconName = effectBeacons[beaconKey] as String? {
           let beaconUI = self.beaconUIs[beaconName]
           let _switch: UISwitch = beaconUI?[0] as! UISwitch
           let _slider: UISlider = beaconUI?[1] as! UISlider
