@@ -401,6 +401,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Beacon
+    @nonobjc
     func beaconManager(_ manager: Any!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
         
         if let _beacons = beacons as? [CLBeacon] {
