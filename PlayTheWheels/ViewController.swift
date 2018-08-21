@@ -289,22 +289,21 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
     // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
     
-    devices["07ECFB6E-B9B9-40FB-AFCA-CDFD8E6BCBBF"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
-    devices["3300EBFB-C3D0-452B-870C-13E99CDB06F0"] = ["tone":"A-R", "konashi":"konashi2-f01b54"]
-    devices["5D4108ED-F723-4829-81B3-DAD178C486B3"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
-    devices["CFC3C20E-EBE1-4972-9B01-967A7BF8C395"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
-    devices["F6946F2C-8AB6-4E13-A3C3-9325BA2E5148"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
-    devices["48ABB92F-E323-4ECB-AC08-F059C6F4C3C2"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"]
-    devices["3385AAF7-648E-419F-9065-7721BF801A5D"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
-    devices["92C5D75D-41B3-4CBB-902E-4EDFE108CFA4"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
-    devices["C6CDC907-1C68-4CC5-8BDE-1D77DC24C5D9"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
-    devices["217C0F21-0D07-4208-AA18-642B41AE776B"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
+    devices["4985CB07-4A4F-497A-BEA1-E3C8016B9F46"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
+    devices["846B175F-4DA7-4872-8ACF-BDB262735AF8"] = ["tone":"A-R", "konashi":"konashi2-f01b54"]
+    devices["FA539093-C884-414B-A329-0CEECDB8C2EA"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
+    devices["7CE9DC13-FCD3-4270-9E89-48CB7C2EC15F"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
+    devices["5F8A37D7-164E-4BB6-8284-E00F21BD90C1"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
+    devices["F291E9C6-56AE-4D33-8B21-00712A0EEB8D"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"]
+    devices["0BE570D2-F3B4-487C-B9B3-0B6406EC2F04"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
+    devices["D5B0653C-7FCB-4B37-A998-0F814E6C9023"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
+    devices["CDB9D924-5382-48EA-B044-AB6C27A5EAE3"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
+    devices["9026C0D4-EAC7-4993-959B-2E3F3043C8FD"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
+    devices["36F8F7B9-224B-48BB-B4B1-6C1DADD9053E"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
+    devices["5DEF11E9-E992-40C2-A7B1-F7EE5F804A41"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"]
     
-    // 予備
-    devices["3E2B4AF5-2EAB-421B-B71A-7A795D0422A7"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
-    devices["16462C30-3AB7-4872-88B6-651A42ADD56A"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"]
-    // iPhone
-    devices["9F90BB54-9DA8-454A-9744-C590D9195F12"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
+    // iPhoneX
+    devices["31B4E639-6475-431A-ACF8-E67DF2AC30CB"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
     
     colors["A"] = ["hue":0.412, "saturation":1.0]
     colors["B"] = ["hue":0.190, "saturation":1.0]
