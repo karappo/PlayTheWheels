@@ -156,7 +156,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         if let konashi = device?["konashi"] {
             konashiBtnDefaultLabel = "Find Konashi (\(konashi))"
-            konashiBtn.setTitle(konashiBtnDefaultLabel, for: UIControlState())
+            setKonashiBtn(title: konashiBtnDefaultLabel, color: self.view.tintColor)
         }
         
         
@@ -231,8 +231,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             NSLog("[Konashi] Disconnected")
             
             // button
-            self.konashiBtn.setTitle(self.konashiBtnDefaultLabel, for: [])
             
+            self.setKonashiBtn(title: self.konashiBtnDefaultLabel, color: self.view.tintColor)
             //      // 勝手に切断された場合にリトライする
             //      if self.manualDisconnection == false {
             //        // UserDefaultsから前回接続したKonashiを読み、接続を試みる
@@ -260,8 +260,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             
             
             // button
-            self.konashiBtn.setTitle("[Connected] \(konashiName)", for: [])
             
+            self.setKonashiBtn(title: "[Connected] \(konashiName)", color: UIColor.green)
             // Konashi setting
             Konashi.uartMode(KonashiUartMode.enable, baudrate: KonashiUartBaudrate.rate9K6)
             Konashi.pinMode(KonashiDigitalIOPin.digitalIO1, mode: KonashiPinMode.output)
@@ -362,6 +362,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         findKonashiWithName(konashi)
     }
     
+    func setKonashiBtn(title: String, color: UIColor){
+        self.konashiBtn.setTitleColor(color, for: [])
+        self.konashiBtn.setTitle(title, for: [])
+    }
     func sendPlayerType() {
         switch playerType {
         case PlayerType.OneShot:
