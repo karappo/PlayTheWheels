@@ -406,9 +406,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     // Beacon
-    @nonobjc
-    func beaconManager(_ manager: Any!, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion!) {
-         NSLog("kita!")
+    func beaconManager(_ manager: Any, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
         // var nearestBeacon: String?
         for beacon: CLBeacon in beacons {
