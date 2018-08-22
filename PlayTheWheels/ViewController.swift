@@ -884,7 +884,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         let currentDeg = radiansToDegrees(radian)
         let variation = getVariation(currentDeg)
         
-        arrow.transform = CGAffineTransform(rotationAngle: CGFloat(radian))
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 1.0, animations: { () -> Void in
+                self.arrow.transform = CGAffineTransform(rotationAngle: CGFloat(radian))
+            }) { (succeed) -> Void in
+                
+            }
+        }
         
         // 変化量
         // 実際の車輪のスピードの範囲とうまくマッピングする
