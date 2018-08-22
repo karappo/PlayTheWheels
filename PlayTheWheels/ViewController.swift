@@ -407,85 +407,82 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     // Beacon
     @nonobjc
-    func beaconManager(_ manager: Any!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
-        
-        if let _beacons = beacons as? [CLBeacon] {
-            
-            var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
-            // var nearestBeacon: String?
-            for _beacon: CLBeacon in _beacons {
-                let beaconKey = "\(_beacon.major):\(_beacon.minor)"
-                if let beaconName = effectBeacons[beaconKey] as String? {
-                    let beaconUI = self.beaconUIs[beaconName]
-                    let _switch: UISwitch = beaconUI?[0] as! UISwitch
-                    let _slider: UISlider = beaconUI?[1] as! UISlider
-                    let accuracy = _beacon.accuracy
-                    if 0 < accuracy {
-                        if _switch.isOn {
-                            if accuracy_min == nil || Float(accuracy) < accuracy_min! {
-                                accuracy_min = Float(accuracy)
-                                // nearestBeacon = beaconName
-                            }
+    func beaconManager(_ manager: Any!, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion!) {
+         NSLog("kita!")
+        var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
+        // var nearestBeacon: String?
+        for beacon: CLBeacon in beacons {
+            let beaconKey = "\(beacon.major):\(beacon.minor)"
+            if let beaconName = effectBeacons[beaconKey] as String? {
+                let beaconUI = self.beaconUIs[beaconName]
+                let _switch: UISwitch = beaconUI?[0] as! UISwitch
+                let _slider: UISlider = beaconUI?[1] as! UISlider
+                let accuracy = beacon.accuracy
+                if 0 < accuracy {
+                    if _switch.isOn {
+                        if accuracy_min == nil || Float(accuracy) < accuracy_min! {
+                            accuracy_min = Float(accuracy)
+                            // nearestBeacon = beaconName
                         }
-                        _slider.setValue(Float(-accuracy), animated: true)
                     }
+                    _slider.setValue(Float(-accuracy), animated: true)
                 }
             }
+        }
+        
+        if accuracy_min != nil {
             
-            if accuracy_min != nil {
-                
-                // beaconの値が結構あてにならないし、ここの処理のせいでLEDがチカチカするのでここで間引く
-                let now = Date()
-                if 3 < Float(now.timeIntervalSince(beaconLastUpdate)) {
-                    beaconLastUpdate = now
-                    if 0 < beaconAccuracies.count {
-                        accuracy_min = beaconAccuracies.reduce(0, +) / Float(beaconAccuracies.count)
-                        beaconAccuracies.removeAll()
-                    }
+            // beaconの値が結構あてにならないし、ここの処理のせいでLEDがチカチカするのでここで間引く
+            let now = Date()
+            if 3 < Float(now.timeIntervalSince(beaconLastUpdate)) {
+                beaconLastUpdate = now
+                if 0 < beaconAccuracies.count {
+                    accuracy_min = beaconAccuracies.reduce(0, +) / Float(beaconAccuracies.count)
+                    beaconAccuracies.removeAll()
                 }
-                else {
-                    beaconAccuracies.append(accuracy_min!)
-                    return
-                }
+            }
+            else {
+                beaconAccuracies.append(accuracy_min!)
+                return
+            }
+            
+            let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
+            let beacon_min: Float = 1.3
+            let beacon_max: Float = 0.8
+            let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:60)
+            let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
+            let float_val = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
+            setDelayFeedback(feedback)
+            delayFeedbackSlider.setValue(feedback, animated: true)
+            setDelayWetDry(drywet)
+            delayDryWetSlider.setValue(drywet, animated: true)
+            
+            layeredPlayerVol = float_val
+            
+            uart("E:\(float_val);")
+            
+            // for debug --------
+            if(DEBUG) {
+                // NSLog(nearestBeacon)
+                NSLog(NSString(format: "%.3f ", accuracy) as String)
+                let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
+                let arr = Array(repeating: "*", count: percent)
                 
-                let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
-                let beacon_min: Float = 1.3
-                let beacon_max: Float = 0.8
-                let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:60)
-                let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
-                let float_val = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
-                setDelayFeedback(feedback)
-                delayFeedbackSlider.setValue(feedback, animated: true)
-                setDelayWetDry(drywet)
-                delayDryWetSlider.setValue(drywet, animated: true)
-                
-                layeredPlayerVol = float_val
-                
-                uart("E:\(float_val);")
-                
-                // for debug --------
-                if(DEBUG) {
-                    // NSLog(nearestBeacon)
-                    NSLog(NSString(format: "%.3f ", accuracy) as String)
-                    let percent = Int(map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:100))
-                    let arr = Array(repeating: "*", count: percent)
-                    
-                    if 0<arr.count {
-                        if 100<=percent {
-                            NSLog(arr.joined(separator: ""))
-                            NSLog("")
-                        }
-                        else {
-                            NSLog(arr.joined(separator: ""))
-                        }
-                        
-                    }
-                    else {
+                if 0<arr.count {
+                    if 100<=percent {
+                        NSLog(arr.joined(separator: ""))
                         NSLog("")
                     }
+                    else {
+                        NSLog(arr.joined(separator: ""))
+                    }
+                    
                 }
-                // / for debug --------
+                else {
+                    NSLog("")
+                }
             }
+            // / for debug --------
         }
     }
     
