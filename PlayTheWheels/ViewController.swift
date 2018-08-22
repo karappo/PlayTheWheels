@@ -296,11 +296,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         devices["5F8A37D7-164E-4BB6-8284-E00F21BD90C1"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
         devices["F291E9C6-56AE-4D33-8B21-00712A0EEB8D"] = ["tone":"C-R", "konashi":"konashi2-f01cc9"]
         devices["0BE570D2-F3B4-487C-B9B3-0B6406EC2F04"] = ["tone":"D-L", "konashi":"konashi2-f01cf9"]
-        devices["D5B0653C-7FCB-4B37-A998-0F814E6C9023"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
+        devices["691198E5-60AF-48C0-A283-BAA5A3825972"] = ["tone":"D-R", "konashi":"konashi2-f01bf3"]
         devices["CDB9D924-5382-48EA-B044-AB6C27A5EAE3"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
         devices["9026C0D4-EAC7-4993-959B-2E3F3043C8FD"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
         devices["36F8F7B9-224B-48BB-B4B1-6C1DADD9053E"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
-        devices["5DEF11E9-E992-40C2-A7B1-F7EE5F804A41"] = ["tone":"F-R", "konashi":"konashi2-f01c9e"]
+        devices["3BF1CAC3-9D50-4C5B-843D-1D9BAF07665A"] = ["tone":"F-R", "konashi":"konashi2-f01c9e"]
         
         // iPhoneX
         devices["31B4E639-6475-431A-ACF8-E67DF2AC30CB"] = ["tone":"F-L", "konashi":"konashi2-f01xxx"]
