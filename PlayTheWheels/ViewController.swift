@@ -289,8 +289,8 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         // "{IPHONE-UUIDString}":["tone":"{TONE-NAME}","konashi":"{KONASHI-ID}",["color":["hue":{val},"saturation":{val}]]]
         // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
         
-        devices["4985CB07-4A4F-497A-BEA1-E3C8016B9F46"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
-        devices["846B175F-4DA7-4872-8ACF-BDB262735AF8"] = ["tone":"A-R", "konashi":"konashi2-f01d54"]
+        devices["37DE4D02-F0A2-4CA0-B1BE-DF0CD8C2F1B4"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
+        devices["A85CA58C-2810-4C34-8DEF-770FDB480051"] = ["tone":"A-R", "konashi":"konashi2-f01d54"]
         devices["FA539093-C884-414B-A329-0CEECDB8C2EA"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
         devices["7CE9DC13-FCD3-4270-9E89-48CB7C2EC15F"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
         devices["5F8A37D7-164E-4BB6-8284-E00F21BD90C1"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
