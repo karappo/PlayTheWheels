@@ -290,7 +290,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         // [注意] defaults = [["DAE4E972-9F4D-4EDB-B511-019B0214944F":["tone":"A-L"],..],...] みたいな書き方をするとindexingが止まらなくなる 参考：http://qiita.com/osamu1203/items/270fc716883d86d8f3b7
         
         devices["4985CB07-4A4F-497A-BEA1-E3C8016B9F46"] = ["tone":"A-L", "konashi":"konashi2-f01d0f"]
-        devices["846B175F-4DA7-4872-8ACF-BDB262735AF8"] = ["tone":"A-R", "konashi":"konashi2-f01b54"]
+        devices["846B175F-4DA7-4872-8ACF-BDB262735AF8"] = ["tone":"A-R", "konashi":"konashi2-f01d54"]
         devices["FA539093-C884-414B-A329-0CEECDB8C2EA"] = ["tone":"B-L", "konashi":"konashi2-f01c12"]
         devices["7CE9DC13-FCD3-4270-9E89-48CB7C2EC15F"] = ["tone":"B-R", "konashi":"konashi2-f01c3d"]
         devices["5F8A37D7-164E-4BB6-8284-E00F21BD90C1"] = ["tone":"C-L", "konashi":"konashi2-f01cc5"]
@@ -300,10 +300,10 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         devices["CDB9D924-5382-48EA-B044-AB6C27A5EAE3"] = ["tone":"E-L", "konashi":"konashi2-f01bf5"]
         devices["9026C0D4-EAC7-4993-959B-2E3F3043C8FD"] = ["tone":"E-R", "konashi":"konashi2-f01c78"]
         devices["36F8F7B9-224B-48BB-B4B1-6C1DADD9053E"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
-        devices["5DEF11E9-E992-40C2-A7B1-F7EE5F804A41"] = ["tone":"F-R", "konashi":"konashi2-f01c3d"]
+        devices["5DEF11E9-E992-40C2-A7B1-F7EE5F804A41"] = ["tone":"F-R", "konashi":"konashi2-f01c9e"]
         
         // iPhoneX
-        devices["31B4E639-6475-431A-ACF8-E67DF2AC30CB"] = ["tone":"F-L", "konashi":"konashi2-f01d7a"]
+        devices["31B4E639-6475-431A-ACF8-E67DF2AC30CB"] = ["tone":"F-L", "konashi":"konashi2-f01xxx"]
         
         colors["A"] = ["hue":0.412, "saturation":1.0]
         colors["B"] = ["hue":0.190, "saturation":1.0]
