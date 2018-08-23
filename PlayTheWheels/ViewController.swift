@@ -461,10 +461,16 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
             
             let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
-            let isBig = ["big-coconut","big-blueberry","big-ice","big-mint"].contains(nearestBeacon)
-            // isBig時の値は検証不十分
-            let beacon_min: Float = isBig ? 3.0 : 1.3
-            let beacon_max: Float = isBig ? 2.0 : 0.8
+            print(accuracy)
+            
+//            let isBig = ["big-coconut","big-blueberry","big-ice","big-mint"].contains(nearestBeacon)
+//            // isBig時の値は検証不十分
+//            let beacon_min: Float = isBig ? 3.0 : 1.3
+//            let beacon_max: Float = isBig ? 2.0 : 0.8
+            
+            // Broadcasting Power = -4dBに合わせた設定値
+            let beacon_min: Float = 1.3
+            let beacon_max: Float = 0.8
             let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:60)
             let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
             let float_val = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
