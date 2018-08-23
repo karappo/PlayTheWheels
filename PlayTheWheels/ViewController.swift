@@ -423,7 +423,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // Beacon
     func beaconManager(_ manager: Any, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         var accuracy_min: Float? // 最小値を保持しておいて、あとでEffectに適用する
-        // var nearestBeacon: String?
+        var nearestBeacon: String = ""
         for beacon: CLBeacon in beacons {
             let beaconKey = "\(beacon.major):\(beacon.minor)"
             if let beaconName = effectBeacons[beaconKey] as String? {
@@ -433,10 +433,13 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                 let accuracy = beacon.accuracy
                 // たまに負の値が来るので間引く
                 if 0 < accuracy {
+                    if beaconName=="big-coconut" {
+                        print("\(accuracy)")
+                    }
                     if _switch.isOn {
                         if accuracy_min == nil || Float(accuracy) < accuracy_min! {
                             accuracy_min = Float(accuracy)
-                            // nearestBeacon = beaconName
+                            nearestBeacon = beaconName
                         }
                     }
                     _slider.setValue(Float(-accuracy), animated: true)
@@ -461,8 +464,9 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
             
             let accuracy = Float(Int(accuracy_min! * 100.0)) / 100.0 // 小数点第１位まで
-            let beacon_min: Float = 1.3
-            let beacon_max: Float = 0.8
+            let isBig = ["big-coconut","big-blueberry","big-ice","big-mint"].contains(nearestBeacon)
+            let beacon_min: Float = isBig ? 3.0 : 1.3
+            let beacon_max: Float = isBig ? 2.0 : 0.8
             let drywet    = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:60)
             let feedback  = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0, out_max:80)
             let float_val = map(accuracy, in_min:beacon_min, in_max:beacon_max, out_min:0.0, out_max:1.0)
