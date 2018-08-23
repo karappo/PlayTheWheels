@@ -431,6 +431,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                 let _switch: UISwitch = beaconUI?[0] as! UISwitch
                 let _slider: UISlider = beaconUI?[1] as! UISlider
                 let accuracy = beacon.accuracy
+                // たまに負の値が来るので間引く
                 if 0 < accuracy {
                     if _switch.isOn {
                         if accuracy_min == nil || Float(accuracy) < accuracy_min! {
