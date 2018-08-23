@@ -433,9 +433,6 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
                 let accuracy = beacon.accuracy
                 // たまに負の値が来るので間引く
                 if 0 < accuracy {
-                    if beaconName=="big-coconut" {
-                        print("\(accuracy)")
-                    }
                     if _switch.isOn {
                         if accuracy_min == nil || Float(accuracy) < accuracy_min! {
                             accuracy_min = Float(accuracy)
