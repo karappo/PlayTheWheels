@@ -47,20 +47,27 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     @IBOutlet weak var uuidLabel: UILabel!
     
     // # Beacon Section
-    
+
     @IBOutlet weak var beaconSliderBlueberry1: UISlider!
     @IBOutlet weak var beaconSliderBlueberry2: UISlider!
     @IBOutlet weak var beaconSliderIce1: UISlider!
     @IBOutlet weak var beaconSliderIce2: UISlider!
     @IBOutlet weak var beaconSliderMint1: UISlider!
     @IBOutlet weak var beaconSliderMint2: UISlider!
+    @IBOutlet weak var beaconSliderBigCoconut: UISlider!
+    @IBOutlet weak var beaconSliderBigBlueberry: UISlider!
+    @IBOutlet weak var beaconSliderBigIce: UISlider!
+    @IBOutlet weak var beaconSliderBigMint: UISlider!
     @IBOutlet weak var beaconSwitchBlueberry1: UISwitch!
     @IBOutlet weak var beaconSwitchBlueberry2: UISwitch!
     @IBOutlet weak var beaconSwitchIce1: UISwitch!
     @IBOutlet weak var beaconSwitchIce2: UISwitch!
     @IBOutlet weak var beaconSwitchMint1: UISwitch!
     @IBOutlet weak var beaconSwitchMint2: UISwitch!
-    
+    @IBOutlet weak var beaconSwitchBigCoconut: UISwitch!
+    @IBOutlet weak var beaconSwitchBigBlueberry: UISwitch!
+    @IBOutlet weak var beaconSwitchBigIce: UISwitch!
+    @IBOutlet weak var beaconSwitchBigMint: UISwitch!
     
     // # Color Section
     
@@ -118,7 +125,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         "30062:7399" :"ice1",
         "13066:17889":"ice2",
         "38936:27676":"mint1",
-        "4274:29174" :"mint2"
+        "4274:29174" :"mint2",
+        "200:45788"  :"big-blueberry",
+        "5795:20000" :"big-ice",
+        "44241:7968" :"big-mint",
+        "2896:62358" :"big-coconut"
     ]
     var beaconUIs:[String: [AnyObject]]!
     
@@ -331,7 +342,11 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             "ice1":[beaconSwitchIce1, beaconSliderIce1],
             "ice2":[beaconSwitchIce2, beaconSliderIce2],
             "mint1":[beaconSwitchMint1, beaconSliderMint1],
-            "mint2":[beaconSwitchMint2, beaconSliderMint2]
+            "mint2":[beaconSwitchMint2, beaconSliderMint2],
+            "big-coconut":[beaconSwitchBigCoconut, beaconSliderBigCoconut],
+            "big-blueberry":[beaconSwitchBigBlueberry, beaconSliderBigBlueberry],
+            "big-ice":[beaconSwitchBigIce, beaconSliderBigIce],
+            "big-mint":[beaconSwitchBigMint, beaconSliderBigMint]
         ]
         
         // playerPoints
