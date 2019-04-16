@@ -1,6 +1,13 @@
 # PlayTheWheels App for iOS
 Main iOS app which detect rotation, make sounds and control LED via [ptw-wheel](https://github.com/karappo/ptw-wheel).
 
+## Related Projects
+
+This project operate with these projects.
+
+- [ptw-wheel-arduino](https://github.com/karappo/ptw-wheel-arduino)
+- [ptw-wheel-eagle](https://github.com/karappo/ptw-wheel-eagle)
+
 ## Requirements
 
 - Ruby
