@@ -325,7 +325,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         
         do {
             toneDirs = try FM.contentsOfDirectory(atPath: "\(Bundle.main.resourcePath!)/tones")
-            toneDirs.remove(at: toneDirs.index(of: "README.md")!)
+            toneDirs.remove(at: toneDirs.firstIndex(of: "README.md")!)
         }
         catch {
             // do nothing
@@ -673,7 +673,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     // Tone
     
     @IBAction func tapToneName(_ sender: UIButton) {
-        let initial: Int = toneDirs.index(of: toneNameBtn.titleLabel!.text!)!
+        let initial: Int = toneDirs.firstIndex(of: toneNameBtn.titleLabel!.text!)!
         ActionSheetStringPicker.show(withTitle: "Tone", rows: toneDirs, initialSelection: initial, doneBlock: {
             picker, value, index in
             let key: String = index as! String
@@ -687,7 +687,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     @discardableResult
     func initPlayers(_ toneDir: String) -> AVAudioFormat!{
         
-        toneNameBtn.setTitle(toneDir, for: UIControlState())
+        toneNameBtn.setTitle(toneDir, for: UIControl.State())
         
         var format: AVAudioFormat! = nil
         if 1<audioFiles.count {
