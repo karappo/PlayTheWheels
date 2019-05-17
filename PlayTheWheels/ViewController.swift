@@ -416,7 +416,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
         NSLog("--------------------------------")
         NSLog("[Konashi] connected: \(Konashi.isConnected())")
         NSLog("[Konashi] ready: \(Konashi.isReady())")
-        NSLog("[Konashi] module: \(Konashi.peripheralName())")
+        NSLog("[Konashi] module: \(String(describing: Konashi.peripheralName()))")
         NSLog("--------------------------------")
     }
     
@@ -518,7 +518,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     
     @IBAction func tapFind(_ sender: UIButton) {
         if Konashi.isConnected() {
-            let alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(Konashi.peripheralName()). Are you sure?", preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Disconnect Konashi", message: "You are disconnecting \(String(describing: Konashi.peripheralName())). Are you sure?", preferredStyle: .alert)
             
             let otherAction = UIAlertAction(title: "Disconnect", style: .default) {
                 action in
@@ -531,7 +531,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {
                 action in
-                NSLog("[Konashi] Cancel disconnecting \(Konashi.peripheralName())")
+                NSLog("[Konashi] Cancel disconnecting \(String(describing: Konashi.peripheralName()))")
             }
             
             // addActionした順に左から右にボタンが配置されます
@@ -547,7 +547,7 @@ class ViewController: UIViewController, ESTBeaconManagerDelegate {
     }
     
     @objc func disconnectKonashi() {
-        NSLog("[Konashi] Disconnect \(Konashi.peripheralName())")
+        NSLog("[Konashi] Disconnect \(String(describing: Konashi.peripheralName()))")
         // 接続解除
         self.manualDisconnection = true
         Konashi.disconnect()
