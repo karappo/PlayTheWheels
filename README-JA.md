@@ -28,3 +28,10 @@ Enter your app bundle identifier: jp.1001p.wheels.PlayTheWheels
 留意点
 
 - ProvisioningFileにデバイスのUUIDが登録されていないとインストールできない
+
+## デバイスの登録
+
+1. iTunesでデバイスID（UDID）を確認
+  ![screenshot](./_assets/udid.png)
+2. [こちらのページ](https://developer.apple.com/account/resources/devices/add)からデバイスを登録
+  - Device Nameは`PTW4-ipodtouch(<TAMAYAのシールに書いてあるid>)`のような形式にする
