@@ -1,7 +1,7 @@
 PODS:
   - ActionSheetPicker-3.0 (2.3.0)
   - Colorkit (0.1.0)
-  - EstimoteSDK (4.27.0)
+  - EstimoteSDK (4.28.0)
   - konashi-ios-sdk (4.1.0)
 
 DEPENDENCIES:
@@ -20,7 +20,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: eef157d75e151f255c5333d26656c7fbfe905a51
   Colorkit: 796f40223fbbec3fc9c24d32608202ef82bfb90a
-  EstimoteSDK: 61935c7fbcb9fe93b97b0360351aef66fb1c338d
+  EstimoteSDK: cd930e53cd15ec32f9a738f339843a73b83620f6
   konashi-ios-sdk: dd545f091380e8adf58114bf270f24f79d8b96cc
 
 PODFILE CHECKSUM: 250b7b11e64a5a1d11926602da549e3e4257b49e
