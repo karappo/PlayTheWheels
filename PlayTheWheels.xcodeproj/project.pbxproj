@@ -217,6 +217,7 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 472W38UNCE;
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Manual;
 					};
 					E7509F6D1B7C4DDB001C54E8 = {
 						CreatedOnToolsVersion = 6.4;
@@ -354,6 +355,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -411,6 +413,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -438,8 +441,9 @@
 			baseConfigurationReference = 4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 472W38UNCE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -451,6 +455,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "jp.1001p.wheels.PlayTheWheels AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 				SWIFT_VERSION = 5.0;
 			};
@@ -461,8 +466,9 @@
 			baseConfigurationReference = 2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 472W38UNCE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -474,6 +480,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "jp.1001p.wheels.PlayTheWheels AdHoc";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 				SWIFT_VERSION = 5.0;
 			};
