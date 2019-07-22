@@ -441,8 +441,8 @@
 			baseConfigurationReference = 4B77D387DD0C739E4C5B0397 /* Pods-PlayTheWheels.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Karappo Inc. (472W38UNCE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Karappo Inc. (472W38UNCE)";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 472W38UNCE;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -455,7 +455,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "jp.1001p.wheels.PlayTheWheels AdHoc";
+				PROVISIONING_PROFILE_SPECIFIER = "PLAY THE WHEELS 4";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 				SWIFT_VERSION = 5.0;
 			};
@@ -466,8 +466,8 @@
 			baseConfigurationReference = 2B2EBC282F70CFE25E73A923 /* Pods-PlayTheWheels.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Karappo Inc. (472W38UNCE)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Karappo Inc. (472W38UNCE)";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 472W38UNCE;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -480,7 +480,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.1001p.wheels.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "jp.1001p.wheels.PlayTheWheels AdHoc";
+				PROVISIONING_PROFILE_SPECIFIER = "PLAY THE WHEELS 4";
 				SWIFT_OBJC_BRIDGING_HEADER = ObjCBridge.h;
 				SWIFT_VERSION = 5.0;
 			};
